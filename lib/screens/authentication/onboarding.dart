@@ -1,7 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:nuphonic_front_end/extracted_widgets/onboarding_box.dart';
 import 'package:nuphonic_front_end/models/onboarding_model.dart';
+
+const bottomSheetDecoration = BoxDecoration(
+  color: Color(0xff191919),
+  borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30),),
+);
 
 class Onboarding extends StatefulWidget {
   @override
@@ -9,11 +14,12 @@ class Onboarding extends StatefulWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
+
   int currentIndex = 0;
 
   List<OnboardingModel> sliders = [
     OnboardingModel(
-        imagePath: "assets/logos/app_logo.svg",
+        imagePath: "assets/logos/app_logo_mini.svg",
         title: "Welcome to",
         appName: "NUPHONIC",
         subTitle: "ANYTIME, ANYWHERE"),
@@ -31,7 +37,7 @@ class _OnboardingState extends State<Onboarding> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 400),
+        duration: Duration(milliseconds: 700),
         curve: Curves.linearToEaseOut,
         height: 5,
         width: isCurrentPage ? 30 : 9,
@@ -44,79 +50,53 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
+
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          Container(
-            height: 700,
-            child: PageView.builder(
-              onPageChanged: (val) {
-                setState(() {
-                  currentIndex = val;
-                });
-              },
-              itemCount: sliders.length,
-              itemBuilder: (context, index) {
-                return OnboardingBox(
-                  imagePath: sliders[index].imagePath,
-                  title: sliders[index].title,
-                  appName: sliders[index].appName,
-                  subTitle: sliders[index].subTitle,
-                );
-              },
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              height: height - 140,
+              child: PageView.builder(
+                onPageChanged: (val) {
+                  setState(() {
+                    currentIndex = val;
+                  });
+                },
+                itemCount: sliders.length,
+                itemBuilder: (context, index) {
+                  return OnboardingBox(
+                    imagePath: sliders[index].imagePath,
+                    title: sliders[index].title,
+                    appName: sliders[index].appName,
+                    subTitle: sliders[index].subTitle,
+                  );
+                },
+              ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (int i = 0; i < sliders.length; i++)
-                currentIndex == i
-                    ? pageIndexIndicator(true)
-                    : pageIndexIndicator(false),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class OnboardingBox extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String appName;
-  final String subTitle;
-
-  OnboardingBox({this.imagePath, this.title, this.appName, this.subTitle});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          SvgPicture.asset(imagePath),
-          Text(
-            title,
-            style: GoogleFonts.khula(
-                color: Color(0xffe4e4e4),
-                textStyle:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 32)),
-          ),
-          appName != null
-              ? Text(
-                  appName,
-                  style: GoogleFonts.wallpoet(
-                      color: Color(0xffe4e4e4),
-                      textStyle: TextStyle(fontSize: 32)),
-                )
-              : SizedBox(),
-          Text(
-            subTitle,
-            style: GoogleFonts.khula(
-                color: Color(0xffe4e4e4), textStyle: TextStyle(fontSize: 18)),
-          )
-        ],
+            Container(
+              height: 20,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int i = 0; i < sliders.length; i++)
+                    currentIndex == i
+                        ? pageIndexIndicator(true)
+                        : pageIndexIndicator(false),
+                ],
+              ),
+            ),
+            SizedBox(height: 10,),
+            Container(
+              height: 83,
+              decoration: bottomSheetDecoration
+            )
+          ],
+        ),
       ),
     );
   }
