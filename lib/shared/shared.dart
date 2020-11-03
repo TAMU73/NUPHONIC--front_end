@@ -20,3 +20,9 @@ var texFieldLabelStyle = normalFontStyle.copyWith(
   color: whitishColor,
   fontSize: 18,
 );
+
+var titleTextStyle = normalFontStyle.copyWith(
+  color: whitishColor,
+  fontSize: 30,
+  fontWeight: FontWeight.w700,
+);

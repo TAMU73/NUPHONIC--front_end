@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
-class TextFieldBox extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
 
   final String hint;
 
-  TextFieldBox({this.hint});
+  CustomTextField({this.hint});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/sliding_panel_appBar.dart';
-import 'package:nuphonic_front_end/extracted_widgets/textfield_box.dart';
+import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
+import 'package:nuphonic_front_end/screens/authentication/confirm_code.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_up.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -48,21 +49,28 @@ class _SignInState extends State<SignIn> {
                         style: texFieldLabelStyle,
                       ),
                       SizedBox(height: 10,),
-                      TextFieldBox(hint: "example@example.com",),
+                      CustomTextField(hint: "example@example.com",),
                       SizedBox(height: 20,),
                       Text(
                         'Password:',
                         style: texFieldLabelStyle,
                       ),
                       SizedBox(height: 10,),
-                      TextFieldBox(hint: "6+ character password",),
+                      CustomTextField(hint: "6+ character password",),
                       SizedBox(height: 15,),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text(
-                          'Forgot Password?',
-                          style: texFieldLabelStyle.copyWith(
-                              fontSize: 13
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => ConfirmCode()
+                            ));
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: texFieldLabelStyle.copyWith(
+                                fontSize: 13
+                            ),
                           ),
                         ),
                       ),

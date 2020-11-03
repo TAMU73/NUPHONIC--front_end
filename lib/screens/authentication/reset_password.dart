@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
-class SignUp extends StatefulWidget {
+class ResetPassword extends StatefulWidget {
   @override
-  _SignUpState createState() => _SignUpState();
+  _ResetPasswordState createState() => _ResetPasswordState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,83 +29,41 @@ class _SignUpState extends State<SignUp> {
                   onIconTap: () {
                     Navigator.pop(context);
                   },
-                  label: 'Create an Account',
+                  label: 'Reset Password',
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  'Full Name:',
+                  'New Password:',
                   style: texFieldLabelStyle,
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
-                  hint: "Your full name",
+                  hint: '6+ character password',
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  'Username:',
+                  'Re-type password:',
                   style: texFieldLabelStyle,
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
-                  hint: "Unique username",
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Email:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hint: "example@example.com",
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Password:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hint: "6+ character password",
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Re-type Password:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hint: "Re-type password as above",
+                  hint: 'Re-type password as above',
                 ),
                 SizedBox(
                   height: 30,
                 ),
                 CustomButton(
                   onPressed: () {},
-                  labelName: 'SIGN UP',
-                ),
-                SizedBox(
-                  height: 30,
-                ),
+                  labelName: 'RESET',
+                )
               ],
             ),
           ),

@@ -30,13 +30,16 @@ class CustomButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Text(
-            labelName,
-            style: normalFontStyle.copyWith(
-                letterSpacing: 1.5,
-                color: whitishColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w700
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              labelName,
+              style: normalFontStyle.copyWith(
+                  letterSpacing: 1.5,
+                  color: whitishColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700
+              ),
             ),
           ),
         ),
