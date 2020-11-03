@@ -2,11 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/extracted_widgets/onboarding_box.dart';
 import 'package:nuphonic_front_end/models/onboarding_model.dart';
-
-const bottomSheetDecoration = BoxDecoration(
-  color: Color(0xff191919),
-  borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30),),
-);
+import 'package:nuphonic_front_end/screens/authentication/sign_in.dart';
+import 'package:nuphonic_front_end/shared/shared.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -50,51 +47,53 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
-
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: backgroundColor,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            Container(
-              height: height - 140,
-              child: PageView.builder(
-                onPageChanged: (val) {
-                  setState(() {
-                    currentIndex = val;
-                  });
-                },
-                itemCount: sliders.length,
-                itemBuilder: (context, index) {
-                  return OnboardingBox(
-                    imagePath: sliders[index].imagePath,
-                    title: sliders[index].title,
-                    appName: sliders[index].appName,
-                    subTitle: sliders[index].subTitle,
-                  );
-                },
-              ),
+            Column(
+              children: [
+                Container(
+                  height: height - 140,
+                  child: PageView.builder(
+                    onPageChanged: (val) {
+                      setState(() {
+                        currentIndex = val;
+                      });
+                    },
+                    itemCount: sliders.length,
+                    itemBuilder: (context, index) {
+                      return OnboardingBox(
+                        imagePath: sliders[index].imagePath,
+                        title: sliders[index].title,
+                        appName: sliders[index].appName,
+                        subTitle: sliders[index].subTitle,
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  height: 20,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 0; i < sliders.length; i++)
+                        currentIndex == i
+                            ? pageIndexIndicator(true)
+                            : pageIndexIndicator(false),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
             ),
-            Container(
-              height: 20,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (int i = 0; i < sliders.length; i++)
-                    currentIndex == i
-                        ? pageIndexIndicator(true)
-                        : pageIndexIndicator(false),
-                ],
-              ),
-            ),
-            SizedBox(height: 10,),
-            Container(
-              height: 83,
-              decoration: bottomSheetDecoration
-            )
+            SignIn()
           ],
         ),
       ),

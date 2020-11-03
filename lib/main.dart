@@ -4,6 +4,7 @@ import 'package:nuphonic_front_end/screens/authentication/onboarding.dart';
 void main() {
   runApp(MaterialApp(
     home: Main(),
+    debugShowCheckedModeBanner: false,
   ));
 }
 

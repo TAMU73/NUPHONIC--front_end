@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nuphonic_front_end/shared/shared.dart';
 
 class OnboardingBox extends StatelessWidget {
   final String imagePath;
@@ -29,19 +30,21 @@ class OnboardingBox extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.khula(
-                      color: Color(0xffe4e4e4),
-                      textStyle:
-                      TextStyle(fontWeight: FontWeight.w700, fontSize: 32)),
+                  style: normalFontStyle.copyWith(
+                    color: whitishColor,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700
+                  ),
                 ),
                 appName != null
                     ? Column(
                   children: [
                     Text(
                       appName,
-                      style: GoogleFonts.wallpoet(
-                          color: Color(0xffe4e4e4),
-                          textStyle: TextStyle(fontSize: 32)),
+                      style: appNameFontStyle.copyWith(
+                        color: whitishColor,
+                        fontSize: 32
+                      )
                     ),
                     SizedBox(height: 40,)
                   ],
@@ -50,9 +53,10 @@ class OnboardingBox extends StatelessWidget {
                 Text(
                   subTitle,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.khula(
-                      color: Color(0xffe4e4e4),
-                      textStyle: TextStyle(fontSize: 18)),
+                  style: normalFontStyle.copyWith(
+                    color: whitishColor.withOpacity(0.5),
+                    fontSize: 18
+                  )
                 )
               ],
             )
