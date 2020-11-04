@@ -11,6 +11,32 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+
+  bool isOn = true;
+  bool isOnR = true; //for retype password
+
+  //0 means error, 1 means success and null means default
+  int isErrorE; //for email
+  int isErrorP; //for password
+  int isErrorR; //for retype password
+
+  Widget eyeIndicator(bool isOn) {
+    String icon = isOn ? 'eye_off_icon.svg' : 'eye_on_icon.svg';
+    return SvgPicture.asset('assets/icons/$icon');
+  }
+
+  Widget errorIndicator(int isError) {
+    Color iconColor = isError == null
+        ? Color(0xff656565)
+        : isError == 1
+        ? greenishColor
+        : reddishColor;
+    return SvgPicture.asset(
+      'assets/icons/check_icon.svg',
+      color: iconColor,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,67 +61,68 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Full Name:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 CustomTextField(
+                  labelName: 'Full Name:',
                   hint: "Your full name",
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Username:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 CustomTextField(
+                  labelName: 'Username:',
                   hint: "Unique username",
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Email:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 CustomTextField(
+                  labelName: 'Email:',
                   hint: "example@example.com",
+                  icons: errorIndicator(isErrorE),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Password:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 CustomTextField(
+                  labelName: 'Password:',
                   hint: "6+ character password",
+                  obsecureText: isOn,
+                  icons: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(()=>isOn=!isOn);
+                        },
+                        child: eyeIndicator(isOn),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      errorIndicator(isErrorP),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Re-type Password:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 CustomTextField(
+                  labelName: 'Re-type Password:',
                   hint: "Re-type password as above",
+                  obsecureText: isOnR,
+                  icons: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(()=>isOnR=!isOnR);
+                        },
+                        child: eyeIndicator(isOnR),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      errorIndicator(isErrorR),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 40,

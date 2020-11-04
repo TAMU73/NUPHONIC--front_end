@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
-import 'package:nuphonic_front_end/extracted_widgets/sliding_panel_appBar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
+import 'package:nuphonic_front_end/extracted_widgets/sliding_panel_appBar.dart';
 import 'package:nuphonic_front_end/screens/authentication/confirm_code.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_up.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
@@ -15,6 +16,29 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   PanelController _controller = PanelController();
 
+  bool isOn = true;
+
+  //0 means error, 1 means success and null means default
+  int isErrorE; //for email
+  int isErrorP; //for password
+
+  Widget eyeIndicator(bool isOn) {
+    String icon = isOn ? 'eye_off_icon.svg' : 'eye_on_icon.svg';
+    return SvgPicture.asset('assets/icons/$icon');
+  }
+
+  Widget errorIndicator(int isError) {
+    Color iconColor = isError == null
+        ? Color(0xff656565)
+        : isError == 1
+            ? greenishColor
+            : reddishColor;
+    return SvgPicture.asset(
+      'assets/icons/check_icon.svg',
+      color: iconColor,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SlidingUpPanel(
@@ -22,7 +46,7 @@ class _SignInState extends State<SignIn> {
         backdropEnabled: true,
         color: darkGreyColor,
         minHeight: 83,
-        maxHeight: 500,
+        maxHeight: 470,
         borderRadius: bottomPanelBorderRadius,
         collapsed: SlidingPanelAppBar(
           height: 83,
@@ -44,27 +68,44 @@ class _SignInState extends State<SignIn> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Email:',
-                        style: texFieldLabelStyle,
+                      CustomTextField(
+                        labelName: 'Email:',
+                        hint: 'example@example.com',
+                        icons: errorIndicator(isErrorE),
                       ),
-                      SizedBox(height: 10,),
-                      CustomTextField(hint: "example@example.com",),
-                      SizedBox(height: 20,),
-                      Text(
-                        'Password:',
-                        style: texFieldLabelStyle,
+                      SizedBox(
+                        height: 20,
                       ),
-                      SizedBox(height: 10,),
-                      CustomTextField(hint: "6+ character password",),
-                      SizedBox(height: 15,),
+                      CustomTextField(
+                        labelName: 'Password:',
+                        obsecureText: isOn,
+                        hint: '6+ character password',
+                        icons: Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(()=>isOn=!isOn);
+                              },
+                              child: eyeIndicator(isOn),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            errorIndicator(isErrorP),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => ConfirmCode()
-                            ));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ConfirmCode()));
                           },
                           child: Text(
                             'Forgot Password?',
@@ -72,17 +113,22 @@ class _SignInState extends State<SignIn> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       CustomButton(
                         labelName: 'SIGN IN',
                         onPressed: () {},
                       ),
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => SignUp()
-                          ));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignUp()));
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
