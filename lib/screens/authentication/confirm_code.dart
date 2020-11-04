@@ -64,7 +64,7 @@ class _ConfirmCodeState extends State<ConfirmCode> {
                   hint: 'Code here...',
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 40,
                 ),
                 CustomButton(
                   onPressed: () {

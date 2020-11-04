@@ -98,7 +98,7 @@ class _SignUpState extends State<SignUp> {
                   hint: "Re-type password as above",
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 40,
                 ),
                 CustomButton(
                   onPressed: () {},

@@ -33,9 +33,9 @@ class SlidingPanelAppBar extends StatelessWidget {
                   text,
                   style: normalFontStyle.copyWith(
                       color: mainColor,
-                      letterSpacing: 1.5,
+                      letterSpacing: 1,
                       fontSize: 20,
-                      fontWeight: FontWeight.w700),
+                      fontWeight: FontWeight.w800),
                 ),
               ),
             ),

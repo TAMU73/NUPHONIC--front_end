@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/extracted_widgets/onboarding_box.dart';
@@ -39,7 +41,7 @@ class _OnboardingState extends State<Onboarding> {
         height: 5,
         width: isCurrentPage ? 30 : 9,
         decoration: BoxDecoration(
-            color: isCurrentPage ? Colors.white : Colors.white70,
+            color: isCurrentPage ? mainColor : whitishColor.withOpacity(0.2),
             borderRadius: BorderRadius.circular(20)),
       ),
     );

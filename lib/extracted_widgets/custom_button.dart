@@ -25,20 +25,19 @@ class CustomButton extends StatelessWidget {
         child: MaterialButton(
           onPressed: onPressed,
           height: 50,
-          minWidth: 200,
           color: mainColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.only(top: 3,left: 15, right: 15),
             child: Text(
               labelName,
               style: normalFontStyle.copyWith(
                   letterSpacing: 1.5,
                   color: whitishColor,
                   fontSize: 20,
-                  fontWeight: FontWeight.w700
+                  fontWeight: FontWeight.w800
               ),
             ),
           ),

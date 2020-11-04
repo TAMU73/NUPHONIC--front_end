@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class OnboardingBox extends StatelessWidget {
@@ -33,7 +32,8 @@ class OnboardingBox extends StatelessWidget {
                   style: normalFontStyle.copyWith(
                     color: whitishColor,
                     fontSize: 32,
-                    fontWeight: FontWeight.w700
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.5
                   ),
                 ),
                 appName != null
@@ -49,13 +49,14 @@ class OnboardingBox extends StatelessWidget {
                     SizedBox(height: 40,)
                   ],
                 )
-                    : SizedBox(),
+                    : SizedBox(height: 10,),
                 Text(
                   subTitle,
                   textAlign: TextAlign.center,
                   style: normalFontStyle.copyWith(
                     color: whitishColor.withOpacity(0.5),
-                    fontSize: 18
+                    fontSize: 18,
+                    letterSpacing: 0.5
                   )
                 )
               ],

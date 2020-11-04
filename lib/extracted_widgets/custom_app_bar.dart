@@ -22,10 +22,10 @@ class CustomAppBar extends StatelessWidget {
             child: SvgPicture.asset(leadIconPath),
           ),
           SizedBox(
-            width: 30,
+            width: 20,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 5.0),
+            padding: const EdgeInsets.only(top: 4.0),
             child: Text(
               label,
               style: titleTextStyle,

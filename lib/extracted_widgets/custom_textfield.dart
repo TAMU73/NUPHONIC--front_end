@@ -18,7 +18,8 @@ class CustomTextField extends StatelessWidget {
         filled: true,
         hintStyle: normalFontStyle.copyWith(
           color: whitishColor.withOpacity(0.25),
-          fontSize: 14
+          fontSize: 13,
+          letterSpacing: 0.5
         ),
         hintText: hint,
         border: OutlineInputBorder(

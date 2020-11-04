@@ -68,9 +68,7 @@ class _SignInState extends State<SignIn> {
                           },
                           child: Text(
                             'Forgot Password?',
-                            style: texFieldLabelStyle.copyWith(
-                                fontSize: 13
-                            ),
+                            style: texFieldLabelStyle,
                           ),
                         ),
                       ),
@@ -91,24 +89,15 @@ class _SignInState extends State<SignIn> {
                           children: [
                             Text(
                               'New to ',
-                              style: normalFontStyle.copyWith(
-                                  color: whitishColor,
-                                  fontSize: 14
-                              ),
+                              style: signUpLabelStyle,
                             ),
                             Text(
                               'NUPHONIC',
-                              style: appNameFontStyle.copyWith(
-                                  color: whitishColor,
-                                  fontSize: 14
-                              ),
+                              style: appNameFontStyle,
                             ),
                             Text(
                               '? Sign Up Now',
-                              style: normalFontStyle.copyWith(
-                                  color: whitishColor,
-                                  fontSize: 14
-                              ),
+                              style: signUpLabelStyle,
                             ),
                           ],
                         ),
