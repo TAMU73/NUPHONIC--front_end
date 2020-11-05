@@ -31,7 +31,7 @@ class _ConfirmCodeState extends State<ConfirmCode> {
                   onIconTap: () {
                     Navigator.pop(context);
                   },
-                  label: 'Confirm your code',
+                  label: 'Confirm Code',
                 ),
                 SizedBox(
                   height: 20,

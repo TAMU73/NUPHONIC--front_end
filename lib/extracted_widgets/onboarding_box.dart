@@ -39,6 +39,7 @@ class OnboardingBox extends StatelessWidget {
                 appName != null
                     ? Column(
                   children: [
+                    SizedBox(height: 15,),
                     Text(
                       appName,
                       style: appNameFontStyle.copyWith(

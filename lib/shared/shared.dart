@@ -43,9 +43,10 @@ const titleTextStyle = TextStyle(
 );
 
 const signUpLabelStyle = TextStyle(
+  fontFamily: "Gilroy",
     color: whitishColor,
     fontSize: 14,
-  letterSpacing: 0.5
+    letterSpacing: 0.5
 );
 
 const circularBorder = BoxDecoration(

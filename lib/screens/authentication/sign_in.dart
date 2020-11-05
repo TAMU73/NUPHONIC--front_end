@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
+import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
+import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/sliding_panel_appBar.dart';
 import 'package:nuphonic_front_end/screens/authentication/confirm_code.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_up.dart';
@@ -22,22 +23,6 @@ class _SignInState extends State<SignIn> {
   int isErrorE; //for email
   int isErrorP; //for password
 
-  Widget eyeIndicator(bool isOn) {
-    String icon = isOn ? 'eye_off_icon.svg' : 'eye_on_icon.svg';
-    return SvgPicture.asset('assets/icons/$icon');
-  }
-
-  Widget errorIndicator(int isError) {
-    Color iconColor = isError == null
-        ? Color(0xff656565)
-        : isError == 1
-            ? greenishColor
-            : reddishColor;
-    return SvgPicture.asset(
-      'assets/icons/check_icon.svg',
-      color: iconColor,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +56,7 @@ class _SignInState extends State<SignIn> {
                       CustomTextField(
                         labelName: 'Email:',
                         hint: 'example@example.com',
-                        icons: errorIndicator(isErrorE),
+                        icons: ErrorIndicator(isError: isErrorE),
                       ),
                       SizedBox(
                         height: 20,
@@ -86,12 +71,12 @@ class _SignInState extends State<SignIn> {
                               onTap: () {
                                 setState(()=>isOn=!isOn);
                               },
-                              child: eyeIndicator(isOn),
+                              child: EyeIndicator(isOn: isOn),
                             ),
                             SizedBox(
                               width: 15,
                             ),
-                            errorIndicator(isErrorP),
+                            ErrorIndicator(isError: isErrorP),
                           ],
                         ),
                       ),

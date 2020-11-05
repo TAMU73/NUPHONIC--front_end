@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
+import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
+import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -10,6 +12,14 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
+
+  bool isOn = true;
+  bool isOnR = true; //for retype password
+
+  //0 means error, 1 means success and null means default
+  int isErrorR; //for email
+  int isErrorP; //for password
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,28 +44,46 @@ class _ResetPasswordState extends State<ResetPassword> {
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'New Password:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 CustomTextField(
+                  labelName: 'New Password:',
                   hint: '6+ character password',
+                  obsecureText: isOn,
+                  icons: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(()=>isOn=!isOn);
+                        },
+                        child: EyeIndicator(isOn: isOn),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      ErrorIndicator(isError: isErrorP),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Re-type password:',
-                  style: texFieldLabelStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 CustomTextField(
+                  labelName: 'Re-type Password',
                   hint: 'Re-type password as above',
+                  obsecureText: isOnR,
+                  icons: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(()=>isOnR=!isOnR);
+                        },
+                        child: EyeIndicator(isOn: isOnR),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      ErrorIndicator(isError: isErrorR),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 30,
