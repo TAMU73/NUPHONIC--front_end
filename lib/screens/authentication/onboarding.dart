@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/extracted_widgets/onboarding_box.dart';
+import 'package:nuphonic_front_end/extracted_widgets/page_indicator.dart';
 import 'package:nuphonic_front_end/models/onboarding_model.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_in.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
@@ -13,7 +12,6 @@ class Onboarding extends StatefulWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
-
   int currentIndex = 0;
 
   List<OnboardingModel> sliders = [
@@ -32,21 +30,6 @@ class _OnboardingState extends State<Onboarding> {
         subTitle: "Find your favourite artist and support them financially"),
   ];
 
-  Widget pageIndexIndicator(bool isCurrentPage) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 700),
-        curve: Curves.linearToEaseOut,
-        height: 5,
-        width: isCurrentPage ? 30 : 9,
-        decoration: BoxDecoration(
-            color: isCurrentPage ? mainColor : whitishColor.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(20)),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -60,7 +43,7 @@ class _OnboardingState extends State<Onboarding> {
             Column(
               children: [
                 Container(
-                  height: height - 140,
+                  height: height - 145,
                   child: PageView.builder(
                     onPageChanged: (val) {
                       setState(() {
@@ -85,8 +68,12 @@ class _OnboardingState extends State<Onboarding> {
                     children: [
                       for (int i = 0; i < sliders.length; i++)
                         currentIndex == i
-                            ? pageIndexIndicator(true)
-                            : pageIndexIndicator(false),
+                            ? PageIndicator(
+                                isCurrentPage: true,
+                              )
+                            : PageIndicator(
+                                isCurrentPage: false,
+                              ),
                     ],
                   ),
                 ),
@@ -95,7 +82,10 @@ class _OnboardingState extends State<Onboarding> {
                 ),
               ],
             ),
-            SignIn()
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SignIn(),
+            )
           ],
         ),
       ),

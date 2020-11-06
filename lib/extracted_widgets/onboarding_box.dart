@@ -20,7 +20,7 @@ class OnboardingBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
-        height: height - 83,
+        height: height - 145,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -39,6 +39,7 @@ class OnboardingBox extends StatelessWidget {
                 appName != null
                     ? Column(
                   children: [
+                    SizedBox(height: 15,),
                     Text(
                       appName,
                       style: appNameFontStyle.copyWith(

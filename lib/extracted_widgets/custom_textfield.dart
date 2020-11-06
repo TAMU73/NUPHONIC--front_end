@@ -7,8 +7,12 @@ class CustomTextField extends StatelessWidget {
   final String hint;
   final Widget icons;
   final bool obsecureText;
+  final Function onChanged;
+  final TextInputAction textInputAction;
+  final Function onEditingComplete;
+  final TextInputType keyboardType;
 
-  CustomTextField({this.labelName, this.hint, this.icons, this.obsecureText});
+  CustomTextField({this.labelName, this.hint, this.icons, this.obsecureText, this.onChanged, this.onEditingComplete, this.textInputAction, this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +54,10 @@ class CustomTextField extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                   ),
+                  onChanged: onChanged,
+                  textInputAction: textInputAction,
+                  onEditingComplete: onEditingComplete,
+                  keyboardType: keyboardType,
                 ),
               ),
               icons != null ? icons : SizedBox(),

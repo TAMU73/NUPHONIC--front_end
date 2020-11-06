@@ -34,6 +34,20 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.8.1
+  flutter_native_splash: ^0.1.9
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/launcher/app_icon.png"
+  adaptive_icon_background: "assets/launcher/background.png"
+  adaptive_icon_foreground: "assets/launcher/foreground.png"
+
+flutter_native_splash:
+  image: assets/launcher/splash.png
+  color: "000000"
+  android_disable_fullscreen: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -49,6 +63,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icons/
+    - assets/launcher/
     - assets/illustrations/
     - assets/images/
     - assets/logos/

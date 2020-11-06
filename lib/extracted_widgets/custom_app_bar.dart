@@ -17,13 +17,13 @@ class CustomAppBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
+          leadIconPath != null ? GestureDetector(
             onTap: onIconTap,
-            child: SvgPicture.asset(leadIconPath),
-          ),
-          SizedBox(
-            width: 20,
-          ),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: SvgPicture.asset(leadIconPath),
+            ),
+          ) : SizedBox(),
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
             child: Text(
