@@ -12,7 +12,6 @@ class Onboarding extends StatefulWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
-
   int currentIndex = 0;
 
   List<OnboardingModel> sliders = [
@@ -44,7 +43,7 @@ class _OnboardingState extends State<Onboarding> {
             Column(
               children: [
                 Container(
-                  height: height - 140,
+                  height: height - 145,
                   child: PageView.builder(
                     onPageChanged: (val) {
                       setState(() {
@@ -69,8 +68,12 @@ class _OnboardingState extends State<Onboarding> {
                     children: [
                       for (int i = 0; i < sliders.length; i++)
                         currentIndex == i
-                            ? PageIndicator(isCurrentPage: true,)
-                            : PageIndicator(isCurrentPage: false,),
+                            ? PageIndicator(
+                                isCurrentPage: true,
+                              )
+                            : PageIndicator(
+                                isCurrentPage: false,
+                              ),
                     ],
                   ),
                 ),
@@ -79,7 +82,10 @@ class _OnboardingState extends State<Onboarding> {
                 ),
               ],
             ),
-            SignIn()
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SignIn(),
+            )
           ],
         ),
       ),

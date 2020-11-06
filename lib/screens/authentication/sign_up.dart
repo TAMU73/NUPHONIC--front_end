@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
+import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class SignUp extends StatefulWidget {
@@ -11,6 +12,11 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+
+  String fullName = "";
+  String username = "";
+  String email;
+  String password;
 
   bool isOn = true;
   bool isOnR = true; //for retype password
@@ -35,6 +41,41 @@ class _SignUpState extends State<SignUp> {
       'assets/icons/check_icon.svg',
       color: iconColor,
     );
+  }
+
+  Validation validate = Validation();
+
+  checkEmail(String val) {
+    bool emailC = validate.isEmail(val);
+    setState(() {
+      isErrorE = val == ""
+          ? null
+          : emailC
+          ? 1
+          : 0;
+      if(isErrorE==1) email = val;
+    });
+  }
+
+  checkPassword(String val) {
+    setState(() {
+      isErrorP = val == ""
+          ? null
+          : val.length >= 8
+          ? 1
+          : 0;
+      if(isErrorP==1) password = val;
+    });
+  }
+
+  checkRetypePassword(String val) {
+    setState(() {
+      isErrorR = val == ""
+          ? null
+          : val == password
+          ? 1
+          : 0;
+    });
   }
 
   @override
@@ -64,6 +105,13 @@ class _SignUpState extends State<SignUp> {
                 CustomTextField(
                   labelName: 'Full Name:',
                   hint: "Your full name",
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  onChanged: (val) {
+                    setState(() {
+                      fullName = val;
+                    });
+                  },
                 ),
                 SizedBox(
                   height: 20,
@@ -71,6 +119,11 @@ class _SignUpState extends State<SignUp> {
                 CustomTextField(
                   labelName: 'Username:',
                   hint: "Unique username",
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  onChanged: (val) {
+                    username = val;
+                  },
                 ),
                 SizedBox(
                   height: 20,
@@ -79,14 +132,24 @@ class _SignUpState extends State<SignUp> {
                   labelName: 'Email:',
                   hint: "example@example.com",
                   icons: errorIndicator(isErrorE),
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  onChanged: (val) {
+                    checkEmail(val);
+                  },
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 CustomTextField(
                   labelName: 'Password:',
-                  hint: "6+ character password",
+                  hint: "8+ character password",
                   obsecureText: isOn,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  onChanged: (val) {
+                    checkPassword(val);
+                  },
                   icons: Row(
                     children: [
                       InkWell(
@@ -109,6 +172,11 @@ class _SignUpState extends State<SignUp> {
                   labelName: 'Re-type Password:',
                   hint: "Re-type password as above",
                   obsecureText: isOnR,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  onChanged: (val) {
+                    checkRetypePassword(val);
+                  },
                   icons: Row(
                     children: [
                       InkWell(
@@ -128,7 +196,11 @@ class _SignUpState extends State<SignUp> {
                   height: 40,
                 ),
                 CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if(fullName != "" && username != "" && isErrorP == 1 && isErrorE == 1 && isErrorR == 1) {
+                      print('success');
+                    }
+                  },
                   labelName: 'SIGN UP',
                 ),
                 SizedBox(

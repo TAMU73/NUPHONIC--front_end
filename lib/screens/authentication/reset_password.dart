@@ -4,6 +4,7 @@ import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
+import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -13,12 +14,38 @@ class ResetPassword extends StatefulWidget {
 
 class _ResetPasswordState extends State<ResetPassword> {
 
+  String email;
+  String password;
+
   bool isOn = true;
   bool isOnR = true; //for retype password
 
   //0 means error, 1 means success and null means default
-  int isErrorR; //for email
+  int isErrorR; //for retype password
   int isErrorP; //for password
+
+  Validation validate = Validation();
+
+  checkPassword(String val) {
+    setState(() {
+      isErrorP = val == ""
+          ? null
+          : val.length >= 8
+          ? 1
+          : 0;
+      if(isErrorP==1) password = val;
+    });
+  }
+
+  checkRetypePassword(String val) {
+    setState(() {
+      isErrorR = val == ""
+          ? null
+          : val == password
+          ? 1
+          : 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +73,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
                 CustomTextField(
                   labelName: 'New Password:',
-                  hint: '6+ character password',
+                  hint: '8+ character password',
                   obsecureText: isOn,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  onChanged: (val) {
+                    checkPassword(val);
+                  },
                   icons: Row(
                     children: [
                       InkWell(
@@ -70,6 +102,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                   labelName: 'Re-type Password',
                   hint: 'Re-type password as above',
                   obsecureText: isOnR,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  onChanged: (val) {
+                    checkRetypePassword(val);
+                  },
                   icons: Row(
                     children: [
                       InkWell(
@@ -89,7 +126,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 30,
                 ),
                 CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if(isErrorP == 1 && isErrorR == 1) {
+                      print('success');
+                    }
+                  },
                   labelName: 'RESET',
                 )
               ],
