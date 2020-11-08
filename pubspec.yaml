@@ -34,7 +34,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  #flutter pub run flutter_launcher_icons:main
   flutter_launcher_icons: ^0.8.1
+  #flutter pub pub run flutter_native_splash:create
   flutter_native_splash: ^0.1.9
 
 flutter_icons:
