@@ -191,7 +191,7 @@ class _SignUpState extends State<SignUp> {
                   hint: "8+ character password",
                   obsecureText: isOn,
                   keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
+                  textInputAction: TextInputAction.done,
                   onChanged: (val) {
                     checkPassword(val);
                     setState(() {

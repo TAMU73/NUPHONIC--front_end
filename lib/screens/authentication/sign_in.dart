@@ -149,7 +149,7 @@ class _SignInState extends State<SignIn> {
                         hint: 'example@example.com',
                         icons: ErrorIndicator(isError: isErrorE),
                         keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
+                        textInputAction: TextInputAction.done,
                         onChanged: (val) {
                           checkEmail(val);
                         }),
