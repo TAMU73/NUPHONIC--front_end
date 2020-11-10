@@ -72,7 +72,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'New Password:',
+                  labelName: 'New Password',
                   hint: '8+ character password',
                   obsecureText: isOn,
                   keyboardType: TextInputType.text,

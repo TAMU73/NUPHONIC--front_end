@@ -103,7 +103,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Full Name:',
+                  labelName: 'Full Name',
                   hint: "Your full name",
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
@@ -117,7 +117,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Username:',
+                  labelName: 'Username',
                   hint: "Unique username",
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
@@ -129,7 +129,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Email:',
+                  labelName: 'Email',
                   hint: "example@example.com",
                   icons: errorIndicator(isErrorE),
                   keyboardType: TextInputType.emailAddress,
@@ -142,7 +142,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Password:',
+                  labelName: 'Password',
                   hint: "8+ character password",
                   obsecureText: isOn,
                   keyboardType: TextInputType.text,
@@ -169,7 +169,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Re-type Password:',
+                  labelName: 'Re-type Password',
                   hint: "Re-type password as above",
                   obsecureText: isOnR,
                   keyboardType: TextInputType.text,

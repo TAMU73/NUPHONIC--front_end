@@ -21,7 +21,7 @@ class _ConfirmCodeState extends State<ConfirmCode> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: 20,
@@ -42,17 +42,19 @@ class _ConfirmCodeState extends State<ConfirmCode> {
                       SvgPicture.asset('assets/illustrations/confirm_code.svg'),
                 ),
                 SizedBox(
-                  height: 25,
+                  height: 30,
                 ),
-                Text(
-                  'Code has been sent to example@example.com',
-                  textAlign: TextAlign.center,
-                  style: normalFontStyle.copyWith(
-                    color: whitishColor,
-                    fontSize: 16,
+                Center(
+                  child: Text(
+                    'Code has been sent to your email \n example@example.com',
+                    textAlign: TextAlign.center,
+                    style: normalFontStyle.copyWith(
+                      color: whitishColor,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 40,),
                 Text(
                   'Enter your code here',
                   style: texFieldLabelStyle,

@@ -37,13 +37,13 @@ class _OnboardingState extends State<Onboarding> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Stack(
           children: [
             Column(
               children: [
                 Container(
-                  height: height - 145,
+                  height: height - 125,
                   child: PageView.builder(
                     onPageChanged: (val) {
                       setState(() {

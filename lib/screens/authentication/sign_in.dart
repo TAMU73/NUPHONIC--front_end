@@ -82,7 +82,7 @@ class _SignInState extends State<SignIn> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextField(
-                        labelName: 'Email:',
+                        labelName: 'Email',
                         hint: 'example@example.com',
                         icons: ErrorIndicator(isError: isErrorE),
                         keyboardType: TextInputType.emailAddress,
@@ -94,7 +94,7 @@ class _SignInState extends State<SignIn> {
                       height: 20,
                     ),
                     CustomTextField(
-                      labelName: 'Password:',
+                      labelName: 'Password',
                       obsecureText: isOn,
                       hint: '8+ character password',
                       keyboardType: TextInputType.text,
