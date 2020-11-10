@@ -5,8 +5,9 @@ class CustomButton extends StatelessWidget {
 
   final String labelName;
   final Function onPressed;
+  final bool isLoading;
 
-  const CustomButton({this.labelName, this.onPressed});
+  const CustomButton({this.labelName, this.onPressed, this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +23,11 @@ class CustomButton extends StatelessWidget {
               // ),
             ]
         ),
-        child: MaterialButton(
+        child: isLoading ? loading : MaterialButton(
           onPressed: onPressed,
           height: 50,
           color: mainColor,
+          disabledColor: mainColor.withOpacity(0.4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -35,7 +37,7 @@ class CustomButton extends StatelessWidget {
               labelName,
               style: normalFontStyle.copyWith(
                   letterSpacing: 1.5,
-                  color: whitishColor,
+                  color: onPressed == null ? whitishColor.withOpacity(0.4):whitishColor,
                   fontSize: 20,
                   fontWeight: FontWeight.w800
               ),
