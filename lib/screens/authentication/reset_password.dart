@@ -127,6 +127,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                   textInputAction: TextInputAction.next,
                   onChanged: (val) {
                     checkPassword(val);
+                    setState(() {
+                      isErrorR = 0;
+                    });
                   },
                   icons: Row(
                     children: [
