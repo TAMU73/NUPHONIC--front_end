@@ -42,6 +42,7 @@ class _OnboardingState extends State<Onboarding> {
           children: [
             Column(
               children: [
+                SizedBox(height: 15,),
                 Container(
                   height: height - 125,
                   child: PageView.builder(
