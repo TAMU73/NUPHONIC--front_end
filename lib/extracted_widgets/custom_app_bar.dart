@@ -7,8 +7,9 @@ class CustomAppBar extends StatelessWidget {
   final Function onIconTap;
   final String leadIconPath;
   final String label;
+  final Widget endChild;
 
-  CustomAppBar({this.onIconTap, this.leadIconPath, this.label});
+  CustomAppBar({this.onIconTap, this.leadIconPath, this.label, this.endChild});
 
 
   @override
@@ -30,7 +31,9 @@ class CustomAppBar extends StatelessWidget {
               label,
               style: titleTextStyle,
             ),
-          )
+          ),
+          Spacer(),
+          endChild!=null ? endChild : SizedBox()
         ],
       ),
     );

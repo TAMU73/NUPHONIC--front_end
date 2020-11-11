@@ -4,6 +4,7 @@ import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
+import 'package:nuphonic_front_end/extracted_widgets/warning.dart';
 import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
@@ -24,6 +25,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController resetPasswordController = TextEditingController();
+  GlobalKey _toolTipKey = GlobalKey();
 
   String password;
 
@@ -111,11 +113,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 20,
                 ),
                 CustomAppBar(
-                  leadIconPath: 'assets/icons/back_icon.svg',
-                  onIconTap: () {
-                    Navigator.pop(context);
-                  },
                   label: 'Reset Password',
+                  endChild: Warning(
+                    toolTipKey: _toolTipKey,
+                    text: "Going back is not recommended.\nPlease complete the process.",
+                  ),
                 ),
                 SizedBox(
                   height: 20,
