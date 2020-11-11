@@ -17,52 +17,54 @@ class OnboardingBox extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        height: height - 145,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SvgPicture.asset(imagePath),
-            Column(
-              children: [
-                Text(
-                  title,
-                  style: normalFontStyle.copyWith(
-                    color: whitishColor,
-                    fontSize: 32,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5
-                  ),
-                ),
-                appName != null
-                    ? Column(
-                  children: [
-                    SizedBox(height: 15,),
-                    Text(
-                      appName,
-                      style: appNameFontStyle.copyWith(
-                        color: whitishColor,
-                        fontSize: 32
-                      )
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          height: height - 145,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SvgPicture.asset(imagePath),
+              Column(
+                children: [
+                  Text(
+                    title,
+                    style: normalFontStyle.copyWith(
+                      color: whitishColor,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.3
                     ),
-                    SizedBox(height: 40,)
-                  ],
-                )
-                    : SizedBox(height: 10,),
-                Text(
-                  subTitle,
-                  textAlign: TextAlign.center,
-                  style: normalFontStyle.copyWith(
-                    color: whitishColor.withOpacity(0.5),
-                    fontSize: 18,
-                    letterSpacing: 0.5
+                  ),
+                  appName != null
+                      ? Column(
+                    children: [
+                      SizedBox(height: 15,),
+                      Text(
+                        appName,
+                        style: appNameFontStyle.copyWith(
+                          color: whitishColor,
+                          fontSize: 32
+                        )
+                      ),
+                      SizedBox(height: 40,)
+                    ],
                   )
-                )
-              ],
-            )
-          ],
+                      : SizedBox(height: 10,),
+                  Text(
+                    subTitle,
+                    textAlign: TextAlign.center,
+                    style: normalFontStyle.copyWith(
+                      color: whitishColor.withOpacity(0.5),
+                      fontSize: 18,
+                      letterSpacing: 0.3
+                    )
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

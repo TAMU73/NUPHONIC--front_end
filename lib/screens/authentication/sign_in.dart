@@ -7,6 +7,7 @@ import 'package:nuphonic_front_end/extracted_widgets/sliding_panel_appBar.dart';
 import 'package:nuphonic_front_end/screens/authentication/confirm_code.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_up.dart';
 import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
+import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -20,9 +21,13 @@ class _SignInState extends State<SignIn> {
   String email;
   String password;
 
+  AuthService _auth = AuthService();
   PanelController _controller = PanelController();
 
   bool isOn = true;
+
+  bool isLoading = false;
+  bool isLinearLoading = false;
 
   //0 means error, 1 means success and null means default
   int isErrorE; //for email
@@ -38,7 +43,7 @@ class _SignInState extends State<SignIn> {
           : emailC
               ? 1
               : 0;
-      if(isErrorE==1) email = val;
+      if (isErrorE == 1) email = val;
     });
   }
 
@@ -47,10 +52,68 @@ class _SignInState extends State<SignIn> {
       isErrorP = val == ""
           ? null
           : val.length >= 8
-          ? 1
-          : 0;
-      if(isErrorP==1) password = val;
+              ? 1
+              : 0;
+      if (isErrorP == 1) password = val;
     });
+  }
+
+  showSnackBar(String msg, bool success) {
+    Scaffold.of(context).hideCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(20),
+          elevation: 0,
+          duration: Duration(seconds: 3),
+          backgroundColor: success ? greenishColor : reddishColor,
+          content: Text(msg,
+              style: normalFontStyle.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.3))),
+    );
+  }
+
+  Future signIn(String email, String password) async {
+    setState(() {
+      isLoading = true;
+    });
+    dynamic result = await _auth.signIn(email, password);
+    setState(() {
+      isLoading = false;
+    });
+    if (result == null) {
+      showSnackBar("Network Error", false);
+    } else {
+      print(result.data['msg']);
+      showSnackBar(result.data['msg'], result.data['success']);
+    }
+  }
+
+  Future forgotPassword(String email) async {
+    setState(() {
+      isLinearLoading = true;
+    });
+    dynamic result = await _auth.forgotPassword(email);
+    setState(() {
+      isLinearLoading = false;
+    });
+    if (result == null) {
+      showSnackBar("Network Error", false);
+    } else {
+      print(result.data['msg']);
+      showSnackBar(result.data['msg'], result.data['success']);
+      if (result.data['success']) {
+        await new Future.delayed(const Duration(seconds : 1));
+        Scaffold.of(context).hideCurrentSnackBar();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ConfirmCode(email: email),
+            ));
+      }
+    }
   }
 
   @override
@@ -82,11 +145,11 @@ class _SignInState extends State<SignIn> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextField(
-                        labelName: 'Email:',
+                        labelName: 'Email',
                         hint: 'example@example.com',
                         icons: ErrorIndicator(isError: isErrorE),
                         keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
+                        textInputAction: TextInputAction.done,
                         onChanged: (val) {
                           checkEmail(val);
                         }),
@@ -94,7 +157,7 @@ class _SignInState extends State<SignIn> {
                       height: 20,
                     ),
                     CustomTextField(
-                      labelName: 'Password:',
+                      labelName: 'Password',
                       obsecureText: isOn,
                       hint: '8+ character password',
                       keyboardType: TextInputType.text,
@@ -118,33 +181,38 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: isLinearLoading ? 33 : 15,
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ConfirmCode()));
-                        },
-                        child: Text(
-                          'Forgot Password?',
-                          style: texFieldLabelStyle,
-                        ),
-                      ),
-                    ),
+                    isLinearLoading
+                        ? Container(height: 2, child: linearLoading)
+                        : Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              child: Container(
+                                height: 20,
+                                child: Text(
+                                  'Forgot Password?',
+                                  style: texFieldLabelStyle,
+                                ),
+                              ),
+                              onTap: () {
+                                if (isErrorE == 1) {
+                                  forgotPassword(email);
+                                } else {
+                                  showSnackBar("Need a valid Email!!", false);
+                                }
+                              },
+                            ),
+                          ),
                     SizedBox(
                       height: 30,
                     ),
                     CustomButton(
                       labelName: 'SIGN IN',
-                      onPressed: () {
-                        if(isErrorE == 1 && isErrorP == 1) {
-                          print('Success');
-                        }
-                      },
+                      isLoading: isLoading,
+                      onPressed: isErrorE == 1 && isErrorP == 1
+                          ? () => signIn(email, password)
+                          : null,
                     ),
                     SizedBox(
                       height: 30,

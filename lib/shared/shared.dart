@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 const backgroundColor = Colors.black;
 const mainColor = Color(0xff7B4BFF);
@@ -7,6 +8,18 @@ const darkGreyColor = Color(0xff191919);
 const textFieldColor = Color(0xff292929);
 const reddishColor = Color(0xffF05959);
 const greenishColor = Color(0xff2DCC70);
+
+const loading = Center(
+  child: SpinKitFadingCube(
+    color: Color(0xff7B4BFF),
+    size: 50,
+  ),
+);
+
+const linearLoading = LinearProgressIndicator(
+  backgroundColor: whitishColor,
+  valueColor: AlwaysStoppedAnimation<Color>(mainColor),
+);
 
 const bottomPanelBorderRadius = BorderRadius.only(
   topRight: Radius.circular(30),

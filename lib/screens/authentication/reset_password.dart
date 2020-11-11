@@ -5,17 +5,28 @@ import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
 import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
+import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class ResetPassword extends StatefulWidget {
+
+  final String email;
+
+  ResetPassword({this.email});
+
   @override
   _ResetPasswordState createState() => _ResetPasswordState();
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
 
-  String email;
+  AuthService _auth = AuthService();
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String password;
+
+  bool isLoading = false;
 
   bool isOn = true;
   bool isOnR = true; //for retype password
@@ -47,9 +58,46 @@ class _ResetPasswordState extends State<ResetPassword> {
     });
   }
 
+  showSnackBar(String msg, bool success) {
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(20),
+          elevation: 0,
+          duration: Duration(seconds: 3),
+          backgroundColor: success ? greenishColor : reddishColor,
+          content: Text(msg,
+              style: normalFontStyle.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.3))),
+    );
+  }
+
+  Future resetPassword(String email, String password) async {
+    setState(() {
+      isLoading = true;
+    });
+    dynamic result = await _auth.resetPassword(email, password);
+    setState(() {
+      isLoading = false;
+    });
+    if (result == null) {
+      showSnackBar("Network Error", false);
+    } else {
+      print(result.data['msg']);
+      showSnackBar(result.data['msg'], result.data['success']);
+      await new Future.delayed(const Duration(seconds : 1));
+      _scaffoldKey.currentState.hideCurrentSnackBar();
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: backgroundColor,
       body: SingleChildScrollView(
         child: SafeArea(
@@ -72,13 +120,16 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'New Password:',
+                  labelName: 'New Password',
                   hint: '8+ character password',
                   obsecureText: isOn,
                   keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
+                  textInputAction: TextInputAction.done,
                   onChanged: (val) {
                     checkPassword(val);
+                    setState(() {
+                      isErrorR = 0;
+                    });
                   },
                   icons: Row(
                     children: [
@@ -126,12 +177,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 30,
                 ),
                 CustomButton(
-                  onPressed: () {
-                    if(isErrorP == 1 && isErrorR == 1) {
-                      print('success');
-                    }
-                  },
                   labelName: 'RESET',
+                  isLoading: isLoading,
+                  onPressed: isErrorP == 1 && isErrorR == 1 ? () => resetPassword(widget.email, password) : null,
                 )
               ],
             ),

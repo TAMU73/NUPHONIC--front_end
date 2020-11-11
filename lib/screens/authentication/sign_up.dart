@@ -4,6 +4,7 @@ import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
+import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class SignUp extends StatefulWidget {
@@ -13,6 +14,10 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
 
+  AuthService _auth = AuthService();
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String fullName = "";
   String username = "";
   String email;
@@ -20,6 +25,8 @@ class _SignUpState extends State<SignUp> {
 
   bool isOn = true;
   bool isOnR = true; //for retype password
+
+  bool isLoading = false;
 
   //0 means error, 1 means success and null means default
   int isErrorE; //for email
@@ -35,8 +42,8 @@ class _SignUpState extends State<SignUp> {
     Color iconColor = isError == null
         ? Color(0xff656565)
         : isError == 1
-        ? greenishColor
-        : reddishColor;
+            ? greenishColor
+            : reddishColor;
     return SvgPicture.asset(
       'assets/icons/check_icon.svg',
       color: iconColor,
@@ -51,9 +58,9 @@ class _SignUpState extends State<SignUp> {
       isErrorE = val == ""
           ? null
           : emailC
-          ? 1
-          : 0;
-      if(isErrorE==1) email = val;
+              ? 1
+              : 0;
+      if (isErrorE == 1) email = val;
     });
   }
 
@@ -62,9 +69,9 @@ class _SignUpState extends State<SignUp> {
       isErrorP = val == ""
           ? null
           : val.length >= 8
-          ? 1
-          : 0;
-      if(isErrorP==1) password = val;
+              ? 1
+              : 0;
+      if (isErrorP == 1) password = val;
     });
   }
 
@@ -73,14 +80,50 @@ class _SignUpState extends State<SignUp> {
       isErrorR = val == ""
           ? null
           : val == password
-          ? 1
-          : 0;
+              ? 1
+              : 0;
     });
+  }
+
+  Future signUp(
+      String fullName, String username, String email, String password, String retypePassword) async {
+    setState(() {
+      isLoading = true;
+    });
+    dynamic result = await _auth.signUp(fullName, username, email, password, retypePassword);
+    setState(() {
+      isLoading = false;
+    });
+    if (result == null) {
+      showSnackBar("Network Error", false);
+    } else {
+      print(result.data['msg']);
+      showSnackBar(result.data['msg'], result.data['success']);
+    }
+  }
+
+  showSnackBar(String msg, bool success) {
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(20),
+          elevation: 0,
+          duration: Duration(seconds: 3),
+          backgroundColor: success ? greenishColor : reddishColor,
+          content: Text(msg,
+              style: normalFontStyle.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.3
+              ))),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: backgroundColor,
       body: SingleChildScrollView(
         child: SafeArea(
@@ -103,7 +146,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Full Name:',
+                  labelName: 'Full Name',
                   hint: "Your full name",
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
@@ -117,19 +160,21 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Username:',
+                  labelName: 'Username',
                   hint: "Unique username",
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
                   onChanged: (val) {
-                    username = val;
+                    setState(() {
+                      username = val;
+                    });
                   },
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Email:',
+                  labelName: 'Email',
                   hint: "example@example.com",
                   icons: errorIndicator(isErrorE),
                   keyboardType: TextInputType.emailAddress,
@@ -142,19 +187,22 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Password:',
+                  labelName: 'Password',
                   hint: "8+ character password",
                   obsecureText: isOn,
                   keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
+                  textInputAction: TextInputAction.done,
                   onChanged: (val) {
                     checkPassword(val);
+                    setState(() {
+                      isErrorR = 0;
+                    });
                   },
                   icons: Row(
                     children: [
                       InkWell(
                         onTap: () {
-                          setState(()=>isOn=!isOn);
+                          setState(() => isOn = !isOn);
                         },
                         child: eyeIndicator(isOn),
                       ),
@@ -169,7 +217,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  labelName: 'Re-type Password:',
+                  labelName: 'Re-type Password',
                   hint: "Re-type password as above",
                   obsecureText: isOnR,
                   keyboardType: TextInputType.text,
@@ -181,7 +229,7 @@ class _SignUpState extends State<SignUp> {
                     children: [
                       InkWell(
                         onTap: () {
-                          setState(()=>isOnR=!isOnR);
+                          setState(() => isOnR = !isOnR);
                         },
                         child: eyeIndicator(isOnR),
                       ),
@@ -196,12 +244,15 @@ class _SignUpState extends State<SignUp> {
                   height: 40,
                 ),
                 CustomButton(
-                  onPressed: () {
-                    if(fullName != "" && username != "" && isErrorP == 1 && isErrorE == 1 && isErrorR == 1) {
-                      print('success');
-                    }
-                  },
                   labelName: 'SIGN UP',
+                  isLoading: isLoading,
+                  onPressed: fullName != "" &&
+                          username != "" &&
+                          isErrorP == 1 &&
+                          isErrorE == 1 &&
+                          isErrorR == 1
+                      ? () => signUp(fullName, username, email, password, password)
+                      : null,
                 ),
                 SizedBox(
                   height: 30,
