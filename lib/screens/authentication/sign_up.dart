@@ -17,11 +17,13 @@ class _SignUpState extends State<SignUp> {
   AuthService _auth = AuthService();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController resetPasswordController = TextEditingController();
 
   String fullName = "";
   String username = "";
   String email;
   String password;
+  String retypePassword;
 
   bool isOn = true;
   bool isOnR = true; //for retype password
@@ -82,6 +84,7 @@ class _SignUpState extends State<SignUp> {
           : val == password
               ? 1
               : 0;
+      if (isErrorR == 1) retypePassword = val;
     });
   }
 
@@ -95,7 +98,7 @@ class _SignUpState extends State<SignUp> {
       isLoading = false;
     });
     if (result == null) {
-      showSnackBar("Network Error", false);
+      showSnackBar("Network Error!!", false);
     } else {
       print(result.data['msg']);
       showSnackBar(result.data['msg'], result.data['success']);
@@ -195,7 +198,8 @@ class _SignUpState extends State<SignUp> {
                   onChanged: (val) {
                     checkPassword(val);
                     setState(() {
-                      isErrorR = 0;
+                      resetPasswordController.clear();
+                      isErrorR =null;
                     });
                   },
                   icons: Row(
@@ -217,6 +221,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
+                  controller: resetPasswordController,
                   labelName: 'Re-type Password',
                   hint: "Re-type password as above",
                   obsecureText: isOnR,
@@ -251,7 +256,7 @@ class _SignUpState extends State<SignUp> {
                           isErrorP == 1 &&
                           isErrorE == 1 &&
                           isErrorR == 1
-                      ? () => signUp(fullName, username, email, password, password)
+                      ? () => signUp(fullName, username, email, password, retypePassword)
                       : null,
                 ),
                 SizedBox(

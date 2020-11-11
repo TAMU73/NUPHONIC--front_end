@@ -23,6 +23,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   AuthService _auth = AuthService();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController resetPasswordController = TextEditingController();
 
   String password;
 
@@ -128,7 +129,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                   onChanged: (val) {
                     checkPassword(val);
                     setState(() {
-                      isErrorR = 0;
+                      resetPasswordController.clear();
+                      isErrorR =null;
                     });
                   },
                   icons: Row(
@@ -150,6 +152,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 20,
                 ),
                 CustomTextField(
+                  controller: resetPasswordController,
                   labelName: 'Re-type Password',
                   hint: 'Re-type password as above',
                   obsecureText: isOnR,
