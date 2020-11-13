@@ -61,20 +61,36 @@ class _ResetPasswordState extends State<ResetPassword> {
     });
   }
 
+  Widget customSnackBar(bool success, String msg) {
+    return SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.all(20),
+      elevation: 0,
+      duration: Duration(seconds: 3),
+      backgroundColor: success ? greenishColor : reddishColor,
+      content: Text(
+        msg,
+        style: normalFontStyle.copyWith(
+            fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+      ),
+    );
+  }
+
   showSnackBar(String msg, bool success) {
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
+        SnackBar(
           behavior: SnackBarBehavior.floating,
           margin: EdgeInsets.all(20),
           elevation: 0,
           duration: Duration(seconds: 3),
           backgroundColor: success ? greenishColor : reddishColor,
-          content: Text(msg,
-              style: normalFontStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.3))),
+          content: Text(
+            msg,
+            style: normalFontStyle.copyWith(
+                fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+          ),
+        )
     );
   }
 

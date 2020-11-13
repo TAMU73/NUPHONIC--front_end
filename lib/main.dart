@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nuphonic_front_end/screens/authentication/onboarding.dart';
+import 'package:nuphonic_front_end/screens/wrapper.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -11,7 +11,7 @@ void main() {
 class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Onboarding();
+    return Wrapper();
   }
 }
 

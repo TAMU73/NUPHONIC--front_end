@@ -31,16 +31,17 @@ class _ConfirmCodeState extends State<ConfirmCode> {
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(20),
-          elevation: 0,
-          duration: Duration(seconds: 2),
-          backgroundColor: success ? greenishColor : reddishColor,
-          content: Text(msg,
-              style: normalFontStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.3))),
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.all(20),
+        elevation: 0,
+        duration: Duration(seconds: 3),
+        backgroundColor: success ? greenishColor : reddishColor,
+        content: Text(
+          msg,
+          style: normalFontStyle.copyWith(
+              fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+        ),
+      ),
     );
   }
 
@@ -88,7 +89,8 @@ class _ConfirmCodeState extends State<ConfirmCode> {
                   label: 'Confirm Code',
                   endChild: Warning(
                     toolTipKey: _toolTipKey,
-                    text: "Going back is not recommended.\nPlease complete the process.",
+                    text:
+                        "Going back is not recommended.\nPlease complete the process.",
                   ),
                 ),
                 SizedBox(

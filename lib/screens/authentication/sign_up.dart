@@ -102,24 +102,29 @@ class _SignUpState extends State<SignUp> {
     } else {
       print(result.data['msg']);
       showSnackBar(result.data['msg'], result.data['success']);
+      if(result.data['success']) {
+        await new Future.delayed(const Duration(seconds: 1));
+        _scaffoldKey.currentState.hideCurrentSnackBar();
+        Navigator.pop(context);
+      }
     }
   }
 
   showSnackBar(String msg, bool success) {
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
+        SnackBar(
           behavior: SnackBarBehavior.floating,
           margin: EdgeInsets.all(20),
           elevation: 0,
           duration: Duration(seconds: 3),
           backgroundColor: success ? greenishColor : reddishColor,
-          content: Text(msg,
-              style: normalFontStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.3
-              ))),
+          content: Text(
+            msg,
+            style: normalFontStyle.copyWith(
+                fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+          ),
+        )
     );
   }
 

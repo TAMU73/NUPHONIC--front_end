@@ -4,11 +4,13 @@ import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/sliding_panel_appBar.dart';
+import 'package:nuphonic_front_end/screens/Home/home.dart';
 import 'package:nuphonic_front_end/screens/authentication/confirm_code.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_up.dart';
 import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SignIn extends StatefulWidget {
@@ -17,7 +19,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-
   String email;
   String password;
 
@@ -60,19 +61,18 @@ class _SignInState extends State<SignIn> {
 
   showSnackBar(String msg, bool success) {
     Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(20),
-          elevation: 0,
-          duration: Duration(seconds: 3),
-          backgroundColor: success ? greenishColor : reddishColor,
-          content: Text(msg,
-              style: normalFontStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.3))),
-    );
+    Scaffold.of(context).showSnackBar(SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.all(20),
+      elevation: 0,
+      duration: Duration(seconds: 3),
+      backgroundColor: success ? greenishColor : reddishColor,
+      content: Text(
+        msg,
+        style: normalFontStyle.copyWith(
+            fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+      ),
+    ));
   }
 
   Future signIn(String email, String password) async {
@@ -88,6 +88,17 @@ class _SignInState extends State<SignIn> {
     } else {
       print(result.data['msg']);
       showSnackBar(result.data['msg'], result.data['success']);
+      if (result.data['success']) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        dynamic key = 'user_id';
+        dynamic value = result.data['id'];
+        prefs.setString(key, value);
+        await new Future.delayed(const Duration(seconds: 1));
+        Scaffold.of(context).hideCurrentSnackBar();
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home()));
+      }
     }
   }
 
@@ -105,13 +116,14 @@ class _SignInState extends State<SignIn> {
       print(result.data['msg']);
       showSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
-        await new Future.delayed(const Duration(seconds : 1));
+        await new Future.delayed(const Duration(seconds: 1));
         Scaffold.of(context).hideCurrentSnackBar();
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ConfirmCode(email: email),
-            ));
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConfirmCode(email: email),
+          ),
+        );
       }
     }
   }
@@ -119,132 +131,137 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return SlidingUpPanel(
+      controller: _controller,
+      backdropEnabled: true,
+      color: darkGreyColor,
+      minHeight: 83,
+      maxHeight: 480,
+      borderRadius: bottomPanelBorderRadius,
+      collapsed: SlidingPanelAppBar(
+        height: 83,
+        text: 'SIGN IN TO CONTINUE',
         controller: _controller,
-        backdropEnabled: true,
-        color: darkGreyColor,
-        minHeight: 83,
-        maxHeight: 480,
-        borderRadius: bottomPanelBorderRadius,
-        collapsed: SlidingPanelAppBar(
-          height: 83,
-          text: 'SIGN IN TO CONTINUE',
-          controller: _controller,
-        ),
-        panel: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SlidingPanelAppBar(
-                height: 83,
-                text: 'SIGN IN WITH EMAIL',
-                controller: _controller,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextField(
-                        labelName: 'Email',
-                        hint: 'example@example.com',
-                        icons: ErrorIndicator(isError: isErrorE),
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.done,
-                        onChanged: (val) {
-                          checkEmail(val);
-                        }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomTextField(
-                      labelName: 'Password',
-                      obsecureText: isOn,
-                      hint: '8+ character password',
-                      keyboardType: TextInputType.text,
+      ),
+      panel: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SlidingPanelAppBar(
+              height: 83,
+              text: 'SIGN IN WITH EMAIL',
+              controller: _controller,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomTextField(
+                      labelName: 'Email',
+                      hint: 'example@example.com',
+                      icons: ErrorIndicator(isError: isErrorE),
+                      keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
                       onChanged: (val) {
-                        checkPassword(val);
-                      },
-                      icons: Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() => isOn = !isOn);
-                            },
-                            child: EyeIndicator(isOn: isOn),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          ErrorIndicator(isError: isErrorP),
-                        ],
-                      ),
+                        checkEmail(val);
+                      }),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextField(
+                    labelName: 'Password',
+                    obsecureText: isOn,
+                    hint: '8+ character password',
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    onChanged: (val) {
+                      checkPassword(val);
+                    },
+                    icons: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() => isOn = !isOn);
+                          },
+                          child: EyeIndicator(isOn: isOn),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        ErrorIndicator(isError: isErrorP),
+                      ],
                     ),
-                    SizedBox(
-                      height: isLinearLoading ? 33 : 15,
-                    ),
-                    isLinearLoading
-                        ? Container(height: 2, child: linearLoading)
-                        : Align(
-                            alignment: Alignment.centerRight,
-                            child: GestureDetector(
-                              child: Container(
-                                height: 20,
-                                child: Text(
-                                  'Forgot Password?',
-                                  style: texFieldLabelStyle,
-                                ),
+                  ),
+                  SizedBox(
+                    height: isLinearLoading ? 33 : 15,
+                  ),
+                  isLinearLoading
+                      ? Container(height: 2, child: linearLoading)
+                      : Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            child: Container(
+                              height: 20,
+                              child: Text(
+                                'Forgot Password?',
+                                style: texFieldLabelStyle,
                               ),
-                              onTap: () {
-                                if (isErrorE == 1) {
-                                  forgotPassword(email);
-                                } else {
-                                  showSnackBar("Need a valid Email!!", false);
-                                }
-                              },
                             ),
+                            onTap: () {
+                              if (isErrorE == 1) {
+                                forgotPassword(email);
+                              } else {
+                                showSnackBar("Need a valid Email!!", false);
+                              }
+                            },
                           ),
-                    SizedBox(
-                      height: 30,
+                        ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  CustomButton(
+                    labelName: 'SIGN IN',
+                    isLoading: isLoading,
+                    onPressed: isErrorE == 1 && isErrorP == 1
+                        ? () => signIn(email, password)
+                        : null,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignUp(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'New to ',
+                          style: signUpLabelStyle,
+                        ),
+                        Text(
+                          'NUPHONIC',
+                          style: appNameFontStyle,
+                        ),
+                        Text(
+                          '? Sign Up Now',
+                          style: signUpLabelStyle,
+                        ),
+                      ],
                     ),
-                    CustomButton(
-                      labelName: 'SIGN IN',
-                      isLoading: isLoading,
-                      onPressed: isErrorE == 1 && isErrorP == 1
-                          ? () => signIn(email, password)
-                          : null,
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignUp()));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'New to ',
-                            style: signUpLabelStyle,
-                          ),
-                          Text(
-                            'NUPHONIC',
-                            style: appNameFontStyle,
-                          ),
-                          Text(
-                            '? Sign Up Now',
-                            style: signUpLabelStyle,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ));
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
