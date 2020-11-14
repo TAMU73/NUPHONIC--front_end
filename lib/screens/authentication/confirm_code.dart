@@ -3,12 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
+import 'package:nuphonic_front_end/extracted_widgets/warning.dart';
 import 'package:nuphonic_front_end/screens/authentication/reset_password.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class ConfirmCode extends StatefulWidget {
-
   final String email;
 
   ConfirmCode({this.email});
@@ -18,10 +18,10 @@ class ConfirmCode extends StatefulWidget {
 }
 
 class _ConfirmCodeState extends State<ConfirmCode> {
-
   AuthService _auth = AuthService();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey _toolTipKey = GlobalKey();
 
   String code = "";
 
@@ -31,16 +31,17 @@ class _ConfirmCodeState extends State<ConfirmCode> {
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(20),
-          elevation: 0,
-          duration: Duration(seconds: 2),
-          backgroundColor: success ? greenishColor : reddishColor,
-          content: Text(msg,
-              style: normalFontStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.3))),
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.all(20),
+        elevation: 0,
+        duration: Duration(seconds: 3),
+        backgroundColor: success ? greenishColor : reddishColor,
+        content: Text(
+          msg,
+          style: normalFontStyle.copyWith(
+              fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+        ),
+      ),
     );
   }
 
@@ -58,7 +59,7 @@ class _ConfirmCodeState extends State<ConfirmCode> {
       print(result.data['msg']);
       showSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
-        await new Future.delayed(const Duration(seconds : 1));
+        await new Future.delayed(const Duration(seconds: 1));
         _scaffoldKey.currentState.hideCurrentSnackBar();
         Navigator.pushReplacement(
             context,
@@ -85,14 +86,15 @@ class _ConfirmCodeState extends State<ConfirmCode> {
                   height: 20,
                 ),
                 CustomAppBar(
-                  leadIconPath: 'assets/icons/back_icon.svg',
-                  onIconTap: () {
-                    Navigator.pop(context);
-                  },
                   label: 'Confirm Code',
+                  endChild: Warning(
+                    toolTipKey: _toolTipKey,
+                    text:
+                        "Going back is not recommended.\nPlease complete the process.",
+                  ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
                 Container(
                   height: 200,
@@ -112,7 +114,9 @@ class _ConfirmCodeState extends State<ConfirmCode> {
                     ),
                   ),
                 ),
-                SizedBox(height: 40,),
+                SizedBox(
+                  height: 40,
+                ),
                 Text(
                   'Enter your code here',
                   style: texFieldLabelStyle,
@@ -135,8 +139,12 @@ class _ConfirmCodeState extends State<ConfirmCode> {
                 CustomButton(
                   labelName: 'CONFIRM',
                   isLoading: isLoading,
-                  onPressed: code == "" ? null : () => confirmCode(widget.email, code),
-                )
+                  onPressed:
+                      code == "" ? null : () => confirmCode(widget.email, code),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
               ],
             ),
           ),

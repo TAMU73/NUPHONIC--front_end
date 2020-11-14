@@ -4,6 +4,7 @@ import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
+import 'package:nuphonic_front_end/extracted_widgets/warning.dart';
 import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
@@ -23,6 +24,8 @@ class _ResetPasswordState extends State<ResetPassword> {
   AuthService _auth = AuthService();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController resetPasswordController = TextEditingController();
+  GlobalKey _toolTipKey = GlobalKey();
 
   String password;
 
@@ -58,20 +61,36 @@ class _ResetPasswordState extends State<ResetPassword> {
     });
   }
 
+  Widget customSnackBar(bool success, String msg) {
+    return SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.all(20),
+      elevation: 0,
+      duration: Duration(seconds: 3),
+      backgroundColor: success ? greenishColor : reddishColor,
+      content: Text(
+        msg,
+        style: normalFontStyle.copyWith(
+            fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+      ),
+    );
+  }
+
   showSnackBar(String msg, bool success) {
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
+        SnackBar(
           behavior: SnackBarBehavior.floating,
           margin: EdgeInsets.all(20),
           elevation: 0,
           duration: Duration(seconds: 3),
           backgroundColor: success ? greenishColor : reddishColor,
-          content: Text(msg,
-              style: normalFontStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.3))),
+          content: Text(
+            msg,
+            style: normalFontStyle.copyWith(
+                fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+          ),
+        )
     );
   }
 
@@ -110,11 +129,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 20,
                 ),
                 CustomAppBar(
-                  leadIconPath: 'assets/icons/back_icon.svg',
-                  onIconTap: () {
-                    Navigator.pop(context);
-                  },
                   label: 'Reset Password',
+                  endChild: Warning(
+                    toolTipKey: _toolTipKey,
+                    text: "Going back is not recommended.\nPlease complete the process.",
+                  ),
                 ),
                 SizedBox(
                   height: 20,
@@ -128,7 +147,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                   onChanged: (val) {
                     checkPassword(val);
                     setState(() {
-                      isErrorR = 0;
+                      resetPasswordController.clear();
+                      isErrorR =null;
                     });
                   },
                   icons: Row(
@@ -150,6 +170,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 20,
                 ),
                 CustomTextField(
+                  controller: resetPasswordController,
                   labelName: 'Re-type Password',
                   hint: 'Re-type password as above',
                   obsecureText: isOnR,

@@ -51,7 +51,7 @@ class OnboardingBox extends StatelessWidget {
                       SizedBox(height: 40,)
                     ],
                   )
-                      : SizedBox(height: 10,),
+                      : SizedBox(height: 15,),
                   Text(
                     subTitle,
                     textAlign: TextAlign.center,

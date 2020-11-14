@@ -8,6 +8,7 @@ const darkGreyColor = Color(0xff191919);
 const textFieldColor = Color(0xff292929);
 const reddishColor = Color(0xffF05959);
 const greenishColor = Color(0xff2DCC70);
+const warningColor = Color(0xffFFC61C);
 
 const loading = Center(
   child: SpinKitFadingCube(

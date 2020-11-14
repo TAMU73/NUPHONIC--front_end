@@ -12,6 +12,7 @@ class Onboarding extends StatefulWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
+
   int currentIndex = 0;
 
   List<OnboardingModel> sliders = [
@@ -22,8 +23,12 @@ class _OnboardingState extends State<Onboarding> {
         subTitle: "ANYTIME, ANYWHERE"),
     OnboardingModel(
         imagePath: "assets/illustrations/music_environment.svg",
-        title: "Listen any music",
+        title: "Listen any song",
         subTitle: "Find your favourite music and enjoy without paying"),
+    OnboardingModel(
+        imagePath: "assets/illustrations/upload.svg",
+        title: "Upload your song",
+        subTitle: "Make your own music and upload without paying"),
     OnboardingModel(
         imagePath: "assets/illustrations/support_bucket.svg",
         title: "Support any artist",
