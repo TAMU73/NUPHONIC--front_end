@@ -15,13 +15,6 @@ class CustomButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            boxShadow: <BoxShadow>[
-              // BoxShadow(
-              //   color: mainColor.withOpacity(0.1),
-              //   blurRadius: 10,
-              //   offset: Offset(0, 10),
-              // ),
-            ]
         ),
         child: isLoading ? loading : MaterialButton(
           onPressed: onPressed,
