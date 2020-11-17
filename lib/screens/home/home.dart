@@ -25,22 +25,6 @@ class _HomeState extends State<Home> {
   String name;
   String greeting;
 
-  void _showSnackBar(String msg, bool success) {
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.all(20),
-      elevation: 0,
-      duration: Duration(seconds: 3),
-      backgroundColor: success ? greenishColor : reddishColor,
-      content: Text(
-        msg,
-        style: normalFontStyle.copyWith(
-            fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
-      ),
-    ));
-  }
-
   Future<void> _signOut() async {
     setState(() {
       isLoading = true;
@@ -60,7 +44,9 @@ class _HomeState extends State<Home> {
     final value = prefs.getString(key);
     dynamic result = await _auth.getUserInfo(value);
     if (result == null) {
-      _showSnackBar("Network Error", false);
+      setState(() {
+        networkError = true;
+      });
     } else {
       setState(() {
         name = result.data['user']['full_name'].split(" ")[0];
