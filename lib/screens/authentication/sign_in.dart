@@ -4,10 +4,10 @@ import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/sliding_panel_appBar.dart';
-import 'package:nuphonic_front_end/screens/Home/home.dart';
 import 'package:nuphonic_front_end/screens/authentication/confirm_code.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_up.dart';
 import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
+import 'package:nuphonic_front_end/screens/wrapper.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,7 +97,7 @@ class _SignInState extends State<SignIn> {
         Scaffold.of(context).hideCurrentSnackBar();
         Navigator.pop(context);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
+            context, MaterialPageRoute(builder: (context) => Wrapper()));
       }
     }
   }
