@@ -46,6 +46,7 @@ class _HomeState extends State<Home> {
     if (result == null) {
       setState(() {
         networkError = true;
+        homeLoading = false;
       });
     } else {
       setState(() {
