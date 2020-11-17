@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/main.dart';
+import 'package:nuphonic_front_end/screens/home/network_error.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +20,7 @@ class _HomeState extends State<Home> {
 
   bool isLoading = false;
   bool homeLoading = true;
+  bool networkError = false;
 
   String name;
   String greeting;
@@ -96,7 +98,7 @@ class _HomeState extends State<Home> {
       backgroundColor: backgroundColor,
       body: homeLoading
           ? Center(child: loading)
-          : SingleChildScrollView(
+          : networkError ? NetworkError(): SingleChildScrollView(
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
