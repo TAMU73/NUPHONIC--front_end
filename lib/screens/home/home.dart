@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
   String name;
   String greeting;
 
-  showSnackBar(String msg, bool success) {
+  void _showSnackBar(String msg, bool success) {
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
     ));
   }
 
-  signOut() async {
+  Future<void> _signOut() async {
     setState(() {
       isLoading = true;
     });
@@ -52,13 +52,13 @@ class _HomeState extends State<Home> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Main()));
   }
 
-  _getUserInfo() async {
+  Future<void> _getUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'user_id';
     final value = prefs.getString(key);
     dynamic result = await _auth.getUserInfo(value);
     if (result == null) {
-      showSnackBar("Network Error", false);
+      _showSnackBar("Network Error", false);
     } else {
       setState(() {
         name = result.data['user']['full_name'].split(" ")[0];
@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  _getGreeting() {
+  void _getGreeting() {
     int hour = DateTime.now().hour;
     String _greeting = hour < 12
         ? "Morning"
@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
                       CustomButton(
                         labelName: 'SIGN OUT',
                         isLoading: isLoading,
-                        onPressed: signOut,
+                        onPressed: _signOut,
                       ),
                     ],
                   ),

@@ -15,7 +15,7 @@ class _OnboardingState extends State<Onboarding> {
 
   int currentIndex = 0;
 
-  List<OnboardingModel> sliders = [
+  List<OnboardingModel> _sliders = [
     OnboardingModel(
         imagePath: "assets/logos/app_logo_mini.svg",
         title: "Welcome to",
@@ -39,7 +39,6 @@ class _OnboardingState extends State<Onboarding> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SingleChildScrollView(
@@ -56,13 +55,13 @@ class _OnboardingState extends State<Onboarding> {
                         currentIndex = val;
                       });
                     },
-                    itemCount: sliders.length,
+                    itemCount: _sliders.length,
                     itemBuilder: (context, index) {
                       return OnboardingBox(
-                        imagePath: sliders[index].imagePath,
-                        title: sliders[index].title,
-                        appName: sliders[index].appName,
-                        subTitle: sliders[index].subTitle,
+                        imagePath: _sliders[index].imagePath,
+                        title: _sliders[index].title,
+                        appName: _sliders[index].appName,
+                        subTitle: _sliders[index].subTitle,
                       );
                     },
                   ),
@@ -72,7 +71,7 @@ class _OnboardingState extends State<Onboarding> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      for (int i = 0; i < sliders.length; i++)
+                      for (int i = 0; i < _sliders.length; i++)
                         currentIndex == i
                             ? PageIndicator(
                                 isCurrentPage: true,

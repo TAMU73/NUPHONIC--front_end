@@ -36,7 +36,7 @@ class _SignInState extends State<SignIn> {
 
   Validation validate = Validation();
 
-  checkEmail(String val) {
+  void checkEmail(String val) {
     bool emailC = validate.isEmail(val);
     setState(() {
       isErrorE = val == ""
@@ -48,7 +48,7 @@ class _SignInState extends State<SignIn> {
     });
   }
 
-  checkPassword(String val) {
+  void checkPassword(String val) {
     setState(() {
       isErrorP = val == ""
           ? null
@@ -59,7 +59,7 @@ class _SignInState extends State<SignIn> {
     });
   }
 
-  showSnackBar(String msg, bool success) {
+  void showSnackBar(String msg, bool success) {
     Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -75,7 +75,7 @@ class _SignInState extends State<SignIn> {
     ));
   }
 
-  Future signIn(String email, String password) async {
+  Future<void> signIn(String email, String password) async {
     setState(() {
       isLoading = true;
     });
@@ -102,7 +102,7 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  Future forgotPassword(String email) async {
+  Future<void> forgotPassword(String email) async {
     setState(() {
       isLinearLoading = true;
     });

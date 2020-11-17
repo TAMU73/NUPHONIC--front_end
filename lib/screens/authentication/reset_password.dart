@@ -24,7 +24,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   AuthService _auth = AuthService();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  TextEditingController resetPasswordController = TextEditingController();
+  TextEditingController _resetPasswordController = TextEditingController();
   GlobalKey _toolTipKey = GlobalKey();
 
   String password;
@@ -40,7 +40,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   Validation validate = Validation();
 
-  checkPassword(String val) {
+  void _checkPassword(String val) {
     setState(() {
       isErrorP = val == ""
           ? null
@@ -51,7 +51,7 @@ class _ResetPasswordState extends State<ResetPassword> {
     });
   }
 
-  checkRetypePassword(String val) {
+  void _checkRetypePassword(String val) {
     setState(() {
       isErrorR = val == ""
           ? null
@@ -145,9 +145,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   onChanged: (val) {
-                    checkPassword(val);
+                    _checkPassword(val);
                     setState(() {
-                      resetPasswordController.clear();
+                      _resetPasswordController.clear();
                       isErrorR =null;
                     });
                   },
@@ -170,14 +170,14 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 20,
                 ),
                 CustomTextField(
-                  controller: resetPasswordController,
+                  controller: _resetPasswordController,
                   labelName: 'Re-type Password',
                   hint: 'Re-type password as above',
                   obsecureText: isOnR,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   onChanged: (val) {
-                    checkRetypePassword(val);
+                    _checkRetypePassword(val);
                   },
                   icons: Row(
                     children: [

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
+import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
+import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
 import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
@@ -17,7 +18,7 @@ class _SignUpState extends State<SignUp> {
   AuthService _auth = AuthService();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  TextEditingController resetPasswordController = TextEditingController();
+  TextEditingController _resetPasswordController = TextEditingController();
 
   String fullName = "";
   String username = "";
@@ -35,26 +36,9 @@ class _SignUpState extends State<SignUp> {
   int isErrorP; //for password
   int isErrorR; //for retype password
 
-  Widget eyeIndicator(bool isOn) {
-    String icon = isOn ? 'eye_off_icon.svg' : 'eye_on_icon.svg';
-    return SvgPicture.asset('assets/icons/$icon');
-  }
-
-  Widget errorIndicator(int isError) {
-    Color iconColor = isError == null
-        ? Color(0xff656565)
-        : isError == 1
-            ? greenishColor
-            : reddishColor;
-    return SvgPicture.asset(
-      'assets/icons/check_icon.svg',
-      color: iconColor,
-    );
-  }
-
   Validation validate = Validation();
 
-  checkEmail(String val) {
+  void checkEmail(String val) {
     bool emailC = validate.isEmail(val);
     setState(() {
       isErrorE = val == ""
@@ -66,7 +50,7 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  checkPassword(String val) {
+  void checkPassword(String val) {
     setState(() {
       isErrorP = val == ""
           ? null
@@ -77,7 +61,7 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  checkRetypePassword(String val) {
+  void checkRetypePassword(String val) {
     setState(() {
       isErrorR = val == ""
           ? null
@@ -88,7 +72,7 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  Future signUp(
+  Future<void> signUp(
       String fullName, String username, String email, String password, String retypePassword) async {
     setState(() {
       isLoading = true;
@@ -110,7 +94,7 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
-  showSnackBar(String msg, bool success) {
+  void showSnackBar(String msg, bool success) {
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
         SnackBar(
@@ -184,7 +168,7 @@ class _SignUpState extends State<SignUp> {
                 CustomTextField(
                   labelName: 'Email',
                   hint: "example@example.com",
-                  icons: errorIndicator(isErrorE),
+                  icons: ErrorIndicator(isError: isErrorE),
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   onChanged: (val) {
@@ -203,7 +187,7 @@ class _SignUpState extends State<SignUp> {
                   onChanged: (val) {
                     checkPassword(val);
                     setState(() {
-                      resetPasswordController.clear();
+                      _resetPasswordController.clear();
                       isErrorR =null;
                     });
                   },
@@ -213,12 +197,12 @@ class _SignUpState extends State<SignUp> {
                         onTap: () {
                           setState(() => isOn = !isOn);
                         },
-                        child: eyeIndicator(isOn),
+                        child: EyeIndicator(isOn: isOn),
                       ),
                       SizedBox(
                         width: 15,
                       ),
-                      errorIndicator(isErrorP),
+                      ErrorIndicator(isError: isErrorP),
                     ],
                   ),
                 ),
@@ -226,7 +210,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 CustomTextField(
-                  controller: resetPasswordController,
+                  controller: _resetPasswordController,
                   labelName: 'Re-type Password',
                   hint: "Re-type password as above",
                   obsecureText: isOnR,
@@ -241,12 +225,12 @@ class _SignUpState extends State<SignUp> {
                         onTap: () {
                           setState(() => isOnR = !isOnR);
                         },
-                        child: eyeIndicator(isOnR),
+                        child: EyeIndicator(isOn: isOnR),
                       ),
                       SizedBox(
                         width: 15,
                       ),
-                      errorIndicator(isErrorR),
+                      ErrorIndicator(isError: isErrorR),
                     ],
                   ),
                 ),

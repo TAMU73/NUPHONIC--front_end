@@ -19,7 +19,7 @@ class _WrapperState extends State<Wrapper> {
     checkUser();
   }
 
-  checkUser () async {
+  Future<void> checkUser () async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'user_id';
     final value = prefs.getString(key) ?? null;

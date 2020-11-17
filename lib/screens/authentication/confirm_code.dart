@@ -27,7 +27,7 @@ class _ConfirmCodeState extends State<ConfirmCode> {
 
   bool isLoading = false;
 
-  showSnackBar(String msg, bool success) {
+  void _showSnackBar(String msg, bool success) {
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
@@ -45,7 +45,7 @@ class _ConfirmCodeState extends State<ConfirmCode> {
     );
   }
 
-  Future confirmCode(String email, String code) async {
+  Future<void> _confirmCode(String email, String code) async {
     setState(() {
       isLoading = true;
     });
@@ -54,10 +54,10 @@ class _ConfirmCodeState extends State<ConfirmCode> {
       isLoading = false;
     });
     if (result == null) {
-      showSnackBar("Network Error", false);
+      _showSnackBar("Network Error", false);
     } else {
       print(result.data['msg']);
-      showSnackBar(result.data['msg'], result.data['success']);
+      _showSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
         await new Future.delayed(const Duration(seconds: 1));
         _scaffoldKey.currentState.hideCurrentSnackBar();
@@ -140,7 +140,7 @@ class _ConfirmCodeState extends State<ConfirmCode> {
                   labelName: 'CONFIRM',
                   isLoading: isLoading,
                   onPressed:
-                      code == "" ? null : () => confirmCode(widget.email, code),
+                      code == "" ? null : () => _confirmCode(widget.email, code),
                 ),
                 SizedBox(
                   height: 10,

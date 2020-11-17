@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 class AuthService {
   Dio dio = Dio();
 
-  signIn(String email, String password) async {
+  Future<dynamic> signIn(String email, String password) async {
     try {
       Response response = await dio.post(
           'https://nuphonic--backend.herokuapp.com/sign_in',
@@ -17,7 +17,7 @@ class AuthService {
     }
   }
 
-  signUp(String fullName, String username, String email, String password,
+  Future<dynamic> signUp(String fullName, String username, String email, String password,
       String retypePassword) async {
     try {
       Response response =
@@ -38,7 +38,7 @@ class AuthService {
     }
   }
 
-  forgotPassword(String email) async {
+  Future<dynamic> forgotPassword(String email) async {
     try {
       Response response = await dio.patch(
           'https://nuphonic--backend.herokuapp.com/forgot_password',
@@ -54,7 +54,7 @@ class AuthService {
     }
   }
 
-  confirmCode(String email, String code) async {
+  Future<dynamic> confirmCode(String email, String code) async {
     try {
       Response response = await dio.patch(
           'https://nuphonic--backend.herokuapp.com/confirm_code',
@@ -68,7 +68,7 @@ class AuthService {
     }
   }
 
-  resetPassword(String email, String password) async {
+  Future<dynamic> resetPassword(String email, String password) async {
     try {
       Response response = await dio.patch(
           'https://nuphonic--backend.herokuapp.com/reset_password',
@@ -86,7 +86,7 @@ class AuthService {
     }
   }
 
-  getUserInfo(String id) async {
+  Future<dynamic> getUserInfo(String id) async {
     try {
       Response response = await dio.get(
           'https://nuphonic--backend.herokuapp.com/get_info/$id',
