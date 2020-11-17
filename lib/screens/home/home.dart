@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AuthService _auth = AuthService();
 
   bool isLoading = false;
@@ -23,8 +24,8 @@ class _HomeState extends State<Home> {
   String greeting;
 
   showSnackBar(String msg, bool success) {
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(SnackBar(
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.all(20),
       elevation: 0,
@@ -56,7 +57,7 @@ class _HomeState extends State<Home> {
     final key = 'user_id';
     final value = prefs.getString(key);
     dynamic result = await _auth.getUserInfo(value);
-    if(result==null) {
+    if (result == null) {
       showSnackBar("Network Error", false);
     } else {
       setState(() {
@@ -68,7 +69,11 @@ class _HomeState extends State<Home> {
 
   _getGreeting() {
     int hour = DateTime.now().hour;
-    String _greeting = hour < 12 ? "Morning" : hour < 17 ? "Afternoon" : "Evening";
+    String _greeting = hour < 12
+        ? "Morning"
+        : hour < 17
+            ? "Afternoon"
+            : "Evening";
     setState(() {
       greeting = _greeting;
     });
@@ -87,31 +92,46 @@ class _HomeState extends State<Home> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: backgroundColor,
-      body: homeLoading ? Center(child: loading) : SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
+      body: homeLoading
+          ? Center(child: loading)
+          : SingleChildScrollView(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      CustomAppBar(
+                        label: 'Good $greeting',
+                        labelTextStyle: titleTextStyle.copyWith(
+                          fontSize: 24,
+                        ),
+                        secondLabel: '$name,',
+                        secondLabelTextStyle: normalFontStyle.copyWith(
+                          fontSize: 20,
+                        ),
+                        endChild: SvgPicture.asset(
+                          'assets/logos/app_logo_mini.svg',
+                          height: 33,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 100,
+                      ),
+                      CustomButton(
+                        labelName: 'SIGN OUT',
+                        isLoading: isLoading,
+                        onPressed: signOut,
+                      ),
+                    ],
+                  ),
                 ),
-                CustomAppBar(
-                  label: 'Good $greeting\n$name,',
-                  endChild: SvgPicture.asset('assets/logos/app_logo_mini.svg', height: 40,),
-                ),
-                SizedBox(height: 100,),
-                CustomButton(
-                  labelName: 'SIGN OUT',
-                  isLoading: isLoading,
-                  onPressed: signOut,
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

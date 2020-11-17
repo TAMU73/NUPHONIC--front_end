@@ -7,9 +7,13 @@ class CustomAppBar extends StatelessWidget {
   final Function onIconTap;
   final String leadIconPath;
   final String label;
+  final TextStyle labelTextStyle;
+  final String secondLabel;
+  final TextStyle secondLabelTextStyle;
   final Widget endChild;
 
-  CustomAppBar({this.onIconTap, this.leadIconPath, this.label, this.endChild});
+  CustomAppBar({this.onIconTap, this.leadIconPath, this.label, this.endChild, this.secondLabel, this
+  .labelTextStyle, this.secondLabelTextStyle});
 
 
   @override
@@ -27,9 +31,19 @@ class CustomAppBar extends StatelessWidget {
           ) : SizedBox(),
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              label,
-              style: titleTextStyle,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: labelTextStyle != null ? labelTextStyle : titleTextStyle,
+                ),
+                secondLabel != null ? Text(
+                  secondLabel,
+                  style: secondLabelTextStyle != null ? secondLabelTextStyle : titleTextStyle,
+                ) : SizedBox()
+              ],
             ),
           ),
           Spacer(),
