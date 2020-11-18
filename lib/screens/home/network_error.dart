@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class NetworkError extends StatelessWidget {
+  final Function onPressed;
+
+  NetworkError({this.onPressed});
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -26,6 +31,12 @@ class NetworkError extends StatelessWidget {
                 color: whitishColor.withOpacity(0.6)
               ),
             ),
+            SizedBox(height: 25,),
+            CustomButton(
+              labelName: 'REFRESH',
+              isLoading: false,
+              onPressed: onPressed,
+            )
           ],
         ),
       ),

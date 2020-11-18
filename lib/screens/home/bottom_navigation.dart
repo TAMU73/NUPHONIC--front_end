@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/screens/home/home.dart';
+import 'package:nuphonic_front_end/screens/home/library.dart';
+import 'package:nuphonic_front_end/screens/home/search.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -16,8 +18,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   static List<Widget> _navigationOption = <Widget>[
     Home(),
-    Text('Search'),
-    Text('Library'),
+    Search(),
+    Library(),
   ];
 
   void changeNavigation(int index) {

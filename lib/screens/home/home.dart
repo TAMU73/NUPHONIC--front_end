@@ -14,7 +14,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AuthService _auth = AuthService();
 
@@ -101,44 +100,50 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: backgroundColor,
-      body: networkError ? NetworkError(): SingleChildScrollView(
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      CustomAppBar(
-                        label: 'Good $greeting',
-                        labelTextStyle: titleTextStyle.copyWith(
-                          fontSize: 24,
-                        ),
-                        secondLabel: '$name,',
-                        secondLabelTextStyle: normalFontStyle.copyWith(
-                          fontSize: 20,
-                        ),
-                        endChild: SvgPicture.asset(
-                          'assets/logos/app_logo_mini.svg',
-                          height: 33,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 100,
-                      ),
-                      homeLoading
-                          ? Center(child: loading)
-                          : CustomButton(
-                        labelName: 'SIGN OUT',
-                        isLoading: isLoading,
-                        onPressed: _signOut,
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: height,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
+                  CustomAppBar(
+                    label: 'Good $greeting',
+                    labelTextStyle: titleTextStyle.copyWith(
+                      fontSize: 24,
+                    ),
+                    secondLabel: '$name,',
+                    secondLabelTextStyle: normalFontStyle.copyWith(
+                      fontSize: 20,
+                    ),
+                    endChild: SvgPicture.asset(
+                      'assets/logos/app_logo_mini.svg',
+                      height: 33,
+                    ),
+                  ),
+                  networkError
+                      ? Expanded(
+                          child: NetworkError(),
+                        )
+                      : homeLoading
+                          ? Expanded(child: loading)
+                          : Expanded(
+                            child: CustomButton(
+                                labelName: 'SIGN OUT',
+                                isLoading: isLoading,
+                                onPressed: _signOut,
+                              ),
+                          ),
+                ],
               ),
             ),
+          ),
+        ),
+      ),
     );
   }
 }
