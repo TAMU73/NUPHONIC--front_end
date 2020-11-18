@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
@@ -6,6 +7,7 @@ import 'package:nuphonic_front_end/main.dart';
 import 'package:nuphonic_front_end/screens/home/network_error.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
+import 'package:nuphonic_front_end/shimmers/home_shimmer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -100,49 +102,52 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: backgroundColor,
-      body: SingleChildScrollView(
-        child: Container(
-          height: height,
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  CustomAppBar(
-                    label: 'Good $greeting',
-                    labelTextStyle: titleTextStyle.copyWith(
-                      fontSize: 24,
-                    ),
-                    secondLabel: '$name,',
-                    secondLabelTextStyle: normalFontStyle.copyWith(
-                      fontSize: 20,
-                    ),
-                    endChild: SvgPicture.asset(
-                      'assets/logos/app_logo_mini.svg',
-                      height: 33,
-                    ),
-                  ),
-                  networkError
-                      ? Expanded(
-                          child: NetworkError(),
-                        )
-                      : homeLoading
-                          ? Expanded(child: loading)
-                          : Expanded(
-                            child: CustomButton(
-                                labelName: 'SIGN OUT',
-                                isLoading: isLoading,
-                                onPressed: _signOut,
-                              ),
-                          ),
-                ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomAppBar(
+                  label: 'Good $greeting',
+                  labelTextStyle: titleTextStyle.copyWith(
+                    fontSize: 24,
+                  ),
+                  secondLabel: '$name,',
+                  secondLabelTextStyle: normalFontStyle.copyWith(
+                    fontSize: 20,
+                  ),
+                  endChild: SvgPicture.asset(
+                    'assets/logos/app_logo_mini.svg',
+                    height: 33,
+                  ),
+                ),
+              ),
+              networkError
+                  ? Container(
+                      height: height - 200,
+                      child: NetworkError(),
+                    )
+                  : homeLoading
+                      ? HomeShimmer()
+                      : homeBody(height)
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget homeBody(double height) {
+    return Container(
+      height: height - 200,
+      child: CustomButton(
+        labelName: 'SIGN OUT',
+        isLoading: isLoading,
+        onPressed: _signOut,
       ),
     );
   }
