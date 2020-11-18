@@ -129,7 +129,17 @@ class _HomeState extends State<Home> {
               networkError
                   ? Container(
                       height: height - 200,
-                      child: NetworkError(),
+                      child: NetworkError(
+                        onPressed: () {
+                          setState(() {
+                            networkError = false;
+                            homeLoading = true;
+                          });
+                          _getGreeting(); //checking greetings
+                          _savedData(); //checking saved user's first name
+                          _getUserInfo();
+                        },
+                      ),
                     )
                   : homeLoading
                       ? HomeShimmer()
