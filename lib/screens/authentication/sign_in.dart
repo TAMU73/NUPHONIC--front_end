@@ -80,19 +80,24 @@ class _SignInState extends State<SignIn> {
       isLoading = true;
     });
     dynamic result = await _auth.signIn(email, password);
-    setState(() {
-      isLoading = false;
-    });
     if (result == null) {
       showSnackBar("Network Error", false);
     } else {
-      print(result.data['msg']);
+      //saving user id
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      dynamic key = 'user_id';
+      dynamic value = result.data['id'];
+      prefs.setString(key, value);
+      //saving user first name
+      dynamic result1 = await _auth.getUserInfo(value);
+      dynamic key1 = 'first_name';
+      dynamic value1 = result1.data['user']['full_name'].split(" ")[0];
+      prefs.setString(key1, value1);
+      setState(() {
+        isLoading = false;
+      });
       showSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        dynamic key = 'user_id';
-        dynamic value = result.data['id'];
-        prefs.setString(key, value);
         await new Future.delayed(const Duration(seconds: 1));
         Scaffold.of(context).hideCurrentSnackBar();
         Navigator.pop(context);
@@ -101,6 +106,7 @@ class _SignInState extends State<SignIn> {
       }
     }
   }
+
 
   Future<void> forgotPassword(String email) async {
     setState(() {

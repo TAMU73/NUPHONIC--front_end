@@ -30,18 +30,23 @@ class _HomeState extends State<Home> {
       isLoading = true;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    //setting user id to null after sign out
     dynamic key = 'user_id';
     dynamic value;
     prefs.setString(key, value);
+    //setting user's first name to null after sign out
+    dynamic key1 = 'first_name';
+    dynamic value1;
+    prefs.setString(key1, value1);
     await new Future.delayed(const Duration(seconds: 1));
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) => Main()));
   }
 
   Future<void> _getUserInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = 'user_id';
-    final value = prefs.getString(key);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dynamic key = 'user_id';
+    dynamic value = prefs.getString(key);
     dynamic result = await _auth.getUserInfo(value);
     if (result == null) {
       setState(() {
@@ -49,14 +54,17 @@ class _HomeState extends State<Home> {
         homeLoading = false;
       });
     } else {
+      dynamic key = 'first_name';
+      dynamic value = result.data['user']['full_name'].split(" ")[0];
+      prefs.setString(key, value);
       setState(() {
-        name = result.data['user']['full_name'].split(" ")[0];
+        name = value;
         homeLoading = false;
       });
     }
   }
 
-  void _getGreeting() {
+  Future<void> _getGreeting() async {
     int hour = DateTime.now().hour;
     String _greeting = hour < 12
         ? "Morning"
@@ -68,12 +76,22 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Future<void> _savedData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dynamic key = 'first_name';
+    dynamic firstName = prefs.getString(key);
+    setState(() {
+      name = firstName;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getUserInfo();
-    _getGreeting();
+    _getGreeting(); //checking greetings
+    _savedData(); //checking saved user's first name
+    _getUserInfo(); //updating users info
   }
 
   @override
@@ -83,9 +101,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: backgroundColor,
-      body: homeLoading
-          ? Center(child: loading)
-          : networkError ? NetworkError(): SingleChildScrollView(
+      body: networkError ? NetworkError(): SingleChildScrollView(
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -111,7 +127,9 @@ class _HomeState extends State<Home> {
                       SizedBox(
                         height: 100,
                       ),
-                      CustomButton(
+                      homeLoading
+                          ? Center(child: loading)
+                          : CustomButton(
                         labelName: 'SIGN OUT',
                         isLoading: isLoading,
                         onPressed: _signOut,
