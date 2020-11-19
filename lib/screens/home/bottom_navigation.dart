@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/screens/home/home.dart';
@@ -13,7 +14,6 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
-
   int _selectedIndex = 0;
 
   static List<Widget> _navigationOption = <Widget>[
@@ -32,7 +32,15 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        _navigationOption[_selectedIndex],
+        PageTransitionSwitcher(
+          transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+            return FadeScaleTransition(
+              animation: primaryAnimation,
+              child: child,
+            );
+          },
+          child: _navigationOption[_selectedIndex],
+        ),
         Align(
           alignment: AlignmentDirectional.bottomCenter,
           child: ClipRect(
