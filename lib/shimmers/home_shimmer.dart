@@ -33,10 +33,21 @@ class HomeShimmer extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              for (int i = 0; i < 5; i++)
-                PageIndicator(
-                  isCurrentPage: true,
-                )
+              Container(
+                height: 1.5,
+                width: 30,
+                decoration: circularBorder,
+              ),
+              SizedBox(width: 4,),
+              for (int i = 0; i < 4; i++)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Container(
+                    height: 1.5,
+                    width: 9,
+                    decoration: circularBorder,
+                  ),
+                ),
             ],
           ),
         ),
