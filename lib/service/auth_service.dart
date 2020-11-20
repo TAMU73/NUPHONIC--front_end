@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 class AuthService {
+
   Dio dio = Dio();
 
   Future<dynamic> signIn(String email, String password) async {

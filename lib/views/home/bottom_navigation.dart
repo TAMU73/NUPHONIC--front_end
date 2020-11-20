@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nuphonic_front_end/screens/home/home.dart';
-import 'package:nuphonic_front_end/screens/home/library.dart';
-import 'package:nuphonic_front_end/screens/home/search.dart';
-import 'package:nuphonic_front_end/shared/shared.dart';
+import 'package:nuphonic_front_end/views/home/home.dart';
+import 'package:nuphonic_front_end/views/home/library.dart';
+import 'package:nuphonic_front_end/views/home/search.dart';
+import 'package:nuphonic_front_end/utils/shared.dart';
 
 class BottomNavigation extends StatefulWidget {
   @override

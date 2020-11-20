@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nuphonic_front_end/shared/shared.dart';
+import 'package:nuphonic_front_end/utils/shared.dart';
 
 class CustomAppBar extends StatelessWidget {
 

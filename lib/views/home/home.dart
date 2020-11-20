@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
-import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/main.dart';
-import 'package:nuphonic_front_end/screens/home/network_error.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
-import 'package:nuphonic_front_end/shared/shared.dart';
-import 'package:nuphonic_front_end/shimmers/home_shimmer.dart';
+import 'package:nuphonic_front_end/utils/shared.dart';
+import 'package:nuphonic_front_end/views/authentication/onboarding.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/custom_app_bar.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/custom_button.dart';
+import 'package:nuphonic_front_end/views/home/network_error.dart';
+import 'package:nuphonic_front_end/views/shimmers/home_shimmer.dart';
+import 'package:nuphonic_front_end/views/wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -23,7 +26,7 @@ class _HomeState extends State<Home> {
   bool homeLoading = true;
   bool networkError = false;
 
-  String name;
+  String name = "User";
   String greeting;
 
   Future<void> _signOut() async {
@@ -31,17 +34,14 @@ class _HomeState extends State<Home> {
       isLoading = true;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //setting user id to null after sign out
-    dynamic key = 'user_id';
-    dynamic value;
-    prefs.setString(key, value);
     //setting user's first name to null after sign out
     dynamic key1 = 'first_name';
     dynamic value1;
     prefs.setString(key1, value1);
-    await new Future.delayed(const Duration(seconds: 1));
-    Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Main()));
+    //setting user id to null after sign out
+    dynamic key = 'user_id';
+    dynamic value;
+    prefs.setString(key, value);
   }
 
   Future<void> _getUserInfo() async {

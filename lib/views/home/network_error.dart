@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
-import 'package:nuphonic_front_end/shared/shared.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/custom_button.dart';
+import 'package:nuphonic_front_end/utils/shared.dart';
 
 class NetworkError extends StatelessWidget {
   final Function onPressed;

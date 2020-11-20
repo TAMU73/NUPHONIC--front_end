@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nuphonic_front_end/extracted_widgets/page_indicator.dart';
-import 'package:nuphonic_front_end/shared/shared.dart';
+import 'package:nuphonic_front_end/utils/shared.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomeShimmer extends StatelessWidget {

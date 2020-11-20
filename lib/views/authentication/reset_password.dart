@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
-import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
-import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
-import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
-import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
-import 'package:nuphonic_front_end/extracted_widgets/warning.dart';
-import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/service/validation.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
-import 'package:nuphonic_front_end/shared/shared.dart';
+import 'package:nuphonic_front_end/service/validation.dart';
+import 'package:nuphonic_front_end/utils/shared.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/custom_app_bar.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/custom_button.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/custom_textfield.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/error_indicator.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/eye_indicator.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/warning.dart';
 
 class ResetPassword extends StatefulWidget {
 

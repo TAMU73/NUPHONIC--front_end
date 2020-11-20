@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nuphonic_front_end/screens/wrapper.dart';
+import 'package:get/get.dart';
+import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/views/wrapper.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(GetMaterialApp(
     home: Main(),
     debugShowCheckedModeBanner: false,
   ));

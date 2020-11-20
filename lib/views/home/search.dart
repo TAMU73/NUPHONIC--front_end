@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
-import 'package:nuphonic_front_end/shared/shared.dart';
+import 'package:nuphonic_front_end/views/extracted_widgets/custom_app_bar.dart';
+import 'package:nuphonic_front_end/utils/shared.dart';
 
-class Library extends StatelessWidget {
+class Search extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class Library extends StatelessWidget {
               children: [
                 SizedBox(height: 20,),
                 CustomAppBar(
-                  label: 'Library',
+                  label: 'Search',
                 )
               ],
             ),
