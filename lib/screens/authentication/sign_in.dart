@@ -4,11 +4,11 @@ import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/sliding_panel_appBar.dart';
-import 'package:nuphonic_front_end/screens/Home/home.dart';
 import 'package:nuphonic_front_end/screens/authentication/confirm_code.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_up.dart';
-import 'package:nuphonic_front_end/screens/authentication/validation/validation.dart';
+import 'package:nuphonic_front_end/screens/wrapper.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
+import 'package:nuphonic_front_end/service/validation.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -36,7 +36,7 @@ class _SignInState extends State<SignIn> {
 
   Validation validate = Validation();
 
-  checkEmail(String val) {
+  void checkEmail(String val) {
     bool emailC = validate.isEmail(val);
     setState(() {
       isErrorE = val == ""
@@ -48,7 +48,7 @@ class _SignInState extends State<SignIn> {
     });
   }
 
-  checkPassword(String val) {
+  void checkPassword(String val) {
     setState(() {
       isErrorP = val == ""
           ? null
@@ -59,7 +59,7 @@ class _SignInState extends State<SignIn> {
     });
   }
 
-  showSnackBar(String msg, bool success) {
+  void showSnackBar(String msg, bool success) {
     Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -75,34 +75,40 @@ class _SignInState extends State<SignIn> {
     ));
   }
 
-  Future signIn(String email, String password) async {
+  Future<void> signIn(String email, String password) async {
     setState(() {
       isLoading = true;
     });
     dynamic result = await _auth.signIn(email, password);
-    setState(() {
-      isLoading = false;
-    });
     if (result == null) {
       showSnackBar("Network Error", false);
     } else {
-      print(result.data['msg']);
+      //saving user id
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      dynamic key = 'user_id';
+      dynamic value = result.data['id'];
+      prefs.setString(key, value);
+      //saving user first name
+      dynamic result1 = await _auth.getUserInfo(value);
+      dynamic key1 = 'first_name';
+      dynamic value1 = result1.data['user']['full_name'].split(" ")[0];
+      prefs.setString(key1, value1);
+      setState(() {
+        isLoading = false;
+      });
       showSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        dynamic key = 'user_id';
-        dynamic value = result.data['id'];
-        prefs.setString(key, value);
         await new Future.delayed(const Duration(seconds: 1));
         Scaffold.of(context).hideCurrentSnackBar();
         Navigator.pop(context);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
+            context, MaterialPageRoute(builder: (context) => Wrapper()));
       }
     }
   }
 
-  Future forgotPassword(String email) async {
+
+  Future<void> forgotPassword(String email) async {
     setState(() {
       isLinearLoading = true;
     });

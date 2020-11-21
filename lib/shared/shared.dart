@@ -13,12 +13,13 @@ const warningColor = Color(0xffFFC61C);
 const loading = Center(
   child: SpinKitFadingCube(
     color: Color(0xff7B4BFF),
+    duration: Duration(milliseconds: 800),
     size: 50,
   ),
 );
 
 const linearLoading = LinearProgressIndicator(
-  backgroundColor: whitishColor,
+  backgroundColor: backgroundColor,
   valueColor: AlwaysStoppedAnimation<Color>(mainColor),
 );
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nuphonic_front_end/screens/Home/home.dart';
 import 'package:nuphonic_front_end/screens/authentication/onboarding.dart';
+import 'package:nuphonic_front_end/screens/home/bottom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Wrapper extends StatefulWidget {
@@ -19,7 +19,7 @@ class _WrapperState extends State<Wrapper> {
     checkUser();
   }
 
-  checkUser () async {
+  Future<void> checkUser () async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'user_id';
     final value = prefs.getString(key) ?? null;
@@ -33,7 +33,7 @@ class _WrapperState extends State<Wrapper> {
     if(user==null) {
       return Onboarding();
     } else {
-      return Home();
+      return BottomNavigation();
     }
   }
 }
