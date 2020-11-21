@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
+import 'package:nuphonic_front_end/extracted_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
@@ -19,6 +21,7 @@ class _SignUpState extends State<SignUp> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _resetPasswordController = TextEditingController();
+  Validation validate = Validation();
 
   String fullName = "";
   String username = "";
@@ -35,8 +38,6 @@ class _SignUpState extends State<SignUp> {
   int isErrorE; //for email
   int isErrorP; //for password
   int isErrorR; //for retype password
-
-  Validation validate = Validation();
 
   void checkEmail(String val) {
     bool emailC = validate.isEmail(val);
@@ -82,34 +83,14 @@ class _SignUpState extends State<SignUp> {
       isLoading = false;
     });
     if (result == null) {
-      showSnackBar("Network Error!!", false);
+      await CustomSnackBar().buildSnackBar("Network Error!!", false);
     } else {
       print(result.data['msg']);
-      showSnackBar(result.data['msg'], result.data['success']);
+      await CustomSnackBar().buildSnackBar(result.data['msg'], result.data['success']);
       if(result.data['success']) {
-        await new Future.delayed(const Duration(seconds: 1));
-        _scaffoldKey.currentState.hideCurrentSnackBar();
-        Navigator.pop(context);
+        Get.back();
       }
     }
-  }
-
-  void showSnackBar(String msg, bool success) {
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(20),
-          elevation: 0,
-          duration: Duration(seconds: 3),
-          backgroundColor: success ? greenishColor : reddishColor,
-          content: Text(
-            msg,
-            style: normalFontStyle.copyWith(
-                fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
-          ),
-        )
-    );
   }
 
   @override
@@ -130,7 +111,7 @@ class _SignUpState extends State<SignUp> {
                 CustomAppBar(
                   leadIconPath: 'assets/icons/back_icon.svg',
                   onIconTap: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   label: 'Create an Account',
                 ),
@@ -181,7 +162,7 @@ class _SignUpState extends State<SignUp> {
                 CustomTextField(
                   labelName: 'Password',
                   hint: "8+ character password",
-                  obsecureText: isOn,
+                  obSecureText: isOn,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   onChanged: (val) {
@@ -213,7 +194,7 @@ class _SignUpState extends State<SignUp> {
                   controller: _resetPasswordController,
                   labelName: 'Re-type Password',
                   hint: "Re-type password as above",
-                  obsecureText: isOnR,
+                  obSecureText: isOnR,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   onChanged: (val) {

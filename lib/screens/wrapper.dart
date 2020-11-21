@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/screens/authentication/onboarding.dart';
 import 'package:nuphonic_front_end/screens/home/bottom_navigation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nuphonic_front_end/service/shared_preference_service.dart';
 
 class Wrapper extends StatefulWidget {
   @override
@@ -9,7 +9,6 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-
   String user;
 
   @override
@@ -19,10 +18,8 @@ class _WrapperState extends State<Wrapper> {
     checkUser();
   }
 
-  Future<void> checkUser () async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = 'user_id';
-    final value = prefs.getString(key) ?? null;
+  Future<void> checkUser() async {
+    String value = await SharedPreferenceService().read(id: 'user_id');
     setState(() {
       user = value;
     });
@@ -30,10 +27,6 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
-    if(user==null) {
-      return Onboarding();
-    } else {
-      return BottomNavigation();
-    }
+    return user == null ? OnBoarding() : BottomNavigation();
   }
 }
