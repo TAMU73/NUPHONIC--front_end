@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
+import 'package:nuphonic_front_end/extracted_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/warning.dart';
 import 'package:nuphonic_front_end/screens/authentication/reset_password.dart';
@@ -27,23 +29,6 @@ class _ConfirmCodeState extends State<ConfirmCode> {
 
   bool isLoading = false;
 
-  void _showSnackBar(String msg, bool success) {
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(20),
-        elevation: 0,
-        duration: Duration(seconds: 3),
-        backgroundColor: success ? greenishColor : reddishColor,
-        content: Text(
-          msg,
-          style: normalFontStyle.copyWith(
-              fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
-        ),
-      ),
-    );
-  }
 
   Future<void> _confirmCode(String email, String code) async {
     setState(() {
@@ -54,18 +39,12 @@ class _ConfirmCodeState extends State<ConfirmCode> {
       isLoading = false;
     });
     if (result == null) {
-      _showSnackBar("Network Error", false);
+      await CustomSnackBar().buildSnackBar("Network Error", false);
     } else {
       print(result.data['msg']);
-      _showSnackBar(result.data['msg'], result.data['success']);
+      await CustomSnackBar().buildSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
-        await new Future.delayed(const Duration(seconds: 1));
-        _scaffoldKey.currentState.hideCurrentSnackBar();
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ResetPassword(email: email),
-            ));
+        Get.off(ResetPassword(email: email));
       }
     }
   }

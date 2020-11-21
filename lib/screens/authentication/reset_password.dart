@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
+import 'package:nuphonic_front_end/extracted_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
@@ -22,7 +24,7 @@ class ResetPassword extends StatefulWidget {
 class _ResetPasswordState extends State<ResetPassword> {
 
   AuthService _auth = AuthService();
-
+  Validation validate = Validation();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _resetPasswordController = TextEditingController();
   GlobalKey _toolTipKey = GlobalKey();
@@ -37,8 +39,6 @@ class _ResetPasswordState extends State<ResetPassword> {
   //0 means error, 1 means success and null means default
   int isErrorR; //for retype password
   int isErrorP; //for password
-
-  Validation validate = Validation();
 
   void _checkPassword(String val) {
     setState(() {
@@ -61,39 +61,6 @@ class _ResetPasswordState extends State<ResetPassword> {
     });
   }
 
-  Widget customSnackBar(bool success, String msg) {
-    return SnackBar(
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.all(20),
-      elevation: 0,
-      duration: Duration(seconds: 3),
-      backgroundColor: success ? greenishColor : reddishColor,
-      content: Text(
-        msg,
-        style: normalFontStyle.copyWith(
-            fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
-      ),
-    );
-  }
-
-  showSnackBar(String msg, bool success) {
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(20),
-          elevation: 0,
-          duration: Duration(seconds: 3),
-          backgroundColor: success ? greenishColor : reddishColor,
-          content: Text(
-            msg,
-            style: normalFontStyle.copyWith(
-                fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
-          ),
-        )
-    );
-  }
-
   Future resetPassword(String email, String password) async {
     setState(() {
       isLoading = true;
@@ -103,13 +70,11 @@ class _ResetPasswordState extends State<ResetPassword> {
       isLoading = false;
     });
     if (result == null) {
-      showSnackBar("Network Error", false);
+      await CustomSnackBar().buildSnackBar("Network Error", false);
     } else {
       print(result.data['msg']);
-      showSnackBar(result.data['msg'], result.data['success']);
-      await new Future.delayed(const Duration(seconds : 1));
-      _scaffoldKey.currentState.hideCurrentSnackBar();
-      Navigator.pop(context);
+      await CustomSnackBar().buildSnackBar(result.data['msg'], result.data['success']);
+      Get.back();
     }
   }
 
@@ -141,7 +106,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 CustomTextField(
                   labelName: 'New Password',
                   hint: '8+ character password',
-                  obsecureText: isOn,
+                  obSecureText: isOn,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   onChanged: (val) {
@@ -173,7 +138,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   controller: _resetPasswordController,
                   labelName: 'Re-type Password',
                   hint: 'Re-type password as above',
-                  obsecureText: isOnR,
+                  obSecureText: isOnR,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   onChanged: (val) {
