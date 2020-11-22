@@ -28,18 +28,42 @@ class _BottomNavigationState extends State<BottomNavigation> {
     });
   }
 
+  BottomNavigationBarItem bottomNavigationBarItem(
+      String label, String iconPath, bool isSelected) {
+    return BottomNavigationBarItem(
+        icon: AnimatedContainer(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.ease,
+          height: isSelected ? 26 : 24,
+          width: isSelected ? 26 : 24,
+          child: SvgPicture.asset(
+            iconPath,
+            color: isSelected ? mainColor : whitishColor,
+          ),
+        ),
+        label: label);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        PageTransitionSwitcher(
-          transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
-            return FadeScaleTransition(
-              animation: primaryAnimation,
-              child: child,
-            );
-          },
-          child: _navigationOption[_selectedIndex],
+        // PageTransitionSwitcher(
+        //   transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+        //     return FadeScaleTransition(
+        //       animation: primaryAnimation,
+        //       child: child,
+        //     );
+        //   },
+        //   child: IndexedStack(
+        //     index: _selectedIndex,
+        //     key: ValueKey<int>(_selectedIndex),
+        //     children: _navigationOption,
+        //   ),
+        // ),
+        IndexedStack(
+          index: _selectedIndex,
+          children: _navigationOption,
         ),
         Align(
           alignment: AlignmentDirectional.bottomCenter,
@@ -51,24 +75,21 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 child: BottomNavigationBar(
                   backgroundColor: Colors.black.withOpacity(0.92),
                   items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                        icon: SvgPicture.asset(
-                          'assets/icons/grid.svg',
-                          color: _selectedIndex == 0 ? mainColor : whitishColor,
-                        ),
-                        label: 'Home'),
-                    BottomNavigationBarItem(
-                        icon: SvgPicture.asset(
-                          'assets/icons/search.svg',
-                          color: _selectedIndex == 1 ? mainColor : whitishColor,
-                        ),
-                        label: "Search"),
-                    BottomNavigationBarItem(
-                        icon: SvgPicture.asset(
-                          'assets/icons/library.svg',
-                          color: _selectedIndex == 2 ? mainColor : whitishColor,
-                        ),
-                        label: 'Library'),
+                    bottomNavigationBarItem(
+                      'Home',
+                      'assets/icons/grid.svg',
+                      _selectedIndex == 0 ? true : false,
+                    ),
+                    bottomNavigationBarItem(
+                      'Search',
+                      'assets/icons/search.svg',
+                      _selectedIndex == 1 ? true : false,
+                    ),
+                    bottomNavigationBarItem(
+                      'Library',
+                      'assets/icons/library.svg',
+                      _selectedIndex == 2 ? true : false,
+                    ),
                   ],
                   currentIndex: _selectedIndex,
                   onTap: changeNavigation,
