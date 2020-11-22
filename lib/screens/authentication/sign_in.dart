@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_button.dart';
+import 'package:nuphonic_front_end/extracted_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/extracted_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/extracted_widgets/error_indicator.dart';
 import 'package:nuphonic_front_end/extracted_widgets/eye_indicator.dart';
@@ -8,9 +10,9 @@ import 'package:nuphonic_front_end/screens/authentication/confirm_code.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_up.dart';
 import 'package:nuphonic_front_end/screens/wrapper.dart';
 import 'package:nuphonic_front_end/service/auth_service.dart';
+import 'package:nuphonic_front_end/service/shared_preference_service.dart';
 import 'package:nuphonic_front_end/service/validation.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SignIn extends StatefulWidget {
@@ -59,54 +61,36 @@ class _SignInState extends State<SignIn> {
     });
   }
 
-  void showSnackBar(String msg, bool success) {
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(SnackBar(
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.all(20),
-      elevation: 0,
-      duration: Duration(seconds: 3),
-      backgroundColor: success ? greenishColor : reddishColor,
-      content: Text(
-        msg,
-        style: normalFontStyle.copyWith(
-            fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 0.3),
-      ),
-    ));
-  }
-
   Future<void> signIn(String email, String password) async {
     setState(() {
       isLoading = true;
     });
     dynamic result = await _auth.signIn(email, password);
     if (result == null) {
-      showSnackBar("Network Error", false);
+      await CustomSnackBar().buildSnackBar("Network Error", false);
     } else {
-      //saving user id
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      dynamic key = 'user_id';
-      dynamic value = result.data['id'];
-      prefs.setString(key, value);
-      //saving user first name
-      dynamic result1 = await _auth.getUserInfo(value);
-      dynamic key1 = 'first_name';
-      dynamic value1 = result1.data['user']['full_name'].split(" ")[0];
-      prefs.setString(key1, value1);
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
-        await new Future.delayed(const Duration(seconds: 1));
-        Scaffold.of(context).hideCurrentSnackBar();
-        Navigator.pop(context);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Wrapper()));
+        dynamic result1 = await _auth.getUserInfo(result.data['id']);
+        await SharedPreferenceService()
+            .save(id: 'user_id', data: result.data['id']);
+        await SharedPreferenceService().save(
+            id: 'first_name',
+            data: result1.data['user']['full_name'].split(" ")[0]);
+        setState(() {
+          isLoading = false;
+        });
+        await CustomSnackBar()
+            .buildSnackBar(result.data['msg'], result.data['success']);
+        Get.offAll(Wrapper());
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        await CustomSnackBar()
+            .buildSnackBar(result.data['msg'], result.data['success']);
       }
     }
   }
-
 
   Future<void> forgotPassword(String email) async {
     setState(() {
@@ -117,19 +101,15 @@ class _SignInState extends State<SignIn> {
       isLinearLoading = false;
     });
     if (result == null) {
-      showSnackBar("Network Error", false);
+      await CustomSnackBar().buildSnackBar("Network Error", false);
     } else {
       print(result.data['msg']);
-      showSnackBar(result.data['msg'], result.data['success']);
+      await CustomSnackBar()
+          .buildSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
-        await new Future.delayed(const Duration(seconds: 1));
-        Scaffold.of(context).hideCurrentSnackBar();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConfirmCode(email: email),
-          ),
-        );
+        Get.to(ConfirmCode(
+          email: email,
+        ));
       }
     }
   }
@@ -176,7 +156,7 @@ class _SignInState extends State<SignIn> {
                   ),
                   CustomTextField(
                     labelName: 'Password',
-                    obsecureText: isOn,
+                    obSecureText: isOn,
                     hint: '8+ character password',
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
@@ -213,12 +193,11 @@ class _SignInState extends State<SignIn> {
                                 style: texFieldLabelStyle,
                               ),
                             ),
-                            onTap: () {
-                              if (isErrorE == 1) {
-                                forgotPassword(email);
-                              } else {
-                                showSnackBar("Need a valid Email!!", false);
-                              }
+                            onTap: () async {
+                              isErrorE == 1
+                                  ? forgotPassword(email)
+                                  : await CustomSnackBar().buildSnackBar(
+                                      "Need a valid Email!!", false);
                             },
                           ),
                         ),
@@ -237,12 +216,7 @@ class _SignInState extends State<SignIn> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignUp(),
-                        ),
-                      );
+                      Get.to(SignUp());
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

@@ -6,12 +6,12 @@ import 'package:nuphonic_front_end/models/onboarding_model.dart';
 import 'package:nuphonic_front_end/screens/authentication/sign_in.dart';
 import 'package:nuphonic_front_end/shared/shared.dart';
 
-class Onboarding extends StatefulWidget {
+class OnBoarding extends StatefulWidget {
   @override
-  _OnboardingState createState() => _OnboardingState();
+  _OnBoardingState createState() => _OnBoardingState();
 }
 
-class _OnboardingState extends State<Onboarding> {
+class _OnBoardingState extends State<OnBoarding> {
 
   int currentIndex = 0;
 

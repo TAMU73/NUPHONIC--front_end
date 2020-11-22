@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/screens/wrapper.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(GetMaterialApp(
     home: Main(),
     debugShowCheckedModeBanner: false,
   ));

@@ -6,14 +6,14 @@ class CustomTextField extends StatelessWidget {
   final String labelName;
   final String hint;
   final Widget icons;
-  final bool obsecureText;
+  final bool obSecureText;
   final Function onChanged;
   final TextInputAction textInputAction;
   final Function onEditingComplete;
   final TextInputType keyboardType;
   final TextEditingController controller;
 
-  CustomTextField({this.labelName, this.hint, this.icons, this.obsecureText, this.onChanged, this.onEditingComplete, this.textInputAction, this.keyboardType, this.controller});
+  CustomTextField({this.labelName, this.hint, this.icons, this.obSecureText, this.onChanged, this.onEditingComplete, this.textInputAction, this.keyboardType, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class CustomTextField extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   controller: controller,
-                  obscureText: obsecureText ?? false,
+                  obscureText: obSecureText ?? false,
                   cursorHeight: 24,
                   cursorColor: whitishColor,
                   style: texFieldLabelStyle,
