@@ -19,46 +19,51 @@ class OnBoardingBox extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
-          height: height - 150,
+          height: height - 155,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
-                flex: 6,
                 child: Padding(
-                  padding: const EdgeInsets.all(40),
+                  padding: const EdgeInsets.all(20),
                   child: SvgPicture.asset(imagePath),
                 ),
               ),
-              Flexible(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      style: normalFontStyle.copyWith(
-                          color: whitishColor,
-                          fontSize: 32,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.3),
-                    ),
-                    appName != null
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 25),
-                            child: Text(appName,
+              Column(
+                children: [
+                  Text(
+                    title,
+                    style: normalFontStyle.copyWith(
+                        color: whitishColor,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.3),
+                  ),
+                  appName != null
+                      ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(appName,
                                 style: appNameFontStyle.copyWith(
                                     color: whitishColor, fontSize: 32)),
-                          )
-                        : SizedBox(height: 15),
-                    Text(subTitle,
-                        textAlign: TextAlign.center,
-                        style: normalFontStyle.copyWith(
-                            color: whitishColor.withOpacity(0.5),
-                            fontSize: 18,
-                            letterSpacing: 0.3))
-                  ],
-                ),
+                            SizedBox(
+                              height: 40,
+                            )
+                          ],
+                        )
+                      : SizedBox(
+                          height: 15,
+                        ),
+                  Text(subTitle,
+                      textAlign: TextAlign.center,
+                      style: normalFontStyle.copyWith(
+                          color: whitishColor.withOpacity(0.5),
+                          fontSize: 18,
+                          letterSpacing: 0.3))
+                ],
               )
             ],
           ),
