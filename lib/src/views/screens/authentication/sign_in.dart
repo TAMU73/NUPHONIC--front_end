@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nuphonic_front_end/main.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_button.dart';
@@ -12,7 +13,6 @@ import 'package:nuphonic_front_end/src/views/screens/authentication/confirm_code
 import 'package:nuphonic_front_end/src/views/screens/authentication/sign_up.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:nuphonic_front_end/src/views/utils/validation.dart';
-import 'package:nuphonic_front_end/src/views/wrapper.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SignIn extends StatefulWidget {
@@ -79,7 +79,7 @@ class _SignInState extends State<SignIn> {
         });
         await CustomSnackBar()
             .buildSnackBar(result.data['msg'], result.data['success']);
-        Get.offAll(Wrapper());
+        Get.offAll(Main());
       } else {
         setState(() {
           isLoading = false;

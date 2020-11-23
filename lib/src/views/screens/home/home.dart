@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:nuphonic_front_end/main.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
@@ -9,8 +10,6 @@ import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_button.dart
 import 'package:nuphonic_front_end/src/views/reusable_widgets/network_error.dart';
 import 'package:nuphonic_front_end/src/views/shimmers/home_shimmer.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
-import 'package:nuphonic_front_end/src/views/wrapper.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -34,7 +33,7 @@ class _HomeState extends State<Home> {
     });
     await SharedPrefService().save(id: 'user_id', data: null);
     await SharedPrefService().save(id: 'first_name', data: null);
-    Get.offAll(Wrapper());
+    Get.offAll(Main());
   }
 
   Future<void> _getUserInfo() async {

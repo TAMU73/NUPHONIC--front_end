@@ -52,7 +52,7 @@ const texFieldLabelStyle = TextStyle(
 const titleTextStyle = TextStyle(
     fontFamily: "Gilroy",
     color: whitishColor,
-    fontSize: 28,
+    fontSize: 24,
     letterSpacing: 1.5,
     fontWeight: FontWeight.w700,
 );
