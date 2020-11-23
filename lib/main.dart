@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nuphonic_front_end/screens/wrapper.dart';
+import 'package:nuphonic_front_end/src/views/wrapper.dart';
 
 void main() {
   runApp(GetMaterialApp(
@@ -15,4 +15,3 @@ class Main extends StatelessWidget {
     return Wrapper();
   }
 }
-
