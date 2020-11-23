@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
-import 'package:nuphonic_front_end/src/app_logics/services/shared_prefs_services/shared_pref_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_textfield.dart';
@@ -70,8 +70,8 @@ class _SignInState extends State<SignIn> {
     } else {
       if (result.data['success']) {
         dynamic result1 = await _auth.getUserInfo(result.data['id']);
-        await SharedPreferenceService().save(id: 'user_id', data: result.data['id']);
-        await SharedPreferenceService().save(
+        await SharedPrefService().save(id: 'user_id', data: result.data['id']);
+        await SharedPrefService().save(
             id: 'first_name',
             data: result1.data['user']['full_name'].split(" ")[0]);
         setState(() {

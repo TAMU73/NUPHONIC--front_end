@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
-import 'package:nuphonic_front_end/src/app_logics/services/shared_prefs_services/shared_pref_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_button.dart';
-import 'package:nuphonic_front_end/src/views/screens/home/network_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/network_error.dart';
 import 'package:nuphonic_front_end/src/views/shimmers/home_shimmer.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:nuphonic_front_end/src/views/wrapper.dart';
@@ -32,21 +32,21 @@ class _HomeState extends State<Home> {
     setState(() {
       isLoading = true;
     });
-    await SharedPreferenceService().save(id: 'user_id', data: null);
-    await SharedPreferenceService().save(id: 'first_name', data: null);
+    await SharedPrefService().save(id: 'user_id', data: null);
+    await SharedPrefService().save(id: 'first_name', data: null);
     Get.offAll(Wrapper());
   }
 
   Future<void> _getUserInfo() async {
     dynamic result =
-        await _auth.getUserInfo(await SharedPreferenceService().read(id: 'user_id'));
+        await _auth.getUserInfo(await SharedPrefService().read(id: 'user_id'));
     if (result == null) {
       setState(() {
         networkError = true;
         homeLoading = false;
       });
     } else {
-      await SharedPreferenceService().save(
+      await SharedPrefService().save(
           id: 'first_name',
           data: result.data['user']['full_name'].split(" ")[0]);
       setState(() {
@@ -68,10 +68,8 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> _savedData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    dynamic key = 'first_name';
-    dynamic firstName = prefs.getString(key);
+  Future<void> _getFirstName() async {
+    String firstName = await SharedPrefService().read(id: 'first_name');
     setState(() {
       name = firstName;
     });
@@ -83,7 +81,7 @@ class _HomeState extends State<Home> {
       homeLoading = true;
     });
     _getGreeting(); //checking greetings
-    _savedData(); //checking saved user's first name
+    _getFirstName(); //checking saved user's first name
     _getUserInfo();
   }
 
@@ -92,7 +90,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     _getGreeting(); //checking greetings
-    _savedData(); //checking saved user's first name
+    _getFirstName(); //checking saved user's first name
     _getUserInfo(); //updating users info
   }
 

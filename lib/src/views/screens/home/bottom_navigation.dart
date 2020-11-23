@@ -31,6 +31,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   BottomNavigationBarItem bottomNavigationBarItem(
       String label, String iconPath, bool isSelected) {
     return BottomNavigationBarItem(
+      backgroundColor: Colors.black,
         icon: AnimatedContainer(
           duration: Duration(milliseconds: 400),
           curve: Curves.ease,

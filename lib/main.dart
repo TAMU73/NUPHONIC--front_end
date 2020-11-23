@@ -12,6 +12,18 @@ void main() {
 class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Wrapper();
+    return Theme(
+      data: ThemeData(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+      ),
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (overScroll) {
+          overScroll.disallowGlow();
+          return false;
+        },
+        child: Wrapper(),
+      ),
+    );
   }
 }
