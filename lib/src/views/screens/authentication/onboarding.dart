@@ -5,6 +5,7 @@ import 'package:nuphonic_front_end/src/views/reusable_widgets/onboarding_box.dar
 import 'package:nuphonic_front_end/src/views/reusable_widgets/page_indicator.dart';
 import 'package:nuphonic_front_end/src/views/screens/authentication/sign_in.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class OnBoarding extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class OnBoarding extends StatefulWidget {
 }
 
 class _OnBoardingState extends State<OnBoarding> {
+
   int currentIndex = 0;
 
   List<OnBoardingModel> _sliders = [
