@@ -155,13 +155,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   Widget homeBody(double height) {
-    return Container(
-      height: height - 200,
-      child: CustomButton(
-        labelName: 'SIGN OUT',
-        isLoading: isLoading,
-        onPressed: _signOut,
-      ),
+    return Column(
+      children: [
+        Container(
+          height: height - 200,
+          child: CustomButton(
+            labelName: 'SIGN OUT',
+            isLoading: isLoading,
+            onPressed: _signOut,
+          ),
+        ),
+      ],
     );
   }
 }

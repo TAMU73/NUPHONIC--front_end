@@ -70,11 +70,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
           alignment: AlignmentDirectional.bottomCenter,
           child: ClipRect(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 27.18, sigmaY: 27.18),
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: SizedBox(
                 height: 70,
                 child: BottomNavigationBar(
-                  backgroundColor: Colors.black.withOpacity(0.92),
+                  backgroundColor: Colors.black.withOpacity(0.87),
                   items: <BottomNavigationBarItem>[
                     bottomNavigationBarItem(
                       'Home',
