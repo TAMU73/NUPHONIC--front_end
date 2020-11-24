@@ -25,7 +25,7 @@ class OnBoardingBox extends StatelessWidget {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   child: SvgPicture.asset(imagePath),
                 ),
               ),
@@ -62,7 +62,8 @@ class OnBoardingBox extends StatelessWidget {
                       style: normalFontStyle.copyWith(
                           color: whitishColor.withOpacity(0.5),
                           fontSize: 18,
-                          letterSpacing: 0.3))
+                          letterSpacing: 0.3)),
+                  appName != null ? SizedBox(height: 35,) : SizedBox(height: 10,)
                 ],
               )
             ],
