@@ -76,21 +76,23 @@ class _HomeState extends State<Home> {
 
   void refresh() {
     setState(() {
-      networkError = false;
       homeLoading = true;
+      networkError = false;
     });
+    atStart();
+  }
+
+  void atStart() {
     _getGreeting(); //checking greetings
     _getFirstName(); //checking saved user's first name
-    _getUserInfo();
+    _getUserInfo(); //updating users info
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getGreeting(); //checking greetings
-    _getFirstName(); //checking saved user's first name
-    _getUserInfo(); //updating users info
+    atStart();
   }
 
   @override
