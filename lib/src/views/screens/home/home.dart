@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/main.dart';
@@ -7,16 +8,19 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_ser
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_button.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/network_error.dart';
 import 'package:nuphonic_front_end/src/views/shimmers/home_shimmer.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
+  RefreshController _refreshController = RefreshController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AuthService _auth = AuthService();
 
@@ -74,18 +78,18 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void refresh() {
+  Future<void> refresh() async {
     setState(() {
       homeLoading = true;
       networkError = false;
     });
-    atStart();
+    await atStart().then((value) => _refreshController.refreshCompleted());
   }
 
-  void atStart() {
+  Future<void> atStart() async {
     _getGreeting(); //checking greetings
     _getFirstName(); //checking saved user's first name
-    _getUserInfo(); //updating users info
+    await _getUserInfo(); //updating users info
   }
 
   @override
@@ -103,42 +107,47 @@ class _HomeState extends State<Home> {
       key: _scaffoldKey,
       backgroundColor: backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: CustomAppBar(
-                  label: 'Good $greeting',
-                  labelTextStyle: titleTextStyle.copyWith(
-                    fontSize: 24,
-                  ),
-                  secondLabel: '$name,',
-                  secondLabelTextStyle: normalFontStyle.copyWith(
-                    fontSize: 20,
-                  ),
-                  endChild: SvgPicture.asset(
-                    'assets/logos/app_logo_mini.svg',
-                    height: 33,
+        child: SmartRefresher(
+          controller: _refreshController,
+          onRefresh: refresh,
+          header: CustomRefreshHeader(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomAppBar(
+                    label: 'Good $greeting',
+                    labelTextStyle: titleTextStyle.copyWith(
+                      fontSize: 24,
+                    ),
+                    secondLabel: '$name,',
+                    secondLabelTextStyle: normalFontStyle.copyWith(
+                      fontSize: 20,
+                    ),
+                    endChild: SvgPicture.asset(
+                      'assets/logos/app_logo_mini.svg',
+                      height: 33,
+                    ),
                   ),
                 ),
-              ),
-              networkError
-                  ? Container(
-                      height: height - 200,
-                      child: NetworkError(
-                        onPressed: () {
-                          refresh();
-                        },
-                      ),
-                    )
-                  : homeLoading
-                      ? HomeShimmer()
-                      : homeBody(height)
-            ],
+                networkError
+                    ? Container(
+                        height: height - 200,
+                        child: NetworkError(
+                          onPressed: () {
+                            refresh();
+                          },
+                        ),
+                      )
+                    : homeLoading
+                        ? HomeShimmer()
+                        : homeBody(height)
+              ],
+            ),
           ),
         ),
       ),
