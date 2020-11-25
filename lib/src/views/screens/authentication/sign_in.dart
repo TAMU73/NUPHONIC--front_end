@@ -21,12 +21,13 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  String email;
-  String password;
-
   AuthService _auth = AuthService();
   PanelController _controller = PanelController();
-  Validation validate = Validation();
+  Validation _validate = Validation();
+  SharedPreferenceService _sharedPrefService = SharedPreferenceService();
+
+  String email;
+  String password;
 
   bool isOn = true;
 
@@ -38,7 +39,7 @@ class _SignInState extends State<SignIn> {
   int isErrorP; //for password
 
   void checkEmail(String val) {
-    bool emailC = validate.isEmail(val);
+    bool emailC = _validate.isEmail(val);
     setState(() {
       isErrorE = val == ""
           ? null
@@ -70,8 +71,8 @@ class _SignInState extends State<SignIn> {
     } else {
       if (result.data['success']) {
         dynamic result1 = await _auth.getUserInfo(result.data['id']);
-        await SharedPrefService().save(id: 'user_id', data: result.data['id']);
-        await SharedPrefService().save(
+        await _sharedPrefService.save(id: 'user_id', data: result.data['id']);
+        await _sharedPrefService.save(
             id: 'first_name',
             data: result1.data['user']['full_name'].split(" ")[0]);
         setState(() {

@@ -29,18 +29,16 @@ const bottomPanelBorderRadius = BorderRadius.only(
 );
 
 const normalFontStyle = TextStyle(
-  fontFamily: "Gilroy",
-  color: whitishColor,
-  fontSize: 14,
-  fontWeight: FontWeight.w400
-);
+    fontFamily: "Gilroy",
+    color: whitishColor,
+    fontSize: 14,
+    fontWeight: FontWeight.w400);
 
 const appNameFontStyle = TextStyle(
-  fontFamily: "Wallpoet",
-  color: whitishColor,
-  fontSize: 14,
-  letterSpacing: 1
-);
+    fontFamily: "Wallpoet",
+    color: whitishColor,
+    fontSize: 14,
+    letterSpacing: 1);
 
 const texFieldLabelStyle = TextStyle(
   fontFamily: "Gilroy",
@@ -50,21 +48,18 @@ const texFieldLabelStyle = TextStyle(
 );
 
 const titleTextStyle = TextStyle(
-    fontFamily: "Gilroy",
-    color: whitishColor,
-    fontSize: 24,
-    letterSpacing: 1.5,
-    fontWeight: FontWeight.w700,
+  fontFamily: "Gilroy",
+  color: whitishColor,
+  fontSize: 24,
+  letterSpacing: 1.5,
+  fontWeight: FontWeight.w700,
 );
 
 const signUpLabelStyle = TextStyle(
-  fontFamily: "Gilroy",
+    fontFamily: "Gilroy",
     color: whitishColor,
     fontSize: 14,
-    letterSpacing: 0.5
-);
+    letterSpacing: 0.5);
 
 const circularBorder = BoxDecoration(
-    color: textFieldColor,
-    borderRadius: BorderRadius.all(Radius.circular(10))
-);
+    color: textFieldColor, borderRadius: BorderRadius.all(Radius.circular(10)));
