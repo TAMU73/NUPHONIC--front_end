@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/main.dart';
@@ -145,27 +144,90 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       )
                     : homeLoading
                         ? HomeShimmer()
-                        : homeBody(height)
+                        : Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Container(
+                                  height: 180,
+                                  width: width,
+                                  decoration: circularBorder,
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          'https://i.ytimg.com/vi/AtoZw7o2kRo/mqdefault.jpg',
+                                          height: 180,
+                                          width: width,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        left: 20,
+                                        bottom: 20,
+                                        child: Container(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'BATASH',
+                                                style: normalFontStyle.copyWith(
+                                                    fontWeight: FontWeight.w800,
+                                                    color: Colors.black,
+                                                    fontSize: 24),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'Shashwat Khadka',
+                                                    style: normalFontStyle.copyWith(
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.black.withOpacity(0.6)
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                    child: Icon(Icons.circle, size: 5, color: Colors.black.withOpacity(0.6),),
+                                                  ),
+                                                  Text(
+                                                    'Single',
+                                                    style: normalFontStyle.copyWith(
+                                                        fontWeight: FontWeight.w500,
+                                                        color: Colors.black.withOpacity(0.6)
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                child: CustomButton(
+                                  labelName: 'SIGN OUT',
+                                  isLoading: isLoading,
+                                  onPressed: _signOut,
+                                ),
+                              ),
+                            ],
+                          )
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget homeBody(double height) {
-    return Column(
-      children: [
-        Container(
-          height: height - 200,
-          child: CustomButton(
-            labelName: 'SIGN OUT',
-            isLoading: isLoading,
-            onPressed: _signOut,
-          ),
-        ),
-      ],
     );
   }
 }
