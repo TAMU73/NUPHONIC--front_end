@@ -16,7 +16,7 @@ class FeaturedSongBox extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Stack(
         children: [
           ClipRRect(
@@ -69,7 +69,7 @@ class FeaturedSongBox extends StatelessWidget {
                     style: normalFontStyle.copyWith(
                         fontWeight: FontWeight.w800,
                         color: whitishColor,
-                        fontSize: 18,
+                        fontSize: 20,
                         letterSpacing: 0.5),
                   ),
                   Row(

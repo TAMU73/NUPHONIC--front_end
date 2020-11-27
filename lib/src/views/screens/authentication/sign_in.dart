@@ -24,7 +24,7 @@ class _SignInState extends State<SignIn> {
   AuthService _auth = AuthService();
   PanelController _controller = PanelController();
   Validation _validate = Validation();
-  SharedPreferenceService _sharedPrefService = SharedPreferenceService();
+  SharedPrefService _sharedPrefService = SharedPrefService();
 
   String email;
   String password;

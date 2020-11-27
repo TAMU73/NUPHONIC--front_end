@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
-class TopArtistBox extends StatelessWidget {
+class FeaturedArtistBox extends StatelessWidget {
   final String artistImage;
   final String artistName;
 
-  TopArtistBox({this.artistImage, this.artistName});
+  FeaturedArtistBox({this.artistImage, this.artistName});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class TopArtistBox extends StatelessWidget {
               artistName,
               textAlign: TextAlign.center,
               style:
-                  normalFontStyle.copyWith(color: whitishColor, fontSize: 13),
+                  normalFontStyle.copyWith(color: whitishColor.withOpacity(0.7), fontSize: 13),
             ),
           ),
         ],

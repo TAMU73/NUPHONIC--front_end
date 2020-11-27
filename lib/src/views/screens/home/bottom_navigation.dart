@@ -31,7 +31,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   BottomNavigationBarItem bottomNavigationBarItem(
       String label, String iconPath, bool isSelected) {
     return BottomNavigationBarItem(
-      backgroundColor: Colors.black,
+        backgroundColor: Colors.black,
         icon: AnimatedContainer(
           duration: Duration(milliseconds: 400),
           curve: Curves.ease,
@@ -70,11 +70,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
           alignment: AlignmentDirectional.bottomCenter,
           child: ClipRect(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: SizedBox(
-                height: 70,
+                height: 65,
                 child: BottomNavigationBar(
-                  backgroundColor: Colors.black.withOpacity(0.87),
+                  backgroundColor: Colors.black.withOpacity(0.94),
                   items: <BottomNavigationBarItem>[
                     bottomNavigationBarItem(
                       'Home',

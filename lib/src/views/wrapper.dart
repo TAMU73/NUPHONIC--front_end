@@ -9,7 +9,7 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  SharedPreferenceService _sharedPrefService = SharedPreferenceService();
+  SharedPrefService _sharedPrefService = SharedPrefService();
 
   String user;
 

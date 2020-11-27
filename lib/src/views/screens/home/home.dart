@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:nuphonic_front_end/main.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/artist_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/content_title.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
-import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
-import 'package:nuphonic_front_end/src/views/reusable_widgets/top_artist_box.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_artist_box.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_song_box.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/network_error.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/page_indicator.dart';
@@ -27,12 +26,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   RefreshController _refreshController = RefreshController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AuthService _auth = AuthService();
-  SharedPreferenceService _sharedPrefService = SharedPreferenceService();
+  SharedPrefService _sharedPrefService = SharedPrefService();
 
   String name;
   String greeting;
 
-  bool isLoading = false;
   bool homeLoading = true;
   bool networkError = false;
 
@@ -71,6 +69,39 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       songPlace: 'Single',
     ),
   ];
+  List<SongModel> browseSongs = [
+    SongModel(
+      songName: 'Syndicate',
+      songImage:
+          'https://1.bp.blogspot.com/-pR_JlfS_-74/XxmNHw0zg7I/AAAAAAAAC3o/s7TBfYjyMigIn8XETZP8-54AG2zkXDtjwCLcBGAsYHQ/w1200-h630-p-k-no-nu/Syndicate%2BLyrics%2B-%2BBipul%2BChettri%250A%250A.jpg',
+      artistName: 'Bipul Chettri',
+      songPlace: 'Maya',
+    ),
+    SongModel(
+      songName: 'Mellow',
+      songImage: 'https://i.ytimg.com/vi/lfCy78dbcYA/maxresdefault.jpg',
+      artistName: 'Sajjan Raj Vaidhya',
+      songPlace: 'Single',
+    ),
+    SongModel(
+      songName: 'Eklai Eklai',
+      songImage: 'https://i.ytimg.com/vi/9GGajYVcAfg/hqdefault.jpg',
+      artistName: 'Shubham Gurung',
+      songPlace: 'Single',
+    ),
+    SongModel(
+      songName: 'Batash',
+      songImage: 'https://i.ytimg.com/vi/AtoZw7o2kRo/mqdefault.jpg',
+      artistName: 'Shashwat Khadka',
+      songPlace: 'Single',
+    ),
+    SongModel(
+      songName: 'Ganja ko sahara',
+      songImage: 'https://i.ytimg.com/vi/0LqExX5WFQ8/maxresdefault.jpg',
+      artistName: 'Bikki Karki',
+      songPlace: 'Single',
+    ),
+  ];
 
   List<ArtistModel> featuredArtists = [
     ArtistModel(
@@ -99,15 +130,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           'https://yt3.ggpht.com/ytc/AAUvwngcSlVj8LllIBYvBBPk1EVz5-BMGXcTsB637977QA=s88-c-k-c0xffffffff-no-rj-mo',
     ),
   ];
-
-  Future<void> _signOut() async {
-    setState(() {
-      isLoading = true;
-    });
-    await _sharedPrefService.save(id: 'user_id', data: null);
-    await _sharedPrefService.save(id: 'first_name', data: null);
-    Get.offAll(Main());
-  }
 
   Future<void> _getUserInfo() async {
     dynamic result =
@@ -261,19 +283,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Container(
-                                  height: 25,
-                                  padding: EdgeInsets.symmetric(vertical: 2),
-                                  child: Text(
-                                    'Top Artists',
-                                    style: normalFontStyle.copyWith(
-                                        color: whitishColor,
-                                        fontSize: 17,
-                                        letterSpacing: 0.2),
-                                  ),
-                                ),
+                              ContentTitle(
+                                label: 'Featured Artists',
                               ),
                               SizedBox(
                                 height: 15,
@@ -292,7 +303,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                           MainAxisAlignment.start,
                                       children: featuredArtists
                                           .map(
-                                            (artist) => TopArtistBox(
+                                            (artist) => FeaturedArtistBox(
                                               artistName: artist.artistName,
                                               artistImage: artist.artistImage,
                                             ),
@@ -303,14 +314,27 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 ),
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 15,
                               ),
-                              Container(
-                                child: CustomButton(
-                                  labelName: 'SIGN OUT',
-                                  isLoading: isLoading,
-                                  onPressed: _signOut,
-                                ),
+                              ContentTitle(
+                                label: 'Browse Songs',
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Column(
+                                  children: browseSongs
+                                      .map(
+                                        (song) => SongBox(
+                                          songName: song.songName,
+                                          imageURL: song.songImage,
+                                          artistName: song.artistName,
+                                          songPlace: song.songPlace,
+                                        ),
+                                      )
+                                      .toList()),
+                              SizedBox(
+                                height: 55,
                               ),
                             ],
                           )
