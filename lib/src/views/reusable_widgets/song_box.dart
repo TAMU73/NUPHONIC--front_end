@@ -16,13 +16,13 @@ class SongBox extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
-      child: Container(
-        height: 97,
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          height: 97,
+          child: Stack(
+            children: [
+              Container(
                 color: textFieldColor,
                 child: Center(
                   child: Icon(
@@ -32,18 +32,12 @@ class SongBox extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
+              Image.network(
                 imageURL,
                 width: width,
                 fit: BoxFit.cover,
               ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
+              Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -54,11 +48,9 @@ class SongBox extends StatelessWidget {
                       ]),
                 ),
               ),
-            ),
-            Positioned(
-              left: 10,
-              bottom: 5,
-              child: Container(
+              Positioned(
+                left: 10,
+                bottom: 5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -99,8 +91,8 @@ class SongBox extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
