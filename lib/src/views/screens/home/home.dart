@@ -69,6 +69,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       songPlace: 'Single',
     ),
   ];
+
   List<SongModel> browseSongs = [
     SongModel(
       songName: 'Syndicate',

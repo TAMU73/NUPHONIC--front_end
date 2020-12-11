@@ -11,17 +11,20 @@ class CustomTextField extends StatelessWidget {
   final Function onEditingComplete;
   final TextInputType keyboardType;
   final TextEditingController controller;
+  final EdgeInsets contentPadding;
 
-  CustomTextField(
-      {this.labelName,
-      this.hint,
-      this.icons,
-      this.obSecureText,
-      this.onChanged,
-      this.onEditingComplete,
-      this.textInputAction,
-      this.keyboardType,
-      this.controller});
+  CustomTextField({
+    this.labelName,
+    this.hint,
+    this.icons,
+    this.obSecureText,
+    this.onChanged,
+    this.onEditingComplete,
+    this.textInputAction,
+    this.keyboardType,
+    this.contentPadding,
+    this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,7 @@ class CustomTextField extends StatelessWidget {
                   cursorColor: whitishColor,
                   style: texFieldLabelStyle,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+                    contentPadding: contentPadding != null ? contentPadding : EdgeInsets.fromLTRB(15, 15, 15, 15),
                     fillColor: textFieldColor,
                     filled: true,
                     hintStyle: normalFontStyle.copyWith(
