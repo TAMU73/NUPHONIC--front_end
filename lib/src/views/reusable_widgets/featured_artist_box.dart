@@ -49,7 +49,7 @@ class FeaturedArtistBox extends StatelessWidget {
               artistName,
               textAlign: TextAlign.center,
               style:
-                  normalFontStyle.copyWith(color: whitishColor.withOpacity(0.7), fontSize: 13),
+                  normalFontStyle.copyWith(color: whitishColor.withOpacity(0.6), fontSize: 13),
             ),
           ),
         ],
