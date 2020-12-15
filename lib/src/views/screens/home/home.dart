@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/artist_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/feature_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/content_title.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
@@ -26,6 +28,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   RefreshController _refreshController = RefreshController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AuthService _auth = AuthService();
+  FeatureService _feature = FeatureService();
+  SongService _song = SongService();
   SharedPrefService _sharedPrefService = SharedPrefService();
 
   String name;
@@ -36,101 +40,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   int currentIndex = 0;
 
-  List<SongModel> featuredSongs = [
-    SongModel(
-      songName: 'Batash',
-      songImage: 'https://i.ytimg.com/vi/AtoZw7o2kRo/mqdefault.jpg',
-      artistName: 'Shashwat Khadka',
-      songPlace: 'Single',
-    ),
-    SongModel(
-      songName: 'Eklai Eklai',
-      songImage: 'https://i.ytimg.com/vi/9GGajYVcAfg/hqdefault.jpg',
-      artistName: 'Shubham Gurung',
-      songPlace: 'Single',
-    ),
-    SongModel(
-      songName: 'Syndicate',
-      songImage:
-          'https://1.bp.blogspot.com/-pR_JlfS_-74/XxmNHw0zg7I/AAAAAAAAC3o/s7TBfYjyMigIn8XETZP8-54AG2zkXDtjwCLcBGAsYHQ/w1200-h630-p-k-no-nu/Syndicate%2BLyrics%2B-%2BBipul%2BChettri%250A%250A.jpg',
-      artistName: 'Bipul Chettri',
-      songPlace: 'Maya',
-    ),
-    SongModel(
-      songName: 'Ganja ko sahara',
-      songImage: 'https://i.ytimg.com/vi/0LqExX5WFQ8/maxresdefault.jpg',
-      artistName: 'Bikki Karki',
-      songPlace: 'Single',
-    ),
-    SongModel(
-      songName: 'Mellow',
-      songImage: 'https://i.ytimg.com/vi/lfCy78dbcYA/maxresdefault.jpg',
-      artistName: 'Sajjan Raj Vaidhya',
-      songPlace: 'Single',
-    ),
-  ];
-
-  List<SongModel> browseSongs = [
-    SongModel(
-      songName: 'Syndicate',
-      songImage:
-          'https://1.bp.blogspot.com/-pR_JlfS_-74/XxmNHw0zg7I/AAAAAAAAC3o/s7TBfYjyMigIn8XETZP8-54AG2zkXDtjwCLcBGAsYHQ/w1200-h630-p-k-no-nu/Syndicate%2BLyrics%2B-%2BBipul%2BChettri%250A%250A.jpg',
-      artistName: 'Bipul Chettri',
-      songPlace: 'Maya',
-    ),
-    SongModel(
-      songName: 'Mellow',
-      songImage: 'https://i.ytimg.com/vi/lfCy78dbcYA/maxresdefault.jpg',
-      artistName: 'Sajjan Raj Vaidhya',
-      songPlace: 'Single',
-    ),
-    SongModel(
-      songName: 'Eklai Eklai',
-      songImage: 'https://i.ytimg.com/vi/9GGajYVcAfg/hqdefault.jpg',
-      artistName: 'Shubham Gurung',
-      songPlace: 'Single',
-    ),
-    SongModel(
-      songName: 'Batash',
-      songImage: 'https://i.ytimg.com/vi/AtoZw7o2kRo/mqdefault.jpg',
-      artistName: 'Shashwat Khadka',
-      songPlace: 'Single',
-    ),
-    SongModel(
-      songName: 'Ganja ko sahara',
-      songImage: 'https://i.ytimg.com/vi/0LqExX5WFQ8/maxresdefault.jpg',
-      artistName: 'Bikki Karki',
-      songPlace: 'Single',
-    ),
-  ];
-
-  List<ArtistModel> featuredArtists = [
-    ArtistModel(
-      artistName: 'Bartika Eam Rai',
-      artistImage:
-          'https://lastfm.freetls.fastly.net/i/u/ar0/f626ad7ec7053dc17416033926e686db.jpg',
-    ),
-    ArtistModel(
-      artistName: 'Shashwat Khadka',
-      artistImage:
-          'https://yt3.ggpht.com/ytc/AAUvwnjXKdJzqeiY1ald_XuvFG5hSmBEyj_NAp42WH__jCg=s176-c-k-c0x00ffffff-no-rj-mo',
-    ),
-    ArtistModel(
-      artistName: 'Bipul Chettri',
-      artistImage:
-          'https://yt3.ggpht.com/ytc/AAUvwngkHYUwA0fxbAgPmLFxh-3XhiPxJYAqRPtFVMwwOA=s176-c-k-c0x00ffffff-no-rj-mo',
-    ),
-    ArtistModel(
-      artistName: 'Bikki Gurung',
-      artistImage:
-          'https://yt3.ggpht.com/ytc/AAUvwnj8T1bR7PELGMJ_2iD1D7wKr18JSPwC_AveR12QFg=s176-c-k-c0x00ffffff-no-rj',
-    ),
-    ArtistModel(
-      artistName: 'Neetesh Jung Kunwar',
-      artistImage:
-          'https://yt3.ggpht.com/ytc/AAUvwngcSlVj8LllIBYvBBPk1EVz5-BMGXcTsB637977QA=s88-c-k-c0xffffffff-no-rj-mo',
-    ),
-  ];
+  List<SongModel> featuredSongs = [];
+  List<UserModel> featuredArtists = [];
+  List<SongModel> browseSongs = [];
 
   Future<void> _getUserInfo() async {
     dynamic result =
@@ -146,7 +58,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           data: result.data['user']['full_name'].split(" ")[0]);
       setState(() {
         name = result.data['user']['full_name'].split(" ")[0];
-        homeLoading = false;
       });
     }
   }
@@ -170,19 +81,96 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     });
   }
 
-  Future<void> refresh() async {
-    setState(() {
-      currentIndex = 0;
-      homeLoading = true;
-      networkError = false;
-    });
-    await atStart().then((value) => _refreshController.refreshCompleted());
+  Future<void> _getFeaturedSongs() async {
+    dynamic result = await _feature.getFeaturedSongs();
+    if (result == null) {
+      setState(() {
+        networkError = true;
+        homeLoading = false;
+      });
+    } else {
+      dynamic songList = result.data['songs'];
+      List<SongModel> list = List<SongModel>();
+      for (var songs in songList) {
+        String songID = songs['song_id'];
+        dynamic result1 = await _song.getSongDetails(songID);
+        Map<String, dynamic> songDetail = result1.data['song'];
+        list.add(SongModel.fromJson(songDetail));
+      }
+      featuredSongs.clear();
+      setState(() {
+        featuredSongs = list;
+      });
+    }
+  }
+
+  Future<void> _getFeaturedArtists() async {
+    dynamic result = await _feature.getFeaturedArtists();
+    if (result == null) {
+      setState(() {
+        networkError = true;
+        homeLoading = false;
+      });
+    } else {
+      dynamic artistList = result.data['artists'];
+      List<UserModel> list = List<UserModel>();
+      for (var artists in artistList) {
+        String artistID = artists['artist_id'];
+        dynamic result1 = await _auth.getUserInfo(artistID);
+        Map<String, dynamic> artistDetail = result1.data['user'];
+        list.add(UserModel.fromJson(artistDetail));
+      }
+      featuredArtists.clear();
+      setState(() {
+        featuredArtists = list;
+      });
+    }
+  }
+
+  Future<void> _getBrowseSongs() async {
+    dynamic result = await _song.getBrowseSongs();
+    if (result == null) {
+      setState(() {
+        networkError = true;
+        homeLoading = false;
+      });
+    } else {
+      dynamic songList = result.data['songs'];
+      List<SongModel> list = List<SongModel>();
+      for (var songs in songList) {
+        list.add(SongModel.fromJson(songs));
+      }
+      browseSongs.clear();
+      setState(() {
+        browseSongs = list;
+        homeLoading = false;
+      });
+    }
   }
 
   Future<void> atStart() async {
     _getGreeting(); //checking greetings
     _getFirstName(); //checking saved user's first name
-    await _getUserInfo(); //updating users info
+    _getUserInfo(); //updating users info
+    await _getFeaturedSongs();
+    await _getFeaturedArtists();
+    await _getBrowseSongs();
+  }
+
+  Future<void> atRefresh() async {
+    _getGreeting(); //checking greetings
+    _getFirstName(); //checking saved user's first name
+    _getUserInfo(); //updating users info
+    _getFeaturedSongs();
+    _getFeaturedArtists();
+    _getBrowseSongs();
+  }
+
+  Future<void> refresh() async {
+    setState(() {
+      networkError = false;
+    });
+    await atRefresh().then((value) => _refreshController.refreshCompleted());
   }
 
   @override
@@ -261,7 +249,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       imageURL: featuredSongs[index].songImage,
                                       artistName:
                                           featuredSongs[index].artistName,
-                                      songPlace: featuredSongs[index].songPlace,
+                                      songPlace: featuredSongs[index].albumName,
                                     );
                                   },
                                 ),
@@ -305,8 +293,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       children: featuredArtists
                                           .map(
                                             (artist) => FeaturedArtistBox(
-                                              artistName: artist.artistName,
-                                              artistImage: artist.artistImage,
+                                              artistName: artist.fullName,
+                                              artistImage:
+                                                  artist.profilePicture,
                                             ),
                                           )
                                           .toList(),
@@ -330,7 +319,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                           songName: song.songName,
                                           imageURL: song.songImage,
                                           artistName: song.artistName,
-                                          songPlace: song.songPlace,
+                                          songPlace: song.albumName,
                                         ),
                                       )
                                       .toList()),
