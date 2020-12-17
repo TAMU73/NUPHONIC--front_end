@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/genre_model.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_bottom_sheet.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_text_button.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/genre_box.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
@@ -17,7 +18,6 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-
   PanelController controller = PanelController();
 
   List genres = [
@@ -123,17 +123,12 @@ class _SearchState extends State<Search> {
                     SizedBox(
                       height: 10,
                     ),
-                    InkWell(
-                      onTap: () {
+                    CustomTextButton(
+                      label: 'SUGGEST GENRE',
+                      onPressed: () {
                         controller.open();
                       },
-                      child: Text(
-                        'SUGGEST GENRE',
-                        style: normalFontStyle.copyWith(
-                          color: mainColor,
-                          fontSize: 19,
-                        ),
-                      ),
+                      isLoading: false,
                     ),
                     SizedBox(
                       height: 80,

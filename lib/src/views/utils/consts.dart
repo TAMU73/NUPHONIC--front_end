@@ -28,6 +28,12 @@ const bottomPanelBorderRadius = BorderRadius.only(
   topLeft: Radius.circular(30),
 );
 
+const textButtonStyle = TextStyle(
+    fontFamily: "Gilroy",
+    color: mainColor,
+    fontSize: 19,
+    fontWeight: FontWeight.w400);
+
 const normalFontStyle = TextStyle(
     fontFamily: "Gilroy",
     color: whitishColor,

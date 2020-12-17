@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/artist_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
@@ -10,6 +11,7 @@ import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/
 import 'package:nuphonic_front_end/src/views/reusable_widgets/content_title.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_text_button.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_artist_box.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_song_box.dart';
@@ -37,6 +39,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   bool homeLoading = true;
   bool networkError = false;
+  bool isLoadMoreLoading = false;
 
   int currentIndex = 0;
 
@@ -148,6 +151,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> loadMore() async {
+    setState(() {
+      isLoadMoreLoading = true;
+    });
+    dynamic result = await _song.getBrowseSongs();
+    if (result == null) {
+      setState(() {
+        isLoadMoreLoading = false;
+        networkError = true;
+        homeLoading = false;
+      });
+    } else {
+      dynamic songList = result.data['songs'];
+      for (var songs in songList) {
+        setState(() {
+          isLoadMoreLoading = false;
+          browseSongs.add(SongModel.fromJson(songs));
+        });
+      }
+    }
+  }
+
   Future<void> atStart() async {
     _getGreeting(); //checking greetings
     _getFirstName(); //checking saved user's first name
@@ -173,9 +198,24 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     await atRefresh().then((value) => _refreshController.refreshCompleted());
   }
 
+  ScrollController _controller;
+
+  _scrollListener() {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        !_controller.position.outOfRange) {
+      print('bottom');
+    }
+    if (_controller.offset <= _controller.position.minScrollExtent &&
+        !_controller.position.outOfRange) {
+      print('top');
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
     super.initState();
     atStart();
   }
@@ -193,6 +233,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           onRefresh: refresh,
           header: CustomRefreshHeader(),
           child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
             child: Column(
               children: [
                 SizedBox(
@@ -323,8 +364,30 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                         ),
                                       )
                                       .toList()),
+                              // Container(
+                              //   height: 400,
+                              //   child: ListView.builder(
+                              //     controller: _controller,
+                              //     itemCount: browseSongs.length,
+                              //     itemBuilder: (context, index) {
+                              //       return SongBox(
+                              //         songName: browseSongs[index].songName,
+                              //         imageURL: browseSongs[index].songImage,
+                              //         artistName: browseSongs[index].artistName,
+                              //         songPlace: browseSongs[index].albumName,
+                              //       );
+                              //     },
+                              //   ),
+                              // ),
+                              CustomTextButton(
+                                isLoading: isLoadMoreLoading,
+                                label: 'LOAD MORE',
+                                onPressed: () {
+                                  loadMore();
+                                },
+                              ),
                               SizedBox(
-                                height: 55,
+                                height: 90,
                               ),
                             ],
                           )
