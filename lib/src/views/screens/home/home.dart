@@ -137,7 +137,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       });
     } else {
       dynamic songList = result.data['songs'];
-      if(isRefresh) browseSongs.clear();
+      if (isRefresh) browseSongs.clear();
       for (var songs in songList) {
         setState(() {
           browseSongs.add(SongModel.fromJson(songs));

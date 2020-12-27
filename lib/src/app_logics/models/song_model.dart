@@ -4,7 +4,9 @@ class SongModel {
   final String songURL;
   final String songImage;
   final String genreName;
+  final String artistID;
   final String artistName;
+  final String albumID;
   final String albumName;
   final String songDescription;
   final String songLyrics;
@@ -15,7 +17,9 @@ class SongModel {
     this.songURL,
     this.songImage,
     this.genreName,
+    this.artistID,
     this.artistName,
+    this.albumID,
     this.albumName,
     this.songDescription,
     this.songLyrics,
@@ -26,10 +30,12 @@ class SongModel {
         songName: data['song_name'],
         publishedDate: data['published_date'],
         songURL: data['song_url'],
-        songImage: data['song_cover_url'],
+        songImage: data['song_picture_url'],
         genreName: data['genre_name'],
-        artistName: data['artist_id'],
-        albumName: data['album_id'],
+        artistID: data['artists_id'],
+        artistName: data['artist_name'],
+        albumID: data['album_id'],
+        albumName: data['album_name'],
         songDescription: data['song_description'],
         songLyrics: data['song_lyrics']);
   }
@@ -41,8 +47,10 @@ class SongModel {
       'song_url': songURL,
       'song_cover_url': songImage,
       'genre_name': genreName,
-      'artist_id': artistName,
-      'album_id': albumName,
+      'artist_id': artistID,
+      'artist_name': artistName,
+      'album_id': albumID,
+      'album_name': albumName,
       'song_description': songDescription,
       'song_lyrics': songLyrics
     };
