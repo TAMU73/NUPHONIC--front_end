@@ -72,7 +72,7 @@ class _GenreSongsState extends State<GenreSongs> {
             ? Container(
                 height: height,
                 child: CustomError(
-                  buttonLabel: 'BACK',
+                  buttonLabel: 'GO BACK',
                   onPressed: () {
                     Get.back();
                   },

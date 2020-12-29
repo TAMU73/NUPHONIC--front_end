@@ -16,7 +16,7 @@ class ContentTitle extends StatelessWidget {
         child: Text(
           label,
           style: normalFontStyle.copyWith(
-              color: whitishColor.withOpacity(0.8),
+              color: whitishColor.withOpacity(0.9),
               fontSize: 17,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.2),

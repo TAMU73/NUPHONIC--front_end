@@ -221,7 +221,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     ? Container(
                         height: height - 200,
                         child: CustomError(
-                          onPressed: () {
+                          onPressed: () async {
+                            setState(() {
+                              browseSongs.clear();
+                              homeLoading = true;
+                              networkError = false;
+                            });
                             atStart();
                           },
                         ),
