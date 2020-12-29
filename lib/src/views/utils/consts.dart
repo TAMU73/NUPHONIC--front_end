@@ -31,7 +31,7 @@ const bottomPanelBorderRadius = BorderRadius.only(
 const textButtonStyle = TextStyle(
     fontFamily: "Gilroy",
     color: mainColor,
-    fontSize: 19,
+    fontSize: 18,
     fontWeight: FontWeight.w400);
 
 const normalFontStyle = TextStyle(

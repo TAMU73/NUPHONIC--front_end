@@ -22,7 +22,7 @@ class CustomTextButton extends StatelessWidget {
               onTap: onPressed,
               child: Text(
                 label,
-                style: textButtonStyle.copyWith(fontSize: 14),
+                style: textButtonStyle,
               ),
             ),
     );
