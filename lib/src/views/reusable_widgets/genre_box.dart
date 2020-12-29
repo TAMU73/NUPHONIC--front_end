@@ -4,49 +4,53 @@ import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 class GenreBox extends StatelessWidget {
   final String genreName;
   final Color color;
+  final Function onTap;
   final String imageSrc;
 
-  GenreBox({this.genreName, this.color, this.imageSrc});
+  GenreBox({this.genreName, this.color, this.imageSrc, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: Container(
-        height: 90,
-        decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  genreName,
-                  style: normalFontStyle.copyWith(
-                      fontSize: 14,
-                      letterSpacing: 0.5,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 15),
+        child: Container(
+          height: 90,
+          decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(10)),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    genreName,
+                    style: normalFontStyle.copyWith(
+                        fontSize: 14,
+                        letterSpacing: 0.5,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: ClipPath(
-                    clipper: CustomContainer(),
-                    child: Image.network(
-                      imageSrc,
-                      fit: BoxFit.cover,
-                    )),
+              Expanded(
+                flex: 2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: ClipPath(
+                      clipper: CustomContainer(),
+                      child: Image.network(
+                        imageSrc,
+                        fit: BoxFit.cover,
+                      )),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

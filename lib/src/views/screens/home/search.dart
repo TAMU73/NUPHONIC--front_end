@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/genre_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/genre_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_bottom_sheet.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_text_button.dart';
@@ -20,50 +21,61 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   PanelController controller = PanelController();
 
+  GenreService genreService = GenreService();
+
   List genres = [
-    Genre(
-      color: Color(0xff9B948B),
+    GenreModel(
+      color: '0xff9B948B',
       genreName: 'Hip Hop',
       imageSrc:
           'https://images.pexels.com/photos/1319828/pexels-photo-1319828.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     ),
-    Genre(
-      color: Color(0xffD8D8D9),
+    GenreModel(
+      color: '0xffD8D8D9',
       genreName: 'Pop',
       imageSrc:
           'https://images.pexels.com/photos/114820/pexels-photo-114820.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     ),
-    Genre(
-      color: Color(0xffA58E9F),
+    GenreModel(
+      color: '0xffA58E9F',
       genreName: 'Independent',
       imageSrc:
           'https://images.pexels.com/photos/3771823/pexels-photo-3771823.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
     ),
-    Genre(
-      color: Color(0xffE0BA8F),
+    GenreModel(
+      color: '0xffE0BA8F',
       genreName: 'Rock',
       imageSrc:
           'https://images.pexels.com/photos/2956143/pexels-photo-2956143.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
     ),
-    Genre(
-      color: Color(0xffB7CEFB),
+    GenreModel(
+      color: '0xffB7CEFB',
       genreName: 'Blues',
       imageSrc:
           'https://images.pexels.com/photos/733767/pexels-photo-733767.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     ),
-    Genre(
-      color: Color(0xff9B9D9D),
+    GenreModel(
+      color: '0xff9B9D9D',
       genreName: 'Acoustic',
       imageSrc:
           'https://images.pexels.com/photos/3971985/pexels-photo-3971985.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     ),
-    Genre(
-      color: Color(0xffDBDBFF),
+    GenreModel(
+      color: '0xffDBDBFF',
       genreName: 'Electronic',
       imageSrc:
           'https://images.pexels.com/photos/2111015/pexels-photo-2111015.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     ),
   ];
+
+  Future<void> getGenreSongs(String genreName) async {
+    dynamic result = await genreService.getGenreSongs(genreName);
+    if (result == null) {
+      print('Network Error');
+    } else {
+      print(result.data);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +125,11 @@ class _SearchState extends State<Search> {
                       children: genres
                           .map(
                             (genre) => GenreBox(
+                              onTap: () {
+                                getGenreSongs(genre.genreName);
+                              },
                               genreName: genre.genreName,
-                              color: genre.color,
+                              color: Color(int.parse(genre.color)),
                               imageSrc: genre.imageSrc,
                             ),
                           )
