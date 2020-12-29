@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/genre_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/genre_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_bottom_sheet.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_text_button.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/genre_box.dart';
+import 'package:nuphonic_front_end/src/views/screens/home/genre_songs.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -20,8 +24,14 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   PanelController controller = PanelController();
+  TextEditingController genreNameController = TextEditingController();
+  TextEditingController genreDescriptionController = TextEditingController();
+  SharedPrefService _sharedPrefService = SharedPrefService();
+  GenreService _genreService = GenreService();
 
-  GenreService genreService = GenreService();
+  String genreName = "";
+  String genreDescription = "";
+  bool isLoading = false;
 
   List genres = [
     GenreModel(
@@ -68,17 +78,41 @@ class _SearchState extends State<Search> {
     ),
   ];
 
-  Future<void> getGenreSongs(String genreName) async {
-    dynamic result = await genreService.getGenreSongs(genreName);
+  Future<void> suggestGenre(String genreName, String genreDescription) async {
+    setState(() {
+      isLoading = true;
+    });
+    String userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result =
+        await _genreService.suggestGenre(genreName, genreDescription, userID);
+    setState(() {
+      isLoading = false;
+    });
     if (result == null) {
-      print('Network Error');
+      await CustomSnackBar().buildSnackBar("Network Error", false);
     } else {
-      print(result.data);
+      await CustomSnackBar()
+          .buildSnackBar(result.data['msg'], result.data['success']);
+      if (result.data['success']) {
+        setState(() {
+          this.genreName = "";
+          this.genreDescription = "";
+        });
+        genreDescriptionController.clear();
+        genreNameController.clear();
+        controller.close();
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Stack(
@@ -122,32 +156,40 @@ class _SearchState extends State<Search> {
                       height: 25,
                     ),
                     Column(
-                      children: genres
-                          .map(
-                            (genre) => GenreBox(
-                              onTap: () {
-                                getGenreSongs(genre.genreName);
-                              },
-                              genreName: genre.genreName,
-                              color: Color(int.parse(genre.color)),
-                              imageSrc: genre.imageSrc,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    CustomTextButton(
-                      label: 'SUGGEST GENRE',
-                      onPressed: () {
-                        controller.open();
-                      },
-                      isLoading: false,
-                    ),
-                    SizedBox(
-                      height: 80,
-                    ),
+                      children: [
+                        Column(
+                          children: genres
+                              .map(
+                                (genre) => GenreBox(
+                                  onTap: () {
+                                    // getGenreSongs(genre.genreName);
+                                    Get.to(GenreSongs(
+                                      genreName: genre.genreName,
+                                      genreColor: genre.color,
+                                    ));
+                                  },
+                                  genreName: genre.genreName,
+                                  color: Color(int.parse(genre.color)),
+                                  imageSrc: genre.imageSrc,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        CustomTextButton(
+                          label: 'SUGGEST GENRE',
+                          onPressed: () {
+                            controller.open();
+                          },
+                          isLoading: false,
+                        ),
+                        SizedBox(
+                          height: 80,
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -157,10 +199,28 @@ class _SearchState extends State<Search> {
             titleName: 'SUGGEST GENRE',
             labelName: 'Genre Name',
             hintName: 'Genre name',
-            onPressed: () {},
-            isLoading: false,
+            secondLabelName: 'Genre Description',
+            secondHintName: 'Genre Description here',
+            onPressed: genreName == "" || genreDescription == ""
+                ? null
+                : () {
+                    suggestGenre(genreName, genreDescription);
+                  },
+            isLoading: isLoading,
             controller: controller,
             buttonName: 'SUGGEST',
+            textController: genreNameController,
+            secondTextController: genreDescriptionController,
+            onChanged: (val) {
+              setState(() {
+                genreName = val;
+              });
+            },
+            secondOnChanged: (val) {
+              setState(() {
+                genreDescription = val;
+              });
+            },
           )
         ],
       ),

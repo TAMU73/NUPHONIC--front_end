@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
-class NetworkError extends StatelessWidget {
+class CustomError extends StatelessWidget {
   final Function onPressed;
+  final String buttonLabel;
+  final String title;
+  final String subTitle;
 
-  NetworkError({this.onPressed});
+  CustomError({this.onPressed, this.buttonLabel, this.title, this.subTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class NetworkError extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'No Connection',
+              title != null ? title : 'No Connection',
               style: normalFontStyle.copyWith(
                   fontSize: 22, fontWeight: FontWeight.w800),
             ),
@@ -24,16 +27,16 @@ class NetworkError extends StatelessWidget {
               height: 15,
             ),
             Text(
-              'Please check your internet connection and try again.',
+              subTitle != null ? subTitle : 'Please check your internet connection and try again.',
               textAlign: TextAlign.center,
               style: normalFontStyle.copyWith(
                   fontSize: 18, color: whitishColor.withOpacity(0.6)),
             ),
             SizedBox(
-              height: 25,
+              height: 35,
             ),
             CustomButton(
-              labelName: 'REFRESH',
+              labelName: buttonLabel != null ? buttonLabel : 'REFRESH',
               isLoading: false,
               onPressed: onPressed,
             )

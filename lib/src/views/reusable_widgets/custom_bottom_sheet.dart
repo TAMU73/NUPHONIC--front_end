@@ -13,8 +13,29 @@ class CustomBottomSheet extends StatelessWidget {
   final String buttonName;
   final Function onPressed;
   final bool isLoading;
+  final String secondLabelName;
+  final String secondHintName;
+  final TextEditingController textController;
+  final TextEditingController secondTextController;
+  final Function onChanged;
+  final Function secondOnChanged;
 
-  CustomBottomSheet({this.controller, this.titleName, this.labelName, this.hintName, this.buttonName, this.onPressed, this.isLoading});
+  CustomBottomSheet({
+    this.controller,
+    this.titleName,
+    this.labelName,
+    this.hintName,
+    this.buttonName,
+    this.onPressed,
+    this.isLoading,
+    this.secondHintName,
+    this.secondLabelName,
+    this.secondTextController,
+    this.textController,
+    this.onChanged,
+    this.secondOnChanged
+  });
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -24,7 +45,7 @@ class CustomBottomSheet extends StatelessWidget {
         backdropEnabled: true,
         controller: controller,
         minHeight: 0,
-        maxHeight: 325,
+        maxHeight: secondLabelName != null && secondHintName != null ? 570 : 380,
         panel: Column(
           children: [
             SlidingPanelAppBar(
@@ -34,20 +55,38 @@ class CustomBottomSheet extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.fromLTRB(20,0,20,65),
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 65),
                 color: darkGreyColor,
                 child: Column(
                   children: [
                     CustomTextField(
+                      controller: textController,
                       labelName: labelName,
                       hint: hintName,
+                      onChanged: onChanged,
                     ),
-                    SizedBox(height: 20,),
+                    secondLabelName != null && secondHintName != null ? Column(
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        CustomTextField(
+                          controller: secondTextController,
+                          maxLines: 6,
+                          labelName: secondLabelName,
+                          hint: secondHintName,
+                          onChanged: secondOnChanged,
+                        ),
+                      ],
+                    ) : SizedBox(),
+                    SizedBox(
+                      height: 40,
+                    ),
                     CustomButton(
                       labelName: buttonName,
                       isLoading: isLoading,
                       onPressed: onPressed,
-                    )
+                    ),
                   ],
                 ),
               ),

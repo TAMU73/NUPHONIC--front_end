@@ -13,7 +13,7 @@ import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_hea
 import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_artist_box.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_song_box.dart';
-import 'package:nuphonic_front_end/src/views/reusable_widgets/network_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/page_indicator.dart';
 import 'package:nuphonic_front_end/src/views/shimmers/home_shimmer.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
@@ -220,9 +220,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 networkError
                     ? Container(
                         height: height - 200,
-                        child: NetworkError(
+                        child: CustomError(
                           onPressed: () {
-                            refresh();
+                            atStart();
                           },
                         ),
                       )

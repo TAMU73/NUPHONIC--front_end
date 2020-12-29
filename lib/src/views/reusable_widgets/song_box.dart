@@ -39,19 +39,19 @@ class SongBox extends StatelessWidget {
                 width: width,
                 fit: BoxFit.cover,
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  width: width,
-                  height: 97,
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                    child: Container(
-                      color: Colors.white.withOpacity(0),
-                    ),
-                  ),
-                ),
-              ),
+              // ClipRRect(
+              //   borderRadius: BorderRadius.circular(10),
+              //   child: Container(
+              //     width: width,
+              //     height: 97,
+              //     child: BackdropFilter(
+              //       filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              //       child: Container(
+              //         color: Colors.white.withOpacity(0),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -112,20 +112,20 @@ class SongBox extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    height: 85,
-                    width: 85,
-                    child: Image.network(
-                      imageURL,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              )
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: ClipRRect(
+              //     borderRadius: BorderRadius.circular(10),
+              //     child: Container(
+              //       height: 85,
+              //       width: 85,
+              //       child: Image.network(
+              //         imageURL,
+              //         fit: BoxFit.cover,
+              //       ),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ),
