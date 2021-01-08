@@ -327,6 +327,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                           imageURL: song.songImage,
                                           artistName: song.artistName,
                                           songPlace: song.albumName,
+                                          song: song,
                                         ),
                                       )
                                       .toList()),
