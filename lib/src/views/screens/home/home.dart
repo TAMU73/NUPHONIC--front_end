@@ -322,12 +322,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               Column(
                                   children: browseSongs
                                       .map(
-                                        (song) => SongBox(
-                                          songName: song.songName,
-                                          imageURL: song.songImage,
-                                          artistName: song.artistName,
-                                          songPlace: song.albumName,
-                                          song: song,
+                                        (song) => Padding(
+                                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
+                                          child: SongBox(
+                                            songName: song.songName,
+                                            imageURL: song.songImage,
+                                            artistName: song.artistName,
+                                            songPlace: song.albumName,
+                                            song: song,
+                                          ),
                                         ),
                                       )
                                       .toList()),
