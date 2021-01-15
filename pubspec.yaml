@@ -38,6 +38,7 @@ dependencies:
   get: ^3.17.1
   pull_to_refresh: ^1.6.3
   palette_generator: ^0.2.3
+  audioplayers: ^0.17.2
 
 dev_dependencies:
   flutter_test:

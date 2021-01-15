@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -16,13 +17,28 @@ class MusicPlayer extends StatefulWidget {
 }
 
 class _MusicPlayerState extends State<MusicPlayer> {
+  String url = "https://luan.xyz/files/audio/ambient_c_motion.mp3";
+  AudioPlayer audioPlayer = new AudioPlayer();
   List<PaletteColor> colors = [];
+
+  Duration duration = new Duration();
+  Duration position = new Duration();
+
+  bool isPlaying = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     generateColor();
+    getAudio();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    audioPlayer.dispose();
   }
 
   void generateColor() async {
@@ -36,6 +52,56 @@ class _MusicPlayerState extends State<MusicPlayer> {
         ? generator.darkMutedColor
         : PaletteColor(darkGreyColor.withOpacity(0.6), 2));
     setState(() {});
+  }
+
+  Widget slider() {
+    return Slider.adaptive(
+      min: 0.0,
+      value: position.inSeconds.toDouble() != null
+          ? position.inSeconds.toDouble()
+          : 0.0,
+      max: duration.inSeconds.toDouble() != null
+          ? duration.inSeconds.toDouble()
+          : 0.0,
+      onChanged: (double val) {
+        setState(() {
+          audioPlayer.seek(Duration(seconds: val.toInt()));
+        });
+      },
+    );
+  }
+
+  void getAudio() async {
+    if (isPlaying) {
+      var result = await audioPlayer.pause();
+      if (result == 1) {
+        setState(() {
+          isPlaying = false;
+        });
+      }
+    } else {
+      var result = await audioPlayer.play(url);
+      if (result == 1) {
+        setState(() {
+          isPlaying = true;
+        });
+      }
+    }
+    audioPlayer.onDurationChanged.listen((Duration d) {
+      setState(() {
+        duration = d;
+      });
+    });
+    audioPlayer.onAudioPositionChanged.listen((Duration d) {
+      setState(() {
+        position = d;
+      });
+    });
+    audioPlayer.onPlayerCompletion.listen((event) {
+      setState(() {
+        isPlaying = false;
+      });
+    });
   }
 
   @override
@@ -69,11 +135,15 @@ class _MusicPlayerState extends State<MusicPlayer> {
                       ),
                       SvgPicture.asset(
                         'assets/icons/arrow_down.svg',
-                        color: colors.isEmpty ? darkGreyColor.withOpacity(0.6) : colors[1].color.withOpacity(0.6),
+                        color: colors.isEmpty
+                            ? darkGreyColor.withOpacity(0.6)
+                            : colors[1].color.withOpacity(0.6),
                       ),
                       SvgPicture.asset(
                         'assets/icons/more.svg',
-                        color: colors.isEmpty ? darkGreyColor.withOpacity(0.6) : colors[1].color.withOpacity(0.6),
+                        color: colors.isEmpty
+                            ? darkGreyColor.withOpacity(0.6)
+                            : colors[1].color.withOpacity(0.6),
                       ),
                     ],
                   ),
@@ -151,7 +221,14 @@ class _MusicPlayerState extends State<MusicPlayer> {
                       SizedBox(
                         width: 30,
                       ),
-                      SvgPicture.asset('assets/icons/play_song.svg'),
+                      InkWell(
+                        onTap: () {
+                          getAudio();
+                        },
+                        child: SvgPicture.asset(isPlaying
+                            ? 'assets/icons/pause_song.svg'
+                            : 'assets/icons/play_song.svg'),
+                      ),
                       SizedBox(
                         width: 30,
                       ),
@@ -165,11 +242,11 @@ class _MusicPlayerState extends State<MusicPlayer> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '2:25',
+                          '${position.inSeconds.toDouble() != null ? position.inSeconds.toDouble() : 0.0}',
                           style: normalFontStyle,
                         ),
                         Text(
-                          '2:25',
+                          '${duration.inSeconds.toDouble() != null ? duration.inSeconds.toDouble() : 0.0}',
                           style: normalFontStyle,
                         )
                       ],
@@ -177,10 +254,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                     SizedBox(
                       height: 15,
                     ),
-                    Container(
-                      height: 2,
-                      color: whitishColor.withOpacity(0.3),
-                    )
+                    slider()
                   ],
                 ),
                 Padding(
