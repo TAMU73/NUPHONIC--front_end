@@ -17,7 +17,6 @@ class MusicPlayer extends StatefulWidget {
 }
 
 class _MusicPlayerState extends State<MusicPlayer> {
-  String url = "https://luan.xyz/files/audio/ambient_c_motion.mp3";
   AudioPlayer audioPlayer = new AudioPlayer();
   List<PaletteColor> colors = [];
 
@@ -55,19 +54,26 @@ class _MusicPlayerState extends State<MusicPlayer> {
   }
 
   Widget slider() {
-    return Slider.adaptive(
-      min: 0.0,
-      value: position.inSeconds.toDouble() != null
-          ? position.inSeconds.toDouble()
-          : 0.0,
-      max: duration.inSeconds.toDouble() != null
-          ? duration.inSeconds.toDouble()
-          : 0.0,
-      onChanged: (double val) {
-        setState(() {
-          audioPlayer.seek(Duration(seconds: val.toInt()));
-        });
-      },
+    return SliderTheme(
+      data: SliderThemeData(
+        trackShape: CustomTrackShape(),
+      ),
+      child: Slider.adaptive(
+        inactiveColor: whitishColor.withOpacity(0.3),
+        activeColor: mainColor,
+        min: 0.0,
+        value: position.inSeconds.toDouble() != null
+            ? position.inSeconds.toDouble()
+            : 0.0,
+        max: duration.inSeconds.toDouble() != null
+            ? duration.inSeconds.toDouble()
+            : 0.0,
+        onChanged: (double val) {
+          setState(() {
+            audioPlayer.seek(Duration(seconds: val.toInt()));
+          });
+        },
+      ),
     );
   }
 
@@ -80,7 +86,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
         });
       }
     } else {
-      var result = await audioPlayer.play(url);
+      var result = await audioPlayer.play(widget.song.songURL);
       if (result == 1) {
         setState(() {
           isPlaying = true;
@@ -217,7 +223,15 @@ class _MusicPlayerState extends State<MusicPlayer> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset('assets/icons/skip_back.svg'),
+                      InkWell(
+                        onTap: () {
+                          double val = position.inSeconds.toDouble() - 10;
+                          setState(() {
+                            audioPlayer.seek(Duration(seconds: val.toInt()));
+                          });
+                        },
+                        child: SvgPicture.asset('assets/icons/reverse.svg'),
+                      ),
                       SizedBox(
                         width: 30,
                       ),
@@ -232,7 +246,15 @@ class _MusicPlayerState extends State<MusicPlayer> {
                       SizedBox(
                         width: 30,
                       ),
-                      SvgPicture.asset('assets/icons/skip_forward.svg'),
+                      InkWell(
+                        onTap: () {
+                          double val = position.inSeconds.toDouble() + 10;
+                          setState(() {
+                            audioPlayer.seek(Duration(seconds: val.toInt()));
+                          });
+                        },
+                        child: SvgPicture.asset('assets/icons/forward.svg'),
+                      ),
                     ],
                   ),
                 ),
@@ -242,11 +264,11 @@ class _MusicPlayerState extends State<MusicPlayer> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${position.inSeconds.toDouble() != null ? position.inSeconds.toDouble() : 0.0}',
+                          '${position.inSeconds.toDouble() != null ? '${position.inMinutes}:${(position.inSeconds % 60).toString().padLeft(2, '0')}' : '0:00'}',
                           style: normalFontStyle,
                         ),
                         Text(
-                          '${duration.inSeconds.toDouble() != null ? duration.inSeconds.toDouble() : 0.0}',
+                          '${duration.inSeconds.toDouble() != null ? '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}' : '0:00'}',
                           style: normalFontStyle,
                         )
                       ],
@@ -254,7 +276,10 @@ class _MusicPlayerState extends State<MusicPlayer> {
                     SizedBox(
                       height: 15,
                     ),
-                    slider()
+                    Container(
+                      height: 10,
+                      child: slider(),
+                    )
                   ],
                 ),
                 Padding(
@@ -274,5 +299,22 @@ class _MusicPlayerState extends State<MusicPlayer> {
         ),
       ),
     );
+  }
+}
+
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  Rect getPreferredRect({
+    @required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    @required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = 2;
+    final double trackLeft = offset.dx;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }
 }
