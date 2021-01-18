@@ -24,6 +24,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
   Duration position = new Duration();
 
   bool isPlaying = false;
+  bool isRepeating = false;
 
   @override
   void initState() {
@@ -77,21 +78,28 @@ class _MusicPlayerState extends State<MusicPlayer> {
     );
   }
 
+  void play() async {
+    var result = await audioPlayer.play(widget.song.songURL);
+    if (result == 1) {
+      setState(() {
+        isPlaying = true;
+      });
+    }
+  }
+
+  void pause() async {
+    var result = await audioPlayer.pause();
+    if (result == 1) {
+      setState(() {
+        isPlaying = false;
+      });
+    }
+  }
   void getAudio() async {
     if (isPlaying) {
-      var result = await audioPlayer.pause();
-      if (result == 1) {
-        setState(() {
-          isPlaying = false;
-        });
-      }
+      pause();
     } else {
-      var result = await audioPlayer.play(widget.song.songURL);
-      if (result == 1) {
-        setState(() {
-          isPlaying = true;
-        });
-      }
+      play();
     }
     audioPlayer.onDurationChanged.listen((Duration d) {
       setState(() {
@@ -104,9 +112,14 @@ class _MusicPlayerState extends State<MusicPlayer> {
       });
     });
     audioPlayer.onPlayerCompletion.listen((event) {
-      setState(() {
-        isPlaying = false;
-      });
+      audioPlayer.stop();
+      if (isRepeating) {
+        play();
+      } else {
+        setState(() {
+          isPlaying = false;
+        });
+      }
     });
   }
 
@@ -219,41 +232,60 @@ class _MusicPlayerState extends State<MusicPlayer> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       InkWell(
                         onTap: () {
-                          double val = position.inSeconds.toDouble() - 10;
                           setState(() {
-                            audioPlayer.seek(Duration(seconds: val.toInt()));
+                            isRepeating = !isRepeating;
                           });
                         },
-                        child: SvgPicture.asset('assets/icons/reverse.svg'),
+                        child: SvgPicture.asset('assets/icons/repeat.svg', color: isRepeating ? mainColor : Color(0xff817E7D)),
                       ),
-                      SizedBox(
-                        width: 30,
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                double val = position.inSeconds.toDouble() - 10;
+                                setState(() {
+                                  audioPlayer.seek(Duration(seconds: val.toInt()));
+                                });
+                              },
+                              child: SvgPicture.asset('assets/icons/reverse.svg'),
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                getAudio();
+                              },
+                              child: SvgPicture.asset(isPlaying
+                                  ? 'assets/icons/pause_song.svg'
+                                  : 'assets/icons/play_song.svg'),
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                double val = position.inSeconds.toDouble() + 10;
+                                setState(() {
+                                  audioPlayer.seek(Duration(seconds: val.toInt()));
+                                });
+                              },
+                              child: SvgPicture.asset('assets/icons/forward.svg'),
+                            ),
+                          ],
+                        ),
                       ),
                       InkWell(
                         onTap: () {
-                          getAudio();
                         },
-                        child: SvgPicture.asset(isPlaying
-                            ? 'assets/icons/pause_song.svg'
-                            : 'assets/icons/play_song.svg'),
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          double val = position.inSeconds.toDouble() + 10;
-                          setState(() {
-                            audioPlayer.seek(Duration(seconds: val.toInt()));
-                          });
-                        },
-                        child: SvgPicture.asset('assets/icons/forward.svg'),
+                        child: SvgPicture.asset('assets/icons/love.svg'),
                       ),
                     ],
                   ),
@@ -288,8 +320,8 @@ class _MusicPlayerState extends State<MusicPlayer> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SvgPicture.asset('assets/icons/love_song.svg'),
-                      SvgPicture.asset('assets/icons/add_to_playlist.svg'),
+                      SvgPicture.asset('assets/icons/support.svg'),
+                      SvgPicture.asset('assets/icons/add.svg'),
                     ],
                   ),
                 ),
