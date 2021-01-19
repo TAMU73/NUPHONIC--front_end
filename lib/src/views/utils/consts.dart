@@ -30,22 +30,23 @@ const bottomPanelBorderRadius = BorderRadius.only(
 );
 
 const textButtonStyle = TextStyle(
-    fontFamily: "Gilroy",
-    color: mainColor,
-    fontSize: 18,
-    fontWeight: FontWeight.w400);
+  fontFamily: "Gilroy",
+  color: mainColor,
+  fontSize: 18,
+);
 
 const normalFontStyle = TextStyle(
-    fontFamily: "Gilroy",
-    color: whitishColor,
-    fontSize: 14,
-    fontWeight: FontWeight.w400);
+  fontFamily: "Gilroy",
+  color: whitishColor,
+  fontSize: 14,
+);
 
 const appNameFontStyle = TextStyle(
-    fontFamily: "Wallpoet",
-    color: whitishColor,
-    fontSize: 14,
-    letterSpacing: 1);
+  fontFamily: "Wallpoet",
+  color: whitishColor,
+  fontSize: 14,
+  letterSpacing: 1,
+);
 
 const texFieldLabelStyle = TextStyle(
   fontFamily: "Gilroy",

@@ -18,7 +18,7 @@ class ContentTitle extends StatelessWidget {
           style: normalFontStyle.copyWith(
               color: whitishColor.withOpacity(0.9),
               fontSize: 17,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w800,
               letterSpacing: 0.2),
         ),
       ),
