@@ -252,11 +252,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   itemCount: featuredSongs.length,
                                   itemBuilder: (context, index) {
                                     return FeaturedSongBox(
-                                      songName: featuredSongs[index].songName,
-                                      imageURL: featuredSongs[index].songImage,
-                                      artistName:
-                                          featuredSongs[index].artistName,
-                                      songPlace: featuredSongs[index].albumName,
+                                      song: featuredSongs[index],
                                     );
                                   },
                                 ),
@@ -322,15 +318,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               Column(
                                   children: browseSongs
                                       .map(
-                                        (song) => Padding(
-                                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
-                                          child: SongBox(
-                                            songName: song.songName,
-                                            imageURL: song.songImage,
-                                            artistName: song.artistName,
-                                            songPlace: song.albumName,
-                                            song: song,
-                                          ),
+                                        (song) => SongBox(
+                                          song: song,
                                         ),
                                       )
                                       .toList()),

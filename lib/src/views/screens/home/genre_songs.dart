@@ -118,10 +118,7 @@ class _GenreSongsState extends State<GenreSongs> {
                                 children: genreSongs
                                     .map(
                                       (song) => SongBox(
-                                        songName: song.songName,
-                                        imageURL: song.songImage,
-                                        artistName: song.artistName,
-                                        songPlace: song.albumName,
+                                        song: song,
                                       ),
                                     )
                                     .toList())

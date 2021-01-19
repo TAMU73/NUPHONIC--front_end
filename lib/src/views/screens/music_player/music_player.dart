@@ -25,21 +25,8 @@ class _MusicPlayerState extends State<MusicPlayer> {
 
   bool isPlaying = false;
   bool isRepeating = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    generateColor();
-    getAudio();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    audioPlayer.dispose();
-  }
+  bool isFavourite = false;
+  bool isSupported = false;
 
   void generateColor() async {
     ImageProvider image = NetworkImage('${widget.song.songImage}');
@@ -79,7 +66,9 @@ class _MusicPlayerState extends State<MusicPlayer> {
   }
 
   void play() async {
-    var result = await audioPlayer.play(widget.song.songURL);
+    var result = await audioPlayer.play(
+      widget.song.songURL,
+    );
     if (result == 1) {
       setState(() {
         isPlaying = true;
@@ -95,6 +84,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
       });
     }
   }
+
   void getAudio() async {
     if (isPlaying) {
       pause();
@@ -121,6 +111,21 @@ class _MusicPlayerState extends State<MusicPlayer> {
         });
       }
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    generateColor();
+    getAudio();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    audioPlayer.dispose();
   }
 
   @override
@@ -174,9 +179,25 @@ class _MusicPlayerState extends State<MusicPlayer> {
                       child: Container(
                         height: width - 60,
                         width: width - 60,
-                        child: Image.network(
-                          widget.song.songImage,
-                          fit: BoxFit.cover,
+                        child: Stack(
+                          children: [
+                            Container(
+                              color: textFieldColor,
+                              child: Center(
+                                child: Icon(
+                                  Icons.image,
+                                  color: mainColor,
+                                  size: 50,
+                                ),
+                              ),
+                            ),
+                            Image.network(
+                              widget.song.songImage,
+                              fit: BoxFit.cover,
+                              height: width - 60,
+                              width: width - 60,
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -232,7 +253,8 @@ class _MusicPlayerState extends State<MusicPlayer> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                   child: Row(
                     children: [
                       InkWell(
@@ -241,20 +263,43 @@ class _MusicPlayerState extends State<MusicPlayer> {
                             isRepeating = !isRepeating;
                           });
                         },
-                        child: SvgPicture.asset('assets/icons/repeat.svg', color: isRepeating ? mainColor : Color(0xff817E7D)),
+                        child: Column(
+                          children: [
+                            SvgPicture.asset('assets/icons/repeat.svg',
+                                color:
+                                    isRepeating ? mainColor : lightGreyColor),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            isRepeating
+                                ? Icon(
+                                    Icons.circle,
+                                    size: 4,
+                                    color: mainColor,
+                                  )
+                                : SizedBox()
+                          ],
+                        ),
                       ),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: () {
+                              onDoubleTap: () {
                                 double val = position.inSeconds.toDouble() - 10;
-                                setState(() {
-                                  audioPlayer.seek(Duration(seconds: val.toInt()));
-                                });
+                                if (val > 0) {
+                                  setState(() {
+                                    audioPlayer
+                                        .seek(Duration(seconds: val.toInt()));
+                                  });
+                                } else {
+                                  setState(() {
+                                    audioPlayer.seek(Duration(seconds: 0));
+                                  });
+                                }
                               },
-                              child: SvgPicture.asset('assets/icons/reverse.svg'),
+                              child: SvgPicture.asset('assets/icons/back.svg'),
                             ),
                             SizedBox(
                               width: 30,
@@ -271,22 +316,34 @@ class _MusicPlayerState extends State<MusicPlayer> {
                               width: 30,
                             ),
                             InkWell(
-                              onTap: () {
+                              onDoubleTap: () {
                                 double val = position.inSeconds.toDouble() + 10;
-                                setState(() {
-                                  audioPlayer.seek(Duration(seconds: val.toInt()));
-                                });
+                                if (val < duration.inSeconds.toDouble()) {
+                                  setState(() {
+                                    audioPlayer
+                                        .seek(Duration(seconds: val.toInt()));
+                                  });
+                                } else {
+                                  setState(() {
+                                    audioPlayer.seek(
+                                        Duration(seconds: duration.inSeconds));
+                                  });
+                                }
                               },
-                              child: SvgPicture.asset('assets/icons/forward.svg'),
+                              child: SvgPicture.asset('assets/icons/next.svg'),
                             ),
                           ],
                         ),
                       ),
                       InkWell(
-                        onTap: () {
-                        },
-                        child: SvgPicture.asset('assets/icons/love.svg'),
-                      ),
+                          onTap: () {
+                            setState(() {
+                              isFavourite = !isFavourite;
+                            });
+                          },
+                          child: SvgPicture.asset(isFavourite
+                              ? 'assets/icons/loved.svg'
+                              : 'assets/icons/love.svg')),
                     ],
                   ),
                 ),
@@ -320,7 +377,16 @@ class _MusicPlayerState extends State<MusicPlayer> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SvgPicture.asset('assets/icons/support.svg'),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            isSupported = !isSupported;
+                          });
+                        },
+                        child: SvgPicture.asset(isSupported
+                            ? 'assets/icons/supported.svg'
+                            : 'assets/icons/support.svg'),
+                      ),
                       SvgPicture.asset('assets/icons/add.svg'),
                     ],
                   ),

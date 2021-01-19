@@ -5,6 +5,7 @@ const backgroundColor = Colors.black;
 const mainColor = Color(0xff7B4BFF);
 const whitishColor = Color(0xffE4E4E4);
 const darkGreyColor = Color(0xff191919);
+const lightGreyColor = Color(0xff817E7D);
 const textFieldColor = Color(0xff292929);
 const reddishColor = Color(0xffF05959);
 const greenishColor = Color(0xff2DCC70);
