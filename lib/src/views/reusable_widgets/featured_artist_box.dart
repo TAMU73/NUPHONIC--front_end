@@ -48,8 +48,10 @@ class FeaturedArtistBox extends StatelessWidget {
             child: Text(
               artistName,
               textAlign: TextAlign.center,
-              style:
-                  normalFontStyle.copyWith(color: whitishColor.withOpacity(0.6), fontSize: 13),
+              style: normalFontStyle.copyWith(
+                color: whitishColor.withOpacity(0.6),
+                fontSize: 13,
+              ),
             ),
           ),
         ],

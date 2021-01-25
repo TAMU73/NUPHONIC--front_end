@@ -65,7 +65,7 @@ class FeaturedSongBox extends StatelessWidget {
                       Text(
                         song.songName,
                         style: normalFontStyle.copyWith(
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w700,
                             color: whitishColor,
                             fontSize: 20,
                             letterSpacing: 0.5),

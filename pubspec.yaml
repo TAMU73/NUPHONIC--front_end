@@ -91,18 +91,22 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Gilroy
+    - family: Proxima Nova
       fonts:
-        - asset: fonts/Gilroy-Regular.ttf
-        - asset: fonts/Gilroy-Light.ttf
+        - asset: fonts/ProximaNova-Regular.ttf
+        - asset: fonts/ProximaNova-UltraThin.ttf
+          weight: 200
+        - asset: fonts/ProximaNova-Light.ttf
           weight: 300
-        - asset: fonts/Gilroy-Medium.ttf
+        - asset: fonts/ProximaNova-Regular.ttf
+          weight: 400
+        - asset: fonts/ProximaNova-Medium.ttf
           weight: 500
-        - asset: fonts/Gilroy-SemiBold.ttf
+        - asset: fonts/ProximaNova-SemiBold.ttf
           weight: 600
-        - asset: fonts/Gilroy-Bold.ttf
+        - asset: fonts/ProximaNova-Bold.ttf
           weight: 700
-        - asset: fonts/Gilroy-ExtraBold.ttf
+        - asset: fonts/ProximaNova-ExtraBold.ttf
           weight: 800
     - family: Wallpoet
       fonts:

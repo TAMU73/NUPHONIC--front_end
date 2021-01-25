@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-const backgroundColor = Colors.black;
+const backgroundColor = Color(0xff000000);
 const mainColor = Color(0xff7B4BFF);
 const whitishColor = Color(0xffE4E4E4);
 const darkGreyColor = Color(0xff191919);
@@ -30,15 +30,17 @@ const bottomPanelBorderRadius = BorderRadius.only(
 );
 
 const textButtonStyle = TextStyle(
-  fontFamily: "Gilroy",
+  fontFamily: "Proxima Nova",
   color: mainColor,
   fontSize: 18,
+  fontWeight: FontWeight.w600
 );
 
 const normalFontStyle = TextStyle(
-  fontFamily: "Gilroy",
+  fontFamily: "Proxima Nova",
   color: whitishColor,
   fontSize: 14,
+  letterSpacing: 0.5,
 );
 
 const appNameFontStyle = TextStyle(
@@ -49,18 +51,18 @@ const appNameFontStyle = TextStyle(
 );
 
 const texFieldLabelStyle = TextStyle(
-  fontFamily: "Gilroy",
+  fontFamily: "Proxima Nova",
   color: whitishColor,
   fontSize: 15,
   letterSpacing: 0.5,
 );
 
 const titleTextStyle = TextStyle(
-  fontFamily: "Gilroy",
+  fontFamily: "Proxima Nova",
   color: whitishColor,
   fontSize: 24,
-  letterSpacing: 1.5,
-  fontWeight: FontWeight.w700,
+  letterSpacing: 1,
+  fontWeight: FontWeight.w800,
 );
 
 const signUpLabelStyle = TextStyle(

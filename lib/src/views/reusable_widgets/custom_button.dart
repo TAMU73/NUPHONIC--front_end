@@ -31,7 +31,7 @@ class CustomButton extends StatelessWidget {
                           ? whitishColor.withOpacity(0.4)
                           : whitishColor,
                       fontSize: 20,
-                      fontWeight: FontWeight.w800),
+                      fontWeight: FontWeight.w700),
                 ),
               ),
             ),

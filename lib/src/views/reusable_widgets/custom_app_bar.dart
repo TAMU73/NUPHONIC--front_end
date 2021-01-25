@@ -27,7 +27,7 @@ class CustomAppBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           leadIconPath != null
-              ? GestureDetector(
+              ? InkWell(
                   onTap: onIconTap,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20),

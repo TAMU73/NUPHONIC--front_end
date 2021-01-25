@@ -11,14 +11,13 @@ class ContentTitle extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Container(
-        height: 25,
         padding: EdgeInsets.symmetric(vertical: 2),
         child: Text(
           label,
           style: normalFontStyle.copyWith(
               color: whitishColor.withOpacity(0.9),
-              fontSize: 17,
-              fontWeight: FontWeight.w800,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
               letterSpacing: 0.2),
         ),
       ),

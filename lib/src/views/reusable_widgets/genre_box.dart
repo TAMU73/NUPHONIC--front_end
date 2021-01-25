@@ -14,7 +14,7 @@ class GenreBox extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 15),
+        padding: const EdgeInsets.only(bottom: 20),
         child: Container(
           height: 90,
           decoration: BoxDecoration(
@@ -32,7 +32,7 @@ class GenreBox extends StatelessWidget {
                     style: normalFontStyle.copyWith(
                         fontSize: 14,
                         letterSpacing: 0.5,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w800,
                         color: Colors.black),
                   ),
                 ),

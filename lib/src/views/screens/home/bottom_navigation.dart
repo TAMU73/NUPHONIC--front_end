@@ -74,7 +74,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               child: SizedBox(
                 height: 65,
                 child: BottomNavigationBar(
-                  backgroundColor: Colors.black.withOpacity(0.7),
+                  backgroundColor: backgroundColor.withOpacity(0.7),
                   items: <BottomNavigationBarItem>[
                     bottomNavigationBarItem(
                       'Home',
