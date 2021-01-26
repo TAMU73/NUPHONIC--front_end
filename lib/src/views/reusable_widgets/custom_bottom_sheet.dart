@@ -20,35 +20,38 @@ class CustomBottomSheet extends StatelessWidget {
   final Function onChanged;
   final Function secondOnChanged;
 
-  CustomBottomSheet({
-    this.controller,
-    this.titleName,
-    this.labelName,
-    this.hintName,
-    this.buttonName,
-    this.onPressed,
-    this.isLoading,
-    this.secondHintName,
-    this.secondLabelName,
-    this.secondTextController,
-    this.textController,
-    this.onChanged,
-    this.secondOnChanged
-  });
+  CustomBottomSheet(
+      {this.controller,
+      this.titleName,
+      this.labelName,
+      this.hintName,
+      this.buttonName,
+      this.onPressed,
+      this.isLoading,
+      this.secondHintName,
+      this.secondLabelName,
+      this.secondTextController,
+      this.textController,
+      this.onChanged,
+      this.secondOnChanged});
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Container(
-        color: darkGreyColor,
-        child: SlidingUpPanel(
-          color: Colors.transparent,
-          backdropEnabled: true,
-          controller: controller,
-          minHeight: 0,
-          maxHeight: secondLabelName != null && secondHintName != null ? 570 : 380,
-          panel: Column(
+      child: SlidingUpPanel(
+        color: Colors.transparent,
+        backdropEnabled: true,
+        controller: controller,
+        minHeight: 0,
+        maxHeight:
+            secondLabelName != null && secondHintName != null ? 570 : 380,
+        panel: Container(
+          decoration: BoxDecoration(
+            color: darkGreyColor,
+            borderRadius: bottomPanelBorderRadius,
+          ),
+          child: Column(
             children: [
               SlidingPanelAppBar(
                 height: 83,
@@ -67,20 +70,22 @@ class CustomBottomSheet extends StatelessWidget {
                         hint: hintName,
                         onChanged: onChanged,
                       ),
-                      secondLabelName != null && secondHintName != null ? Column(
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          CustomTextField(
-                            controller: secondTextController,
-                            maxLines: 6,
-                            labelName: secondLabelName,
-                            hint: secondHintName,
-                            onChanged: secondOnChanged,
-                          ),
-                        ],
-                      ) : SizedBox(),
+                      secondLabelName != null && secondHintName != null
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                CustomTextField(
+                                  controller: secondTextController,
+                                  maxLines: 6,
+                                  labelName: secondLabelName,
+                                  hint: secondHintName,
+                                  onChanged: secondOnChanged,
+                                ),
+                              ],
+                            )
+                          : SizedBox(),
                       SizedBox(
                         height: 40,
                       ),

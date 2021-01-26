@@ -32,7 +32,7 @@ class GenreBox extends StatelessWidget {
                     style: normalFontStyle.copyWith(
                         fontSize: 14,
                         letterSpacing: 0.5,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         color: Colors.black),
                   ),
                 ),

@@ -66,7 +66,7 @@ const titleTextStyle = TextStyle(
 );
 
 const signUpLabelStyle = TextStyle(
-    fontFamily: "Gilroy",
+    fontFamily: "Proxima Nova",
     color: whitishColor,
     fontSize: 14,
     letterSpacing: 0.5);
