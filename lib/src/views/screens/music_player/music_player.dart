@@ -232,7 +232,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                 style: normalFontStyle.copyWith(
                                     fontWeight: FontWeight.w700,
                                     color: whitishColor,
-                                    fontSize: 20,
+                                    fontSize: 24,
                                     letterSpacing: 0.5),
                               ),
                             ],

@@ -43,6 +43,15 @@ class SongDescription extends StatelessWidget {
                       children: [
                         Row(
                           children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                child: Image.network(song.songImage, fit: BoxFit.cover,),
+                              ),
+                            ),
+                            SizedBox(width: 10,),
                             Text(
                               song.songName,
                               style: normalFontStyle.copyWith(

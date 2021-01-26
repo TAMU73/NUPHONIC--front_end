@@ -1,4 +1,5 @@
 class SongModel {
+  final String songID;
   final String songName;
   final String publishedDate;
   final String songURL;
@@ -12,6 +13,7 @@ class SongModel {
   final String songLyrics;
 
   SongModel({
+    this.songID,
     this.songName,
     this.publishedDate,
     this.songURL,
@@ -27,12 +29,13 @@ class SongModel {
 
   factory SongModel.fromJson(Map<String, dynamic> data) {
     return SongModel(
+        songID: data['_id'],
         songName: data['song_name'],
         publishedDate: data['published_date'],
         songURL: data['song_url'],
         songImage: data['song_picture_url'],
         genreName: data['genre_name'],
-        artistID: data['artists_id'],
+        artistID: data['artist_id'],
         artistName: data['artist_name'],
         albumID: data['album_id'],
         albumName: data['album_name'],
@@ -42,6 +45,7 @@ class SongModel {
 
   Map<String, dynamic> toJson() {
     return {
+      '_id': songID,
       'song_name': songName,
       'published_date': publishedDate,
       'song_url': songURL,

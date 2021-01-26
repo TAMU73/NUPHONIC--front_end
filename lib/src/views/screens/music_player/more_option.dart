@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/models/user_model.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/user_profile.dart';
 import 'package:nuphonic_front_end/src/views/screens/music_player/song_description.dart';
 import 'package:nuphonic_front_end/src/views/screens/music_player/song_lyrics.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
@@ -76,21 +78,23 @@ class MoreOption extends StatelessWidget {
                       },
                     ),
                     moreTile(
-                      title: 'Lyrics',
-                      iconPath: 'assets/icons/lyrics.svg',
-                      onTap: () {
-                        Get.to(SongLyrics(song: song,));
-                      },
-                    ),
-                    moreTile(
                       title: 'View Artist',
                       iconPath: 'assets/icons/artist.svg',
-                      onTap: null,
+                      onTap: () {
+                        Get.to(UserProfile(userID: song.artistID,));
+                      },
                     ),
                     moreTile(
                       title: 'View Album',
                       iconPath: 'assets/icons/album.svg',
                       onTap: null,
+                    ),
+                    moreTile(
+                      title: 'Lyrics',
+                      iconPath: 'assets/icons/lyrics.svg',
+                      onTap: () {
+                        Get.to(SongLyrics(song: song,));
+                      },
                     ),
                   ],
                 ),

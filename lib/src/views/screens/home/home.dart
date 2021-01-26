@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nuphonic_front_end/src/app_logics/models/artist_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/models/user_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/feature_service.dart';
@@ -204,9 +204,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CustomAppBar(
                     label: 'Good $greeting',
-                    labelTextStyle: titleTextStyle.copyWith(
-                      fontSize: 21,
-                    ),
+                    labelTextStyle: titleTextStyle,
                     secondLabel: '$name,',
                     secondLabelTextStyle: normalFontStyle.copyWith(
                       fontSize: 18,
@@ -296,9 +294,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       children: featuredArtists
                                           .map(
                                             (artist) => FeaturedArtistBox(
-                                              artistName: artist.fullName,
-                                              artistImage:
-                                                  artist.profilePicture,
+                                              user: artist,
                                             ),
                                           )
                                           .toList(),
