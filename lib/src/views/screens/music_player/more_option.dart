@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/user_model.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/album_profile.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/user_profile.dart';
 import 'package:nuphonic_front_end/src/views/screens/music_player/song_description.dart';
 import 'package:nuphonic_front_end/src/views/screens/music_player/song_lyrics.dart';
@@ -87,7 +88,9 @@ class MoreOption extends StatelessWidget {
                     moreTile(
                       title: 'View Album',
                       iconPath: 'assets/icons/album.svg',
-                      onTap: null,
+                      onTap: () {
+                        Get.to(AlbumProfile());
+                      },
                     ),
                     moreTile(
                       title: 'Lyrics',

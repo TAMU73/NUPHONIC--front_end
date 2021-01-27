@@ -1,49 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nuphonic_front_end/src/app_logics/models/user_model.dart';
-import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/models/album_model.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
-class UserProfile extends StatefulWidget {
-  final UserModel user;
-  final String userID;
+class AlbumProfile extends StatefulWidget {
+  // final AlbumModel album;
+  final String albumID;
 
-  UserProfile({this.user, this.userID});
+  AlbumProfile({
+    this.albumID,
+    // this.album,
+  });
 
   @override
-  _UserProfileState createState() => _UserProfileState();
+  _AlbumProfileState createState() => _AlbumProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> {
-  AuthService _auth = AuthService();
-
+class _AlbumProfileState extends State<AlbumProfile> {
   bool isLoading = false;
-  UserModel user;
 
-  void atStart() async {
-    if (widget.user != null) {
-      setState(() {
-        user = widget.user;
-      });
-    } else {
-      setState(() {
-        isLoading = true;
-      });
-      dynamic result1 = await _auth.getUserInfo(widget.userID);
-      Map<String, dynamic> artistDetail = result1.data['user'];
-      setState(() {
-        isLoading = false;
-        user = UserModel.fromJson(artistDetail);
-      });
-    }
-  }
+  AlbumModel album = AlbumModel(
+      albumID: "albumID",
+      artistID: "artistID",
+      artistName: "Bartika Eam Rai",
+      albumName: "Bimbaakash",
+      albumPicture:
+          "https://m.media-amazon.com/images/I/61po9HBLnQL._SS500_.jpg",
+      albumSongs: ["song1", "song2", "song3"],
+      description: "Album Description");
+
+  // void atStart() async {
+  //   if (widget.album != null) {
+  //     setState(() {
+  //       user = widget.album;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //     dynamic result1 = await _songService.getAlbumInfo(widget.albumID);
+  //     Map<String, dynamic> albumDetail = result1.data['album'];
+  //     setState(() {
+  //       isLoading = false;
+  //       album = AlbumModel.fromJson(albumDetail);
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    atStart();
+    // atStart();
   }
 
   @override
@@ -56,6 +65,7 @@ class _UserProfileState extends State<UserProfile> {
             child: Scaffold(
               backgroundColor: backgroundColor,
               body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Stack(
                     alignment: Alignment.center,
@@ -64,7 +74,7 @@ class _UserProfileState extends State<UserProfile> {
                         width: width,
                         height: width,
                         child: Image.network(
-                          user.profilePicture,
+                          album.albumPicture,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -89,7 +99,7 @@ class _UserProfileState extends State<UserProfile> {
                           leadIconPath: 'assets/icons/back_icon.svg',
                           label: "",
                           endChild: SvgPicture.asset(
-                            'assets/icons/love_big.svg',
+                            'assets/icons/info_big.svg',
                             height: 24,
                           ),
                         ),
@@ -104,28 +114,48 @@ class _UserProfileState extends State<UserProfile> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  user.username,
+                                  album.albumName,
                                   textAlign: TextAlign.center,
                                   style: titleTextStyle.copyWith(fontSize: 30),
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
-                                user.username == user.fullName
-                                    ? SizedBox()
-                                    : Text(
-                                        user.fullName,
-                                        textAlign: TextAlign.center,
-                                        style: normalFontStyle.copyWith(
-                                          color: whitishColor.withOpacity(0.7),
-                                        ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Album by ',
+                                      textAlign: TextAlign.center,
+                                      style: normalFontStyle.copyWith(
+                                          color: whitishColor.withOpacity(0.7)),
+                                    ),
+                                    Text(
+                                      album.artistName,
+                                      textAlign: TextAlign.center,
+                                      style: normalFontStyle.copyWith(
+                                        color: whitishColor.withOpacity(0.7),
+                                        fontWeight: FontWeight.w600
                                       ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      SvgPicture.asset('assets/icons/album_play.svg')
                     ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      '${album.albumSongs.length.toString()} songs',
+                      textAlign: TextAlign.center,
+                      style: normalFontStyle.copyWith(
+                          color: whitishColor.withOpacity(0.7)),
+                    ),
                   ),
                 ],
               ),
