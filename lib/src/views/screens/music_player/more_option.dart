@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
-import 'package:nuphonic_front_end/src/app_logics/models/user_model.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/album_profile.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/user_profile.dart';
 import 'package:nuphonic_front_end/src/views/screens/music_player/song_description.dart';
@@ -16,12 +15,13 @@ class MoreOption extends StatelessWidget {
 
   MoreOption({this.controller, this.song});
 
-  Widget moreTile({String title, Function onTap, String iconPath}) {
+  Widget moreTile({String title, Function onTap, String iconPath, bool isActive = true}) {
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-        child: Container(
+        child: Opacity(
+          opacity: isActive ? 1 : 0.5,
           child: Row(
             children: [
               SvgPicture.asset(iconPath),
@@ -82,21 +82,23 @@ class MoreOption extends StatelessWidget {
                       title: 'View Artist',
                       iconPath: 'assets/icons/artist.svg',
                       onTap: () {
-                        Get.to(UserProfile(userID: song.artistID,));
+                        Get.off(UserProfile(userID: song.artistID,));
                       },
                     ),
                     moreTile(
                       title: 'View Album',
                       iconPath: 'assets/icons/album.svg',
+                      isActive: song.albumID ==null ? false : true,
                       onTap: () {
-                        Get.to(AlbumProfile());
+                        song.albumID != null ? Get.off(AlbumProfile(albumID: song.albumID,)) : null;
                       },
                     ),
                     moreTile(
                       title: 'Lyrics',
                       iconPath: 'assets/icons/lyrics.svg',
+                      isActive: song.songLyrics ==null ? false : true,
                       onTap: () {
-                        Get.to(SongLyrics(song: song,));
+                        song.songLyrics !=null ? Get.to(SongLyrics(song: song,)) : null;
                       },
                     ),
                   ],

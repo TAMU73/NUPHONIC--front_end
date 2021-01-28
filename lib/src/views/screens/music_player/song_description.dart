@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
@@ -40,6 +41,7 @@ class SongDescription extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
@@ -55,7 +57,7 @@ class SongDescription extends StatelessWidget {
                             Text(
                               song.songName,
                               style: normalFontStyle.copyWith(
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   color: whitishColor,
                                   fontSize: 22,
                                   letterSpacing: 0.5),
@@ -90,21 +92,40 @@ class SongDescription extends StatelessWidget {
                               ),
                             ),
                           ],
-                        )
+                        ),
+
                       ],
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    SizedBox(width: 10,),
+                    Text(
+                      'Uploaded on ',
+                      style: normalFontStyle.copyWith(
+                          color: whitishColor.withOpacity(0.7)
+                      ),
+                    ),
+                    Text(
+                      '${DateFormat('MMM dd, yyyy').format(DateTime.parse(song.publishedDate))}',
+                      style: normalFontStyle,
+                    ),
+                  ],
+                ),
                 SizedBox(height: 20,),
                 Text(
-                  song.songDescription,
+                  '  ${song.songDescription}',
                   style: normalFontStyle,
                   textAlign: TextAlign.justify,
                 ),
                 SizedBox(height: 20,),
                 Center(
                   child: Text(
-                    '2020 \u00a9 ${song.artistName}',
+                    '2021 \u00a9 ${song.artistName}',
                     style: normalFontStyle.copyWith(
                       color: whitishColor.withOpacity(0.7)
                     ),

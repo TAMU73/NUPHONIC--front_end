@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/album_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/album_services.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
 class AlbumProfile extends StatefulWidget {
-  // final AlbumModel album;
+  final AlbumModel album;
   final String albumID;
 
   AlbumProfile({
     this.albumID,
-    // this.album,
+    this.album,
   });
 
   @override
@@ -18,53 +19,46 @@ class AlbumProfile extends StatefulWidget {
 }
 
 class _AlbumProfileState extends State<AlbumProfile> {
+  AlbumServices _albumServices = AlbumServices();
+
   bool isLoading = false;
+  AlbumModel album;
 
-  AlbumModel album = AlbumModel(
-      albumID: "albumID",
-      artistID: "artistID",
-      artistName: "Bartika Eam Rai",
-      albumName: "Bimbaakash",
-      albumPicture:
-          "https://m.media-amazon.com/images/I/61po9HBLnQL._SS500_.jpg",
-      albumSongs: ["song1", "song2", "song3"],
-      description: "Album Description");
-
-  // void atStart() async {
-  //   if (widget.album != null) {
-  //     setState(() {
-  //       user = widget.album;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     dynamic result1 = await _songService.getAlbumInfo(widget.albumID);
-  //     Map<String, dynamic> albumDetail = result1.data['album'];
-  //     setState(() {
-  //       isLoading = false;
-  //       album = AlbumModel.fromJson(albumDetail);
-  //     });
-  //   }
-  // }
+  void atStart() async {
+    if (widget.album != null) {
+      setState(() {
+        album = widget.album;
+      });
+    } else {
+      setState(() {
+        isLoading = true;
+      });
+      dynamic result1 = await _albumServices.getAlbumDetails(widget.albumID);
+      Map<String, dynamic> albumDetail = result1.data['album'];
+      setState(() {
+        isLoading = false;
+        album = AlbumModel.fromJson(albumDetail);
+      });
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // atStart();
+    atStart();
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return isLoading
-        ? loading
-        : SafeArea(
-            child: Scaffold(
-              backgroundColor: backgroundColor,
-              body: Column(
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      body: SafeArea(
+        child: isLoading
+            ? loading
+            : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Stack(
@@ -134,9 +128,8 @@ class _AlbumProfileState extends State<AlbumProfile> {
                                       album.artistName,
                                       textAlign: TextAlign.center,
                                       style: normalFontStyle.copyWith(
-                                        color: whitishColor.withOpacity(0.7),
-                                        fontWeight: FontWeight.w600
-                                      ),
+                                          color: whitishColor.withOpacity(0.7),
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ],
                                 ),
@@ -159,7 +152,7 @@ class _AlbumProfileState extends State<AlbumProfile> {
                   ),
                 ],
               ),
-            ),
-          );
+      ),
+    );
   }
 }

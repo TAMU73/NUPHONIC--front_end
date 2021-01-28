@@ -21,7 +21,7 @@ class CustomError extends StatelessWidget {
             Text(
               title != null ? title : 'No Connection',
               style: normalFontStyle.copyWith(
-                  fontSize: 22, fontWeight: FontWeight.w800),
+                  fontSize: 22, fontWeight: FontWeight.w700),
             ),
             SizedBox(
               height: 15,
@@ -30,7 +30,7 @@ class CustomError extends StatelessWidget {
               subTitle != null ? subTitle : 'Please check your internet connection and try again.',
               textAlign: TextAlign.center,
               style: normalFontStyle.copyWith(
-                  fontSize: 18, color: whitishColor.withOpacity(0.6)),
+                  fontSize: 16, color: whitishColor.withOpacity(0.6)),
             ),
             SizedBox(
               height: 35,

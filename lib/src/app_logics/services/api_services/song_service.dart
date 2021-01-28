@@ -29,4 +29,17 @@ class SongService {
     }
   }
 
+  Future<dynamic> getArtistSongs(String id) async {
+    try {
+      Response response = await dio.get(
+          'https://nuphonic--backend.herokuapp.com/artist_songs/$id',
+          options: Options(contentType: Headers.formUrlEncodedContentType));
+      return response;
+    } on DioError catch (e) {
+      return e.response;
+    } catch (e) {
+      return null;
+    }
+  }
+
 }
