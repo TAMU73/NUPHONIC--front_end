@@ -1,8 +1,8 @@
 class OnBoardingModel {
-  String imagePath;
-  String title;
-  String appName;
-  String subTitle;
+  final String imagePath;
+  final String title;
+  final String appName;
+  final String subTitle;
 
   OnBoardingModel({
     this.imagePath,

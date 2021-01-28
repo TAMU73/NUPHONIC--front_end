@@ -31,7 +31,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   BottomNavigationBarItem bottomNavigationBarItem(
       String label, String iconPath, bool isSelected) {
     return BottomNavigationBarItem(
-      backgroundColor: Colors.black,
+        backgroundColor: Colors.black,
         icon: AnimatedContainer(
           duration: Duration(milliseconds: 400),
           curve: Curves.ease,
@@ -72,9 +72,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: SizedBox(
-                height: 70,
+                height: 65,
                 child: BottomNavigationBar(
-                  backgroundColor: Colors.black.withOpacity(0.87),
+                  backgroundColor: backgroundColor.withOpacity(0.7),
                   items: <BottomNavigationBarItem>[
                     bottomNavigationBarItem(
                       'Home',

@@ -9,6 +9,8 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
+  SharedPrefService _sharedPrefService = SharedPrefService();
+
   String user;
 
   @override
@@ -19,7 +21,7 @@ class _WrapperState extends State<Wrapper> {
   }
 
   Future<void> checkUser() async {
-    String value = await SharedPrefService().read(id: 'user_id');
+    String value = await _sharedPrefService.read(id: 'user_id');
     setState(() {
       user = value;
     });
