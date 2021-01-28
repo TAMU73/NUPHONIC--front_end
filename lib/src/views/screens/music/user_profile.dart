@@ -26,7 +26,7 @@ class _UserProfileState extends State<UserProfile> {
   SongService _song = SongService();
 
   bool isLoading = false;
-  bool networkError = true;
+  bool networkError = false;
   bool isSongLoading = false;
   UserModel user;
   List<SongModel> artistSongs = [];
@@ -56,6 +56,7 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   Future<void> getArtistSongs() async {
+    artistSongs.clear();
     setState(() {
       isSongLoading = true;
     });
@@ -144,7 +145,7 @@ class _UserProfileState extends State<UserProfile> {
                               ),
                             ),
                             Positioned(
-                              top: 10,
+                              top: 20,
                               left: 20,
                               right: 20,
                               child: CustomAppBar(
