@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/views/screens/music_player/more_option.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -23,6 +24,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
   PanelController moreController = PanelController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AudioPlayer audioPlayer = new AudioPlayer();
+  SongService _song = SongService();
   List<PaletteColor> colors = [];
 
   Duration duration = new Duration();
@@ -118,12 +120,22 @@ class _MusicPlayerState extends State<MusicPlayer> {
     });
   }
 
+  void addListen() async {
+    dynamic result = await _song.addListen(widget.song.songID);
+    if(result!=null) {
+      print(result);
+    } else {
+      print('Error');
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     generateColor();
     getAudio();
+    addListen();
   }
 
   @override

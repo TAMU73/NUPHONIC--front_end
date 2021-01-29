@@ -42,4 +42,17 @@ class SongService {
     }
   }
 
+  Future<dynamic> addListen(String id) async {
+    try {
+      Response response = await dio.patch(
+          'https://nuphonic--backend.herokuapp.com/add_listen/$id',
+          options: Options(contentType: Headers.formUrlEncodedContentType));
+      return response;
+    } on DioError catch (e) {
+      return e.response;
+    } catch (e) {
+      return null;
+    }
+  }
+
 }

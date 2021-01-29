@@ -116,6 +116,24 @@ class SongDescription extends StatelessWidget {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    SizedBox(width: 10,),
+                    Text(
+                      '${song.songListens}',
+                      style: normalFontStyle,
+                    ),
+                    Text(
+                      ' listens',
+                      style: normalFontStyle.copyWith(
+                          color: whitishColor.withOpacity(0.7)
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(height: 20,),
                 Text(
                   '  ${song.songDescription}',

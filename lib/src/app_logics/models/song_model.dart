@@ -11,6 +11,7 @@ class SongModel {
   final String albumName;
   final String songDescription;
   final String songLyrics;
+  final String songListens;
 
   SongModel({
     this.songID,
@@ -25,6 +26,7 @@ class SongModel {
     this.albumName,
     this.songDescription,
     this.songLyrics,
+    this.songListens
   });
 
   factory SongModel.fromJson(Map<String, dynamic> data) {
@@ -40,7 +42,10 @@ class SongModel {
         albumID: data['album_id'],
         albumName: data['album_name'],
         songDescription: data['song_description'],
-        songLyrics: data['song_lyrics']);
+        songLyrics: data['song_lyrics'],
+        songListens: data['listens'].toString()
+    );
+
   }
 
   Map<String, dynamic> toJson() {
@@ -56,7 +61,8 @@ class SongModel {
       'album_id': albumID,
       'album_name': albumName,
       'song_description': songDescription,
-      'song_lyrics': songLyrics
+      'song_lyrics': songLyrics,
+      'listens': songListens,
     };
   }
 }
