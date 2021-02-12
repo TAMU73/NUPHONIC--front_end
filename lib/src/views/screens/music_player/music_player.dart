@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:nuphonic_front_end/src/app_logics/blocs/now_playing_bloc.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/views/screens/music_player/more_option.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class MusicPlayer extends StatefulWidget {
   final SongModel song;
+  final AudioPlayer audioPlayer;
 
-  MusicPlayer({this.song});
+  MusicPlayer({this.song, this.audioPlayer});
 
   @override
   _MusicPlayerState createState() => _MusicPlayerState();
@@ -23,7 +26,7 @@ class MusicPlayer extends StatefulWidget {
 class _MusicPlayerState extends State<MusicPlayer> {
   PanelController moreController = PanelController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  AudioPlayer audioPlayer = new AudioPlayer();
+  AudioPlayer audioPlayer = AudioPlayer();
   SongService _song = SongService();
   List<PaletteColor> colors = [];
 
@@ -92,7 +95,27 @@ class _MusicPlayerState extends State<MusicPlayer> {
     }
   }
 
+  Future manageAudioPlayer() async {
+    final nowPlayingBloc = Provider.of<NowPlayingBloc>(context, listen: false);
+    if(widget.song != nowPlayingBloc.song && nowPlayingBloc.audioPlayer != null) {
+      nowPlayingBloc.audioPlayer.dispose();
+    }
+    if(widget.audioPlayer != null) {
+      setState(() {
+        audioPlayer = widget.audioPlayer;
+      });
+    }
+    if(widget.song == nowPlayingBloc.song) {
+      setState(() {
+        audioPlayer = nowPlayingBloc.audioPlayer;
+      });
+    }
+    nowPlayingBloc.song = widget.song;
+    nowPlayingBloc.audioPlayer = audioPlayer;
+  }
+
   void getAudio() async {
+    await manageAudioPlayer();
     if (isPlaying) {
       pause();
     } else {
@@ -122,27 +145,24 @@ class _MusicPlayerState extends State<MusicPlayer> {
 
   void addListen() async {
     dynamic result = await _song.addListen(widget.song.songID);
-    if(result!=null) {
+    if (result != null) {
       print(result);
     } else {
       print('Error');
     }
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  void atStart() async {
     generateColor();
     getAudio();
     addListen();
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    audioPlayer.dispose();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    atStart();
   }
 
   @override

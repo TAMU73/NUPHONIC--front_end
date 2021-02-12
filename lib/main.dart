@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nuphonic_front_end/src/app_logics/blocs/now_playing_bloc.dart';
 import 'package:nuphonic_front_end/src/views/wrapper.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(GetMaterialApp(
-    home: Main(),
-    debugShowCheckedModeBanner: false,
+  runApp(ChangeNotifierProvider<NowPlayingBloc>(
+    create: (_) => NowPlayingBloc(),
+    child: GetMaterialApp(
+      home: Main(),
+      debugShowCheckedModeBanner: false,
+    ),
   ));
 }
 
