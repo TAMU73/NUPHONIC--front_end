@@ -34,7 +34,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
   Duration position = new Duration();
 
   bool isPlaying = false;
-  bool isRepeating = false;
+  // bool isRepeating = false;
   bool isFavourite = false;
   bool isSupported = false;
 
@@ -133,7 +133,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
     });
     audioPlayer.onPlayerCompletion.listen((event) {
       audioPlayer.stop();
-      if (isRepeating) {
+      if (Provider.of<NowPlayingBloc>(context, listen: false).isRepeating) {
         play();
       } else {
         setState(() {
@@ -168,6 +168,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    final nowPlaying = Provider.of<NowPlayingBloc>(context, listen: false);
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -310,20 +311,18 @@ class _MusicPlayerState extends State<MusicPlayer> {
                         children: [
                           InkWell(
                             onTap: () {
-                              setState(() {
-                                isRepeating = !isRepeating;
-                              });
+                              nowPlaying.isRepeating = !nowPlaying.isRepeating;
                             },
                             child: Column(
                               children: [
                                 SvgPicture.asset('assets/icons/repeat.svg',
-                                    color: isRepeating
+                                    color:  nowPlaying.isRepeating
                                         ? mainColor
                                         : lightGreyColor),
                                 SizedBox(
                                   height: 2,
                                 ),
-                                isRepeating
+                                nowPlaying.isRepeating
                                     ? Icon(
                                         Icons.circle,
                                         size: 4,
