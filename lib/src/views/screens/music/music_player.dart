@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/blocs/now_playing_bloc.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
-import 'package:nuphonic_front_end/src/views/screens/music_player/more_option.dart';
+import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/more_option.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';

@@ -18,7 +18,7 @@ import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_artist_bo
 import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_song_box.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/page_indicator.dart';
-import 'package:nuphonic_front_end/src/views/screens/music_player/music_player.dart';
+import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/music_player.dart';
 import 'package:nuphonic_front_end/src/views/shimmers/home_shimmer.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +61,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     } else {
       await _sharedPrefService.save(
           id: 'first_name',
-          data: result.data['user']['full_name'].split(" ")[0]);
+          data: result.data['user']['full_name']);
       setState(() {
         name = result.data['user']['full_name'].split(" ")[0];
       });
@@ -83,7 +83,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Future<void> _getFirstName() async {
     String firstName = await _sharedPrefService.read(id: 'first_name');
     setState(() {
-      name = firstName;
+      name = firstName.split(" ")[0];
     });
   }
 
