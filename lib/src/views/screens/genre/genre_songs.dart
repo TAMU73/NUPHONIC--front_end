@@ -127,6 +127,5 @@ class _GenreSongsState extends State<GenreSongs> {
               ),
       ),
     );
-    ;
   }
 }

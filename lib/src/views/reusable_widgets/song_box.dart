@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
-import 'package:nuphonic_front_end/src/views/screens/music_player/music_player.dart';
+import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/music_player.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
 class SongBox extends StatelessWidget {
