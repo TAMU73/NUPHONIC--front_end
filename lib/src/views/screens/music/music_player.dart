@@ -105,7 +105,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
         audioPlayer = widget.audioPlayer;
       });
     }
-    if(widget.song == nowPlayingBloc.song) {
+    if(widget.song.songID == nowPlayingBloc.song.songID) {
       setState(() {
         audioPlayer = nowPlayingBloc.audioPlayer;
       });
