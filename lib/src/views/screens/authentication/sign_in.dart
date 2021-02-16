@@ -74,7 +74,7 @@ class _SignInState extends State<SignIn> {
         await _sharedPrefService.save(id: 'user_id', data: result.data['id']);
         await _sharedPrefService.save(
             id: 'first_name',
-            data: result1.data['user']['full_name'].split(" ")[0]);
+            data: result1.data['user']['full_name']);
         setState(() {
           isLoading = false;
         });

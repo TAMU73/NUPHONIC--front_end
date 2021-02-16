@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/uploads/supporters.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/uploads/uploaded_albums.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/uploads/uploaded_songs.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
 class Uploads extends StatefulWidget {
@@ -10,9 +13,9 @@ class _UploadsState extends State<Uploads> with SingleTickerProviderStateMixin {
   TabController _tabController1;
 
   List<Widget> tabs = [
-    Text('sddddddddas'),
-    Text('sddddddddas'),
-    Text('sddddddddas'),
+    UploadedSongs(),
+    UploadedAlbums(),
+    Supporters(),
   ];
 
   int selectedIndex = 0;

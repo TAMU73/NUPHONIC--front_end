@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/favourites/favourite_artists.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/favourites/favourite_songs.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/favourites/playlists.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
 class Favourites extends StatefulWidget {
@@ -11,9 +14,9 @@ class _FavouritesState extends State<Favourites>
   TabController _tabController1;
 
   List<Widget> tabs = [
-    Text('sddddddddas'),
-    Text('sddddddddas'),
-    Text('sddddddddas'),
+    Playlists(),
+    FavouriteArtists(),
+    FavouriteSongs(),
   ];
 
   int selectedIndex = 0;
