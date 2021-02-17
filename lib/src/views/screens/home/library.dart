@@ -149,7 +149,7 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
                             style: titleTextStyle.copyWith(fontSize: 20),
                           ),
                           Text(
-                            fullName,
+                            fullName ?? '',
                             style: normalFontStyle.copyWith(
                                 fontSize: 15,
                                 color: whitishColor.withOpacity(0.7)),

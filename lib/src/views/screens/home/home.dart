@@ -353,7 +353,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ? Get.to(
                           MusicPlayer(
                             song: nowPlaying.song,
-                            audioPlayer: nowPlaying.audioPlayer,
                           ),
                         )
                       : null;

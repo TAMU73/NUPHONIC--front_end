@@ -15,9 +15,8 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class MusicPlayer extends StatefulWidget {
   final SongModel song;
-  final AudioPlayer audioPlayer;
 
-  MusicPlayer({this.song, this.audioPlayer});
+  MusicPlayer({this.song});
 
   @override
   _MusicPlayerState createState() => _MusicPlayerState();
@@ -97,18 +96,15 @@ class _MusicPlayerState extends State<MusicPlayer> {
 
   Future manageAudioPlayer() async {
     final nowPlayingBloc = Provider.of<NowPlayingBloc>(context, listen: false);
-    if(widget.song != nowPlayingBloc.song && nowPlayingBloc.audioPlayer != null) {
-      nowPlayingBloc.audioPlayer.dispose();
-    }
-    if(widget.audioPlayer != null) {
-      setState(() {
-        audioPlayer = widget.audioPlayer;
-      });
-    }
-    if(widget.song.songID == nowPlayingBloc.song.songID) {
-      setState(() {
-        audioPlayer = nowPlayingBloc.audioPlayer;
-      });
+    if(nowPlayingBloc.song != null) {
+      if(widget.song.songID == nowPlayingBloc.song.songID) {
+        setState(() {
+          audioPlayer = nowPlayingBloc.audioPlayer;
+        });
+      }
+      else {
+        nowPlayingBloc.audioPlayer.dispose();
+      }
     }
     nowPlayingBloc.song = widget.song;
     nowPlayingBloc.audioPlayer = audioPlayer;
