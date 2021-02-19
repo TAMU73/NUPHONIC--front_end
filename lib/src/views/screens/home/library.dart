@@ -132,7 +132,7 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
                                   size: 30,
                                 ),
                               ),
-                              profilePicture==null ? SizedBox() : Image.network(profilePicture),
+                              profilePicture == null ? SizedBox() : Image.network(profilePicture, height: 52, fit: BoxFit.cover,),
                             ],
                           ),
                         ),

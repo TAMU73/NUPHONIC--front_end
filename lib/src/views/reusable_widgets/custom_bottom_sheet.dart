@@ -45,7 +45,7 @@ class CustomBottomSheet extends StatelessWidget {
         controller: controller,
         minHeight: 0,
         maxHeight:
-            secondLabelName != null && secondHintName != null ? 570 : 380,
+            secondLabelName != null && secondHintName != null ? 570 : 320,
         panel: Container(
           decoration: BoxDecoration(
             color: darkGreyColor,

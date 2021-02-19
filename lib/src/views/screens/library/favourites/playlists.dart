@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/playlist_model.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_bottom_sheet.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Playlists extends StatelessWidget {
+  PanelController _panelController = PanelController();
+  TextEditingController _textEditingController = TextEditingController();
+
   List<PlaylistModel> _allPlaylists = [
     PlaylistModel(
       playlistName: 'Chill',
@@ -20,22 +25,37 @@ class Playlists extends StatelessWidget {
     ),
   ];
 
+  Widget _customButtonSheet() {
+    return CustomBottomSheet(
+      onChanged: null,
+      titleName: 'New Playlist',
+      labelName: 'Playlist Name',
+      hintName: 'Playlist Name',
+      onPressed: null,
+      isLoading: false,
+      controller: _panelController,
+      buttonName: 'CREATE',
+      textController: _textEditingController,
+    );
+  }
+
   Widget _createNewPlaylist() {
-    return Row(
-      children: [
-        Spacer(),
-        SvgPicture.asset('assets/icons/plus_circle.svg'),
-        SizedBox(
-          width: 10,
-        ),
-        Text(
-          'Create New Playlist',
-          style: normalFontStyle,
-        ),
-        SizedBox(
-          width: 20,
-        )
-      ],
+    return InkWell(
+      onTap: () {
+        _panelController.open();
+      },
+      child: Row(
+        children: [
+          Spacer(),
+          SvgPicture.asset('assets/icons/plus_circle.svg'),
+          SizedBox(width: 10),
+          Text(
+            'Create New Playlist',
+            style: normalFontStyle,
+          ),
+          SizedBox(width: 20)
+        ],
+      ),
     );
   }
 
@@ -46,7 +66,7 @@ class Playlists extends StatelessWidget {
           height: 40,
         ),
         CustomError(
-          title: 'No Playlist',
+          title: 'No Playlists',
           subTitle:
               'There are no playlist of your own. Please create one to view here.',
           buttonLabel: 'Create Playlist',
@@ -135,14 +155,12 @@ class Playlists extends StatelessWidget {
   }
 
   Widget _showPlaylists() {
-    return Container(
-      child: Column(
-        children: _allPlaylists
-            .map(
-              (playlist) => _playlistBox(playlist),
-            )
-            .toList(),
-      ),
+    return Column(
+      children: _allPlaylists
+          .map(
+            (playlist) => _playlistBox(playlist),
+          )
+          .toList(),
     );
   }
 
@@ -160,15 +178,16 @@ class Playlists extends StatelessWidget {
               _playlistSongs(),
               _gradientEffect(),
               Positioned(
-                  left: 10,
-                  bottom: 5,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _playlistName(playlist),
-                      _playlistSongsLength(playlist)
-                    ],
-                  )),
+                left: 10,
+                bottom: 5,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _playlistName(playlist),
+                    _playlistSongsLength(playlist),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -178,14 +197,23 @@ class Playlists extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(children: [
-        _createNewPlaylist(),
-        SizedBox(
-          height: 20,
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              _createNewPlaylist(),
+              SizedBox(
+                height: 20,
+              ),
+              _allPlaylists.length == 0
+                  ? _showErrorMessage()
+                  : _showPlaylists(),
+            ],
+          ),
         ),
-        _allPlaylists.length == 0 ? _showErrorMessage() : _showPlaylists(),
-      ]),
+        _customButtonSheet()
+      ],
     );
   }
 }
