@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nuphonic_front_end/src/app_logics/models/SupporterModel.dart';
+import 'package:nuphonic_front_end/src/app_logics/models/supporter_model.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads/support_detail.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
