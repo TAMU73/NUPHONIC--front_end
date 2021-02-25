@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/blocs/now_playing_bloc.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/add_to_playlist.dart';
 import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/more_option.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -33,6 +34,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
   Duration position = new Duration();
 
   bool isPlaying = false;
+
   // bool isRepeating = false;
   bool isFavourite = false;
   bool isSupported = false;
@@ -96,13 +98,12 @@ class _MusicPlayerState extends State<MusicPlayer> {
 
   Future manageAudioPlayer() async {
     final nowPlayingBloc = Provider.of<NowPlayingBloc>(context, listen: false);
-    if(nowPlayingBloc.song != null) {
-      if(widget.song.songID == nowPlayingBloc.song.songID) {
+    if (nowPlayingBloc.song != null) {
+      if (widget.song.songID == nowPlayingBloc.song.songID) {
         setState(() {
           audioPlayer = nowPlayingBloc.audioPlayer;
         });
-      }
-      else {
+      } else {
         nowPlayingBloc.audioPlayer.dispose();
       }
     }
@@ -312,7 +313,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                             child: Column(
                               children: [
                                 SvgPicture.asset('assets/icons/repeat.svg',
-                                    color:  nowPlaying.isRepeating
+                                    color: nowPlaying.isRepeating
                                         ? mainColor
                                         : lightGreyColor),
                                 SizedBox(
@@ -438,7 +439,13 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                 ? 'assets/icons/supported.svg'
                                 : 'assets/icons/support.svg'),
                           ),
-                          SvgPicture.asset('assets/icons/add.svg'),
+                          InkWell(
+                            onTap: () {
+                              print('asdsad');
+                              Get.to(AddToPlaylist(song: widget.song,));
+                            },
+                            child: SvgPicture.asset('assets/icons/add.svg'),
+                          ),
                         ],
                       ),
                     ),

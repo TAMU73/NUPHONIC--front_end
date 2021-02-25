@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/playlist_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/playlist_services.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
-import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_bottom_sheet.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/playlist_box.dart';
-import 'package:nuphonic_front_end/src/views/screens/library/favourites/playlist_detail.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class Playlists extends StatefulWidget {
+class AddToPlaylist extends StatefulWidget {
+  final SongModel song;
+
+  AddToPlaylist({this.song});
+
   @override
-  _PlaylistsState createState() => _PlaylistsState();
+  _AddToPlaylistState createState() => _AddToPlaylistState();
 }
 
-class _PlaylistsState extends State<Playlists> {
-  PanelController _panelController = PanelController();
-  TextEditingController _textEditingController = TextEditingController();
-  PlaylistServices _playlistServices = PlaylistServices();
+class _AddToPlaylistState extends State<AddToPlaylist> {
+  SongService _song = SongService();
   SharedPrefService _sharedPrefService = SharedPrefService();
   CustomSnackBar _customSnackBar = CustomSnackBar();
-  SongService _song = SongService();
+  PlaylistServices _playlistServices = PlaylistServices();
 
   List<PlaylistModel> _allPlaylists = [];
-
-  String newPlaylistName = "";
   bool isLoading = false;
-  bool isButtonLoading = false;
 
   Future<List<SongModel>> getSongModel(List playlistSongs) async {
     List<SongModel> songList = List<SongModel>();
@@ -73,79 +69,38 @@ class _PlaylistsState extends State<Playlists> {
     }
   }
 
-  Future<void> createNewPlaylist() async {
+  Future<void> addSongToPlaylist(PlaylistModel playlist, SongModel song) async {
     setState(() {
-      isButtonLoading = true;
+      isLoading = true;
     });
-    dynamic userID = await _sharedPrefService.read(id: 'user_id');
-    dynamic result =
-        await _playlistServices.createPlaylist(newPlaylistName, userID);
+    dynamic result = await _playlistServices.addPlaylistSongs(
+        song.songID, playlist.playlistId);
     setState(() {
-      isButtonLoading = false;
+      isLoading = false;
     });
     if (result == null) {
       _customSnackBar.buildSnackBar('Network Error', false);
     } else {
       _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
-        _panelController.close();
-        _textEditingController.clear();
         getUserPlaylist();
-        setState(() {
-          newPlaylistName = "";
-        });
       }
     }
   }
 
-  Widget _customButtonSheet() {
-    return CustomBottomSheet(
-      onChanged: (val) {
-        setState(() {
-          newPlaylistName = val;
-        });
-      },
-      titleName: 'New Playlist',
-      labelName: 'Playlist Name',
-      hintName: 'Playlist Name',
-      onPressed: newPlaylistName == "" ? null : createNewPlaylist,
-      isLoading: isButtonLoading,
-      controller: _panelController,
-      buttonName: 'CREATE',
-      textController: _textEditingController,
-    );
-  }
-
-  Widget _createNewPlaylist() {
-    return InkWell(
-      onTap: () {
-        _panelController.open();
-      },
-      child: Row(
-        children: [
-          Spacer(),
-          SvgPicture.asset('assets/icons/plus_circle.svg'),
-          SizedBox(width: 10),
-          Text(
-            'Create New Playlist',
-            style: normalFontStyle,
-          ),
-          SizedBox(width: 20)
-        ],
-      ),
-    );
-  }
-
-  Widget _showErrorMessage() {
-    return Center(
-      child: CustomError(
-        title: 'No Playlists',
-        subTitle:
-            'There are no playlist of your own. Please create one to view here.',
-        buttonLabel: 'CREATE PLAYLIST',
-        onPressed: () {
-          _panelController.open();
-        },
+  Widget _showErrorMessage(double height) {
+    return Container(
+      height: height - 80,
+      child: Center(
+        child: CustomError(
+          title: 'No Playlists',
+          subTitle:
+              'There are no playlist of your own. Please create one to view here.',
+          buttonLabel: 'GO BACK',
+          onPressed: () {
+            Get.back();
+          },
+        ),
       ),
     );
   }
@@ -159,10 +114,10 @@ class _PlaylistsState extends State<Playlists> {
                 PlaylistBox(
                   playlist: playlist,
                   onPressed: () {
-                    Get.to(PlaylistDetail(playlist: playlist,));
+                    addSongToPlaylist(playlist, widget.song);
                   },
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 20,)
               ],
             ),
           )
@@ -179,25 +134,39 @@ class _PlaylistsState extends State<Playlists> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        isLoading
-            ? loading
-            : _allPlaylists.length == 0
-                ? _showErrorMessage()
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _createNewPlaylist(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        _showPlaylists(),
-                      ],
-                    ),
-                  ),
-        _customButtonSheet()
-      ],
+    double height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomAppBar(
+                  label: 'Choose your Playlist',
+                  leadIconPath: 'assets/icons/back_icon.svg',
+                  onIconTap: () {
+                    Get.back();
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              isLoading
+                  ? Container(height: height - 80, child: loading)
+                  : _allPlaylists.length == 0
+                      ? _showErrorMessage(height)
+                      : _showPlaylists(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
