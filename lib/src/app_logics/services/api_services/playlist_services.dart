@@ -5,7 +5,7 @@ class PlaylistServices {
 
   Future<dynamic> deletePlaylistSongs(String songID, String playlistID) async {
     try {
-      Response response = await dio.delete(
+      Response response = await dio.patch(
           'https://nuphonic--backend.herokuapp.com/delete_playlist_song',
           data: {
             "song_id": songID,

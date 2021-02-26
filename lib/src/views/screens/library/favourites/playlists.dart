@@ -98,6 +98,25 @@ class _PlaylistsState extends State<Playlists> {
     }
   }
 
+  Future<void> deletePlaylist(PlaylistModel playlistModel) async {
+    setState(() {
+      isLoading = true;
+    });
+    dynamic result =
+    await _playlistServices.deletePlaylists(playlistModel.playlistId);
+    setState(() {
+      isLoading = false;
+    });
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Network Error', false);
+    } else {
+      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+      if (result.data['success']) {
+        getUserPlaylist();
+      }
+    }
+  }
+
   Widget _customButtonSheet() {
     return CustomBottomSheet(
       onChanged: (val) {
@@ -156,13 +175,33 @@ class _PlaylistsState extends State<Playlists> {
           .map(
             (playlist) => Column(
               children: [
-                PlaylistBox(
-                  playlist: playlist,
-                  onPressed: () {
-                    Get.to(PlaylistDetail(playlist: playlist,));
-                  },
+                Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    PlaylistBox(
+                      playlist: playlist,
+                      onPressed: () {
+                        Get.to(PlaylistDetail(
+                          playlist: playlist,
+                        ));
+                      },
+                    ),
+                    Positioned(
+                      right: 40,
+                      child: InkWell(
+                        onTap: () {
+                          deletePlaylist(playlist);
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/delete.svg',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
               ],
             ),
           )

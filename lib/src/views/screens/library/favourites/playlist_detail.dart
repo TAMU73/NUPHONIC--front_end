@@ -22,32 +22,11 @@ class PlaylistDetail extends StatefulWidget {
 }
 
 class _PlaylistDetailState extends State<PlaylistDetail> {
-  SongService _song = SongService();
-  SharedPrefService _sharedPrefService = SharedPrefService();
   CustomSnackBar _customSnackBar = CustomSnackBar();
   PlaylistServices _playlistServices = PlaylistServices();
 
   PlaylistModel _playlist;
   bool isLoading = false;
-
-  Future<void> deletePlaylist(PlaylistModel playlist) async {
-    setState(() {
-      isLoading = true;
-    });
-    dynamic result =
-        await _playlistServices.deletePlaylists(playlist.playlistId);
-    setState(() {
-      isLoading = false;
-    });
-    if (result == null) {
-      _customSnackBar.buildSnackBar('Network Error', false);
-    } else {
-      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
-      if (result.data['success']) {
-        Get.back();
-      }
-    }
-  }
 
   Future<void> removeSongFromPlaylist(PlaylistModel playlist, SongModel song) async {
     setState(() {
@@ -113,12 +92,6 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
                   onIconTap: () {
                     Get.back();
                   },
-                  endChild: InkWell(
-                    onTap: () {
-                      deletePlaylist(widget.playlist);
-                    },
-                    child: SvgPicture.asset('assets/icons/delete.svg'),
-                  ),
                 ),
               ),
               SizedBox(
@@ -138,7 +111,7 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
                                   playlist: widget.playlist,
                                   showLabel: false,
                                 ),
-                                SvgPicture.asset('assets/icons/play_song.svg'),
+                                SvgPicture.asset('assets/icons/play_song.svg', height: 40, width: 40,),
                               ],
                             ),
                             SizedBox(
