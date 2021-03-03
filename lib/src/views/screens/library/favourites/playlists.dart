@@ -103,7 +103,7 @@ class _PlaylistsState extends State<Playlists> {
       isLoading = true;
     });
     dynamic result =
-    await _playlistServices.deletePlaylists(playlistModel.playlistId);
+        await _playlistServices.deletePlaylists(playlistModel.playlistId);
     setState(() {
       isLoading = false;
     });
@@ -181,9 +181,11 @@ class _PlaylistsState extends State<Playlists> {
                     PlaylistBox(
                       playlist: playlist,
                       onPressed: () {
-                        Get.to(PlaylistDetail(
-                          playlist: playlist,
-                        ));
+                        Get.to(
+                          PlaylistDetail(
+                            playlist: playlist,
+                          ),
+                        );
                       },
                     ),
                     Positioned(
@@ -192,8 +194,11 @@ class _PlaylistsState extends State<Playlists> {
                         onTap: () {
                           deletePlaylist(playlist);
                         },
-                        child: SvgPicture.asset(
-                          'assets/icons/delete.svg',
+                        child: Opacity(
+                          opacity: 0.6,
+                          child: SvgPicture.asset(
+                            'assets/icons/delete.svg',
+                          ),
                         ),
                       ),
                     ),

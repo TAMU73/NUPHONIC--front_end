@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +9,7 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_ser
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/favourites.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/upload_song.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
@@ -93,20 +96,25 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomAppBar(
                   label: 'Library',
-                  endChild: Row(
-                    // mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Upload',
-                        style: normalFontStyle.copyWith(
-                            fontSize: 18, color: mainColor),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      SvgPicture.asset('assets/icons/upload.svg')
-                    ],
+                  endChild: InkWell(
+                    onTap: () {
+                      Get.to(UploadSongs());
+                    },
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Upload',
+                          style: normalFontStyle.copyWith(
+                              fontSize: 18, color: mainColor),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        SvgPicture.asset('assets/icons/upload.svg')
+                      ],
+                    ),
                   ),
                 ),
               ),

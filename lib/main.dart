@@ -5,6 +5,7 @@ import 'package:nuphonic_front_end/src/views/wrapper.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(ChangeNotifierProvider<NowPlayingBloc>(
     create: (_) => NowPlayingBloc(),
     child: GetMaterialApp(
