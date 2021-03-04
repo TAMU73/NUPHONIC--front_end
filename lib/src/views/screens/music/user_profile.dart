@@ -127,7 +127,7 @@ class _UserProfileState extends State<UserProfile> {
                               width: width,
                               height: width,
                               child: Image.network(
-                                user.profilePicture,
+                                user.profilePicture == null ? '' : user.profilePicture,
                                 fit: BoxFit.cover,
                               ),
                             ),

@@ -55,4 +55,40 @@ class SongService {
     }
   }
 
+  Future<dynamic> uploadSong({
+    String songName,
+    String songDescription,
+    String songURL,
+    String songPictureURL,
+    String genreName,
+    String artistID,
+    String artistName,
+    String albumID,
+    String albumName,
+    String songLyrics,
+  }) async {
+    try {
+      Response response = await dio.post(
+        'https://nuphonic--backend.herokuapp.com/upload_song',
+        data: {
+          'song_name': songName,
+          'song_description': songDescription,
+          'song_url': songURL,
+          'song_picture_url': songPictureURL,
+          'genre_name': genreName,
+          'artist_id': artistID,
+          'artist_name': artistName,
+          albumID != '' ? 'album_id' : albumID: null,
+          albumName != '' ? 'album_name' : albumName: null,
+          songLyrics != '' ? 'song_lyrics' : songLyrics: null,
+        },
+        options: Options(contentType: Headers.formUrlEncodedContentType),
+      );
+      return response;
+    } on DioError catch (e) {
+      return e.response;
+    } catch (e) {
+      return null;
+    }
+  }
 }

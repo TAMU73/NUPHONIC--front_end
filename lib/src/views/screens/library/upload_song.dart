@@ -2,7 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/file_services.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_button.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
@@ -18,27 +21,87 @@ class UploadSongs extends StatefulWidget {
 class _UploadSongsState extends State<UploadSongs> {
   CustomSnackBar _customSnackBar = CustomSnackBar();
   FileServices _fileServices = FileServices();
+  SharedPrefService _sharedPrefService = SharedPrefService();
+  AuthService _auth = AuthService();
+  SongService _songService = SongService();
 
   List _genres = [];
   List _albums = [];
 
   String songFileName = '';
   String songImageFileName = '';
+  bool isLoading = false;
+  bool allFields = false;
 
-  String songName;
-  String songDescription;
-  String songUrl;
-  String songPictureUrl;
+  String songName = '';
+  String songDescription = '';
+  String songUrl = '';
+  String songPictureUrl = '';
   String genreName;
-  String artistId;
-  String artistName;
+  String artistId = '';
+  String artistName = '';
 
   //optional
-  String albumId;
-  String albumName;
-  String songLyrics;
+  String albumId = '';
+  String albumName = '';
+  String songLyrics = '';
 
   bool showOptionalFields = false;
+
+  Future<void> _getUserInfo() async {
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    setState(() {
+      artistId = userID;
+    });
+    dynamic result = await _auth.getUserInfo(userID);
+    if (result != null) {
+      setState(() {
+        artistName = result.data['user']['username'];
+      });
+    }
+  }
+
+  Future<void> _upload() async {
+    setState(() {
+      isLoading = true;
+    });
+    dynamic result = await _songService.uploadSong(
+      songName: songName,
+      songDescription: songDescription,
+      genreName: genreName,
+      songURL: songUrl,
+      artistID: artistId,
+      artistName: artistName,
+      songPictureURL: songPictureUrl,
+      albumID: albumId,
+      albumName: albumName,
+      songLyrics: songLyrics
+    );
+    setState(() {
+      isLoading = false;
+    });
+    if(result == null) {
+      _customSnackBar.buildSnackBar('Network Error', false);
+    } else {
+      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+    }
+  }
+
+  void checkTextFields() {
+    if (songName == '' ||
+        songDescription == '' ||
+        songUrl == '' ||
+        songPictureUrl == '' ||
+        genreName == null ||
+        artistId == '' ||
+        artistName == '') {
+      allFields = false;
+    } else {
+      setState(() {
+        allFields = true;
+      });
+    }
+  }
 
   Widget _genreDropDownList() {
     return DropdownButtonHideUnderline(
@@ -47,9 +110,10 @@ class _UploadSongsState extends State<UploadSongs> {
         hint: Text(
           'Select Genre',
           style: normalFontStyle.copyWith(
-              color: whitishColor.withOpacity(0.25),
-              fontSize: 13,
-              letterSpacing: 0.5),
+            color: whitishColor.withOpacity(0.25),
+            fontSize: 13,
+            letterSpacing: 0.5,
+          ),
         ),
         style: normalFontStyle,
         dropdownColor: darkGreyColor,
@@ -65,10 +129,12 @@ class _UploadSongsState extends State<UploadSongs> {
           setState(() {
             genreName = selectedItem;
           });
+          checkTextFields();
         },
       ),
     );
   }
+
   Widget _albumDropDownList() {
     return DropdownButtonHideUnderline(
       child: DropdownButton(
@@ -92,7 +158,7 @@ class _UploadSongsState extends State<UploadSongs> {
         }).toList(),
         onChanged: (selectedItem) {
           setState(() {
-            genreName = selectedItem;
+            albumName = selectedItem;
           });
         },
       ),
@@ -154,7 +220,8 @@ class _UploadSongsState extends State<UploadSongs> {
         CustomTextField(
           labelName: 'Song Lyrics',
           hint: 'Add Lyrics here...',
-          maxLines: 5,
+          maxLines: 500,
+          height: 100,
           onChanged: (val) {
             setState(() {
               songDescription = val;
@@ -199,6 +266,7 @@ class _UploadSongsState extends State<UploadSongs> {
     super.initState();
     initializeFlutterFire();
     _genres = allGenres;
+    _getUserInfo();
   }
 
   @override
@@ -228,18 +296,23 @@ class _UploadSongsState extends State<UploadSongs> {
                     setState(() {
                       songName = val;
                     });
+                    checkTextFields();
                   },
                 ),
                 SizedBox(height: 15),
-                CustomTextField(
-                  labelName: 'Song Description',
-                  hint: 'Add description here...',
-                  maxLines: 5,
-                  onChanged: (val) {
-                    setState(() {
-                      songDescription = val;
-                    });
-                  },
+                Container(
+                  child: CustomTextField(
+                    labelName: 'Song Description',
+                    hint: 'Add description here...',
+                    maxLines: 100,
+                    height: 100,
+                    onChanged: (val) {
+                      setState(() {
+                        songDescription = val;
+                      });
+                      checkTextFields();
+                    },
+                  ),
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -276,8 +349,10 @@ class _UploadSongsState extends State<UploadSongs> {
                     } else {
                       setState(() {
                         songFileName = '';
+                        songUrl = '';
                       });
                     }
+                    checkTextFields();
                   },
                 ),
                 SizedBox(height: 15),
@@ -298,38 +373,44 @@ class _UploadSongsState extends State<UploadSongs> {
                     } else {
                       setState(() {
                         songImageFileName = '';
+                        songPictureUrl = '';
                       });
                     }
+                    checkTextFields();
                   },
                 ),
                 SizedBox(height: 15),
                 Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: showOptionalFields ? _showOptionalFields() : InkWell(
-                      onTap: () {
-                        setState(() {
-                          showOptionalFields = true;
-                        });
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Show Optional Fields',
-                            style: normalFontStyle,
+                    child: showOptionalFields
+                        ? _showOptionalFields()
+                        : InkWell(
+                            onTap: () {
+                              setState(() {
+                                showOptionalFields = true;
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Show Optional Fields',
+                                  style: normalFontStyle,
+                                ),
+                                SvgPicture.asset('assets/icons/drop_down.svg')
+                              ],
+                            ),
                           ),
-                          SvgPicture.asset('assets/icons/drop_down.svg')
-                        ],
-                      ),
-                    ),
                   ),
                 ),
                 SizedBox(height: 30),
                 CustomButton(
                   labelName: "UPLOAD",
-                  isLoading: false,
-
+                  isLoading: isLoading,
+                  onPressed: !allFields
+                      ? null
+                      : _upload
                 ),
                 SizedBox(height: 30),
               ],

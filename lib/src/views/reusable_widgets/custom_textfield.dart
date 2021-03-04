@@ -13,9 +13,11 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final EdgeInsets contentPadding;
   final int maxLines;
+  final double height;
 
   CustomTextField(
       {this.labelName,
+      this.height,
       this.hint,
       this.icons,
       this.obSecureText,
@@ -43,6 +45,7 @@ class CustomTextField extends StatelessWidget {
             : SizedBox(),
         Container(
           decoration: circularBorder,
+          height: height,
           child: Row(
             children: [
               Expanded(
