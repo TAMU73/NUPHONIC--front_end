@@ -55,6 +55,20 @@ class SongService {
     }
   }
 
+  Future<dynamic> deleteSong(String userId, String songId) async {
+    try {
+      Response response = await dio.delete(
+          'https://nuphonic--backend.herokuapp.com/delete_song',
+          options: Options(contentType: Headers.formUrlEncodedContentType),
+          data: {'song_id': songId, 'user_id': userId});
+      return response;
+    } on DioError catch (e) {
+      return e.response;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<dynamic> uploadSong({
     String songName,
     String songDescription,
@@ -78,9 +92,9 @@ class SongService {
           'genre_name': genreName,
           'artist_id': artistID,
           'artist_name': artistName,
-          if(albumID != '') 'album_id' : albumID,
-          if(albumName != '') 'album_name' : albumName,
-          if(songLyrics != '') 'song_lyrics' : songLyrics
+          if (albumID != '') 'album_id': albumID,
+          if (albumName != '') 'album_name': albumName,
+          if (songLyrics != '') 'song_lyrics': songLyrics
         },
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );

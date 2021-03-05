@@ -51,7 +51,6 @@ class _PlaylistsState extends State<Playlists> {
     if (result == null) {
       _customSnackBar.buildSnackBar('Network Error', false);
     } else {
-      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
       if (result.data['success']) {
         dynamic playlistList = result.data['playlists'];
         _allPlaylists.clear();
@@ -69,6 +68,8 @@ class _PlaylistsState extends State<Playlists> {
         setState(() {
           isLoading = false;
         });
+      } else {
+        _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
       }
     }
   }
@@ -156,16 +157,14 @@ class _PlaylistsState extends State<Playlists> {
   }
 
   Widget _showErrorMessage() {
-    return Center(
-      child: CustomError(
-        title: 'No Playlists',
-        subTitle:
-            'There are no playlist of your own. Please create one to view here.',
-        buttonLabel: 'CREATE PLAYLIST',
-        onPressed: () {
-          _panelController.open();
-        },
-      ),
+    return CustomError(
+      title: 'No Playlists',
+      subTitle:
+          'There are no playlist of your own. Please create one to view here.',
+      buttonLabel: 'CREATE PLAYLIST',
+      onPressed: () {
+        _panelController.open();
+      },
     );
   }
 
