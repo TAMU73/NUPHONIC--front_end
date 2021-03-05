@@ -75,12 +75,12 @@ class _UploadSongsState extends State<UploadSongs> {
       songPictureURL: songPictureUrl,
       albumID: albumId,
       albumName: albumName,
-      songLyrics: songLyrics
+      songLyrics: songLyrics,
     );
     setState(() {
       isLoading = false;
     });
-    if(result == null) {
+    if (result == null) {
       _customSnackBar.buildSnackBar('Network Error', false);
     } else {
       _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
@@ -224,7 +224,7 @@ class _UploadSongsState extends State<UploadSongs> {
           height: 100,
           onChanged: (val) {
             setState(() {
-              songDescription = val;
+              songLyrics = val;
             });
           },
         ),
@@ -406,12 +406,9 @@ class _UploadSongsState extends State<UploadSongs> {
                 ),
                 SizedBox(height: 30),
                 CustomButton(
-                  labelName: "UPLOAD",
-                  isLoading: isLoading,
-                  onPressed: !allFields
-                      ? null
-                      : _upload
-                ),
+                    labelName: "UPLOAD",
+                    isLoading: isLoading,
+                    onPressed: !allFields ? null : _upload),
                 SizedBox(height: 30),
               ],
             ),

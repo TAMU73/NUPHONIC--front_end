@@ -78,9 +78,9 @@ class SongService {
           'genre_name': genreName,
           'artist_id': artistID,
           'artist_name': artistName,
-          albumID != '' ? 'album_id' : albumID: null,
-          albumName != '' ? 'album_name' : albumName: null,
-          songLyrics != '' ? 'song_lyrics' : songLyrics: null,
+          if(albumID != '') 'album_id' : albumID,
+          if(albumName != '') 'album_name' : albumName,
+          if(songLyrics != '') 'song_lyrics' : songLyrics
         },
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
