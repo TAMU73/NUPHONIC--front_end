@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/album_profile.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/user_profile.dart';
-import 'package:nuphonic_front_end/src/views/screens/music_player/song_description.dart';
-import 'package:nuphonic_front_end/src/views/screens/music_player/song_lyrics.dart';
+import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/song_description.dart';
+import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/song_lyrics.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 

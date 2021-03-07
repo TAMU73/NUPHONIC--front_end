@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "565416878192",
+    "project_id": "nuphonic-30dde",
+    "storage_bucket": "nuphonic-30dde.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565416878192:android:e8dd7879b09ba8ce0c14b5",
+        "android_client_info": {
+          "package_name": "np.com.sanjivgrg.nuphonic_front_end"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "565416878192-en2q11m76tenfr56bvtbtk3lr0a9gotb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz6F3peyGlzpcXtegkH7dweEr2pvSJekI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "565416878192-en2q11m76tenfr56bvtbtk3lr0a9gotb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -18,7 +18,7 @@ class AlbumModel {
 
   factory AlbumModel.fromJson(Map<String, dynamic> data) {
     return AlbumModel(
-      albumID: data['album_id'],
+      albumID: data['_id'],
       artistID: data['artist_id'],
       artistName: data['artist_name'],
       albumName: data['album_name'],

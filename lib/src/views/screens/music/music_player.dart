@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:nuphonic_front_end/src/app_logics/blocs/now_playing_bloc.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
-import 'package:nuphonic_front_end/src/views/screens/music_player/more_option.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/add_to_playlist.dart';
+import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/more_option.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class MusicPlayer extends StatefulWidget {
@@ -22,14 +26,16 @@ class MusicPlayer extends StatefulWidget {
 class _MusicPlayerState extends State<MusicPlayer> {
   PanelController moreController = PanelController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  AudioPlayer audioPlayer = new AudioPlayer();
+  AudioPlayer audioPlayer = AudioPlayer();
+  SongService _song = SongService();
   List<PaletteColor> colors = [];
 
   Duration duration = new Duration();
   Duration position = new Duration();
 
   bool isPlaying = false;
-  bool isRepeating = false;
+
+  // bool isRepeating = false;
   bool isFavourite = false;
   bool isSupported = false;
 
@@ -90,7 +96,23 @@ class _MusicPlayerState extends State<MusicPlayer> {
     }
   }
 
+  Future manageAudioPlayer() async {
+    final nowPlayingBloc = Provider.of<NowPlayingBloc>(context, listen: false);
+    if (nowPlayingBloc.song != null) {
+      if (widget.song.songID == nowPlayingBloc.song.songID) {
+        setState(() {
+          audioPlayer = nowPlayingBloc.audioPlayer;
+        });
+      } else {
+        nowPlayingBloc.audioPlayer.dispose();
+      }
+    }
+    nowPlayingBloc.song = widget.song;
+    nowPlayingBloc.audioPlayer = audioPlayer;
+  }
+
   void getAudio() async {
+    await manageAudioPlayer();
     if (isPlaying) {
       pause();
     } else {
@@ -108,7 +130,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
     });
     audioPlayer.onPlayerCompletion.listen((event) {
       audioPlayer.stop();
-      if (isRepeating) {
+      if (Provider.of<NowPlayingBloc>(context, listen: false).isRepeating) {
         play();
       } else {
         setState(() {
@@ -118,24 +140,32 @@ class _MusicPlayerState extends State<MusicPlayer> {
     });
   }
 
+  void addListen() async {
+    dynamic result = await _song.addListen(widget.song.songID);
+    if (result != null) {
+      print(result);
+    } else {
+      print('Error');
+    }
+  }
+
+  void atStart() async {
+    generateColor();
+    getAudio();
+    addListen();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    generateColor();
-    getAudio();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    audioPlayer.dispose();
+    atStart();
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    final nowPlaying = Provider.of<NowPlayingBloc>(context, listen: false);
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -278,20 +308,18 @@ class _MusicPlayerState extends State<MusicPlayer> {
                         children: [
                           InkWell(
                             onTap: () {
-                              setState(() {
-                                isRepeating = !isRepeating;
-                              });
+                              nowPlaying.isRepeating = !nowPlaying.isRepeating;
                             },
                             child: Column(
                               children: [
                                 SvgPicture.asset('assets/icons/repeat.svg',
-                                    color: isRepeating
+                                    color: nowPlaying.isRepeating
                                         ? mainColor
                                         : lightGreyColor),
                                 SizedBox(
                                   height: 2,
                                 ),
-                                isRepeating
+                                nowPlaying.isRepeating
                                     ? Icon(
                                         Icons.circle,
                                         size: 4,
@@ -411,7 +439,13 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                 ? 'assets/icons/supported.svg'
                                 : 'assets/icons/support.svg'),
                           ),
-                          SvgPicture.asset('assets/icons/add.svg'),
+                          InkWell(
+                            onTap: () {
+                              print('asdsad');
+                              Get.to(AddToPlaylist(song: widget.song,));
+                            },
+                            child: SvgPicture.asset('assets/icons/add.svg'),
+                          ),
                         ],
                       ),
                     ),
