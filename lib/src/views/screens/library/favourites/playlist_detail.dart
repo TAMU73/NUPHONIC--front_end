@@ -144,8 +144,11 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
                                             onTap: () {
                                               removeSongFromPlaylist(_playlist,song);
                                             },
-                                            child: SvgPicture.asset(
-                                                'assets/icons/remove.svg'),
+                                            child: Opacity(
+                                              opacity: 0.6,
+                                              child: SvgPicture.asset(
+                                                  'assets/icons/remove.svg'),
+                                            ),
                                           ),
                                         )
                                       ],

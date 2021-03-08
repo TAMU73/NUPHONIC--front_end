@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/upload_song.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
 class UploadedSongs extends StatefulWidget {
@@ -45,23 +47,28 @@ class _UploadedSongsState extends State<UploadedSongs> {
   }
 
   Future<void> deleteSong(SongModel song) async {
-    setState(() {
-      isLoading = true;
-    });
-    var userID = await _sharedPrefService.read(id: 'user_id');
-    dynamic result =
-    await _songService.deleteSong(userID, song.songID);
-    setState(() {
-      isLoading = false;
-    });
-    if (result == null) {
-      _customSnackBar.buildSnackBar('Network Error', false);
-    } else {
-      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
-      if (result.data['success']) {
-        getUserSongs();
+    if(song.albumName == 'Single') {
+      setState(() {
+        isLoading = true;
+      });
+      var userID = await _sharedPrefService.read(id: 'user_id');
+      dynamic result =
+      await _songService.deleteSong(userID, song.songID);
+      setState(() {
+        isLoading = false;
+      });
+      if (result == null) {
+        _customSnackBar.buildSnackBar('Network Error', false);
+      } else {
+        _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+        if (result.data['success']) {
+          getUserSongs();
+        }
       }
+    } else {
+      _customSnackBar.buildSnackBar('Remove this song from album first in order to delete', false);
     }
+
   }
 
   Widget _showErrorMessage() {
@@ -70,6 +77,9 @@ class _UploadedSongsState extends State<UploadedSongs> {
       subTitle:
           'You have not uploaded any song yet. Upload song to see here.',
       buttonLabel: 'UPLOAD',
+      onPressed: () {
+        Get.to(UploadSongs());
+      },
     );
   }
 

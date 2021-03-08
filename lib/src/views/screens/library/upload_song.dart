@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:nuphonic_front_end/src/app_logics/models/album_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/album_services.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/file_services.dart';
@@ -24,6 +26,7 @@ class _UploadSongsState extends State<UploadSongs> {
   SharedPrefService _sharedPrefService = SharedPrefService();
   AuthService _auth = AuthService();
   SongService _songService = SongService();
+  AlbumServices _albumServices = AlbumServices();
 
   List _genres = [];
   List _albums = [];
@@ -42,11 +45,33 @@ class _UploadSongsState extends State<UploadSongs> {
   String artistName = '';
 
   //optional
-  String albumId = '';
-  String albumName = '';
+  AlbumModel album;
+  String albumId;
+  String albumName;
   String songLyrics = '';
 
   bool showOptionalFields = false;
+
+  Future<void> getUserAlbum() async {
+    dynamic userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _albumServices.getUserAlbums(userID);
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Network Error', false);
+    } else {
+      if (result.data['success']) {
+        dynamic albumList = result.data['albums'];
+        _albums.clear();
+        for (var album in albumList) {
+          setState(() {
+            _albums.add(AlbumModel.fromJson(album));
+          });
+        }
+      } else {
+        _customSnackBar.buildSnackBar(
+            result.data['msg'], result.data['success']);
+      }
+    }
+  }
 
   Future<void> _getUserInfo() async {
     var userID = await _sharedPrefService.read(id: 'user_id');
@@ -84,6 +109,10 @@ class _UploadSongsState extends State<UploadSongs> {
       _customSnackBar.buildSnackBar('Network Error', false);
     } else {
       _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+      String songId = result.data['song']['_id'];
+      if (albumId != null) {
+        await _albumServices.addAlbumSongs(songId, albumId);
+      }
     }
   }
 
@@ -149,16 +178,18 @@ class _UploadSongsState extends State<UploadSongs> {
         style: normalFontStyle,
         dropdownColor: darkGreyColor,
         isExpanded: true,
-        value: albumName,
+        value: album,
         items: _albums.map((album) {
           return DropdownMenuItem(
-            value: album.albumName,
+            value: album,
             child: Text(album.albumName),
           );
         }).toList(),
         onChanged: (selectedItem) {
           setState(() {
-            albumName = selectedItem;
+            album = selectedItem;
+            albumName = selectedItem.albumName;
+            albumId = selectedItem.albumID;
           });
         },
       ),
@@ -267,6 +298,7 @@ class _UploadSongsState extends State<UploadSongs> {
     initializeFlutterFire();
     _genres = allGenres;
     _getUserInfo();
+    getUserAlbum();
   }
 
   @override

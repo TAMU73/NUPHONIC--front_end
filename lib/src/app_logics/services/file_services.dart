@@ -44,7 +44,7 @@ class FileServices {
             firebase_storage.FirebaseStorage.instance;
         await storage.ref('$type/$userID/$fileName').putFile(file);
         String url = await storage.ref('$type/$userID/$fileName').getDownloadURL();
-        _customSnackBar.buildSnackBar('Successfully Uploaded', true);
+        _customSnackBar.buildSnackBar('Successfully Uploaded the file.', true);
         return [
           url,
           platformFile.name
