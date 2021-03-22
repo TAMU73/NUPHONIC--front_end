@@ -10,7 +10,7 @@ class CustomSnackBar {
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(15),
       borderRadius: 10,
-      duration: Duration(seconds: success ? 1 : 2),
+      duration: Duration(seconds: success ? 3 : 4),
       animationDuration: Duration(milliseconds: 400),
       messageText: Text(
         message,
