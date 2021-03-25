@@ -17,7 +17,11 @@ class UploadedAlbums extends StatefulWidget {
   _UploadedAlbumsState createState() => _UploadedAlbumsState();
 }
 
-class _UploadedAlbumsState extends State<UploadedAlbums> {
+class _UploadedAlbumsState extends State<UploadedAlbums>
+    with AutomaticKeepAliveClientMixin<UploadedAlbums> {
+  @override
+  bool get wantKeepAlive => true;
+
   SharedPrefService _sharedPrefService = SharedPrefService();
   AlbumServices _albumServices = AlbumServices();
   CustomSnackBar _customSnackBar = CustomSnackBar();
@@ -72,8 +76,7 @@ class _UploadedAlbumsState extends State<UploadedAlbums> {
     setState(() {
       isLoading = true;
     });
-    dynamic result =
-    await _albumServices.deleteAlbum(albumModel.albumID);
+    dynamic result = await _albumServices.deleteAlbum(albumModel.albumID);
     setState(() {
       isLoading = false;
     });
@@ -180,7 +183,9 @@ class _UploadedAlbumsState extends State<UploadedAlbums> {
   Widget _albumBox(AlbumModel album) {
     return InkWell(
       onTap: () {
-        Get.to(AlbumProfile(album: album,));
+        Get.to(AlbumProfile(
+          album: album,
+        ));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),

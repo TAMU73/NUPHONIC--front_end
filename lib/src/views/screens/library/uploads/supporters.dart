@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/supporter_model.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads/support_detail.dart';
@@ -10,26 +11,67 @@ class Supporters extends StatefulWidget {
   _SupportersState createState() => _SupportersState();
 }
 
-class _SupportersState extends State<Supporters> {
-  double total = 0;
+class _SupportersState extends State<Supporters>
+    with AutomaticKeepAliveClientMixin<Supporters> {
+  @override
+  bool get wantKeepAlive => true;
+
+  double total;
 
   List<SupporterModel> _supporters = [
-    SupporterModel(supportedAmount: 100),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
+    SupporterModel(
+      supportID: 'id',
+      supporterId: '5fd87603a1e53c2f5cb1d10d',
+      supporterName: 'Shaswat Khadka',
+      supportedAmount: 100,
+      message: 'This is your message',
+      paymentMethod: 'Khalti',
+      supportedDate: '2020-12-15T08:36:22.615+00:00',
+      supporterProfilePicture:
+          'https://yt3.ggpht.com/ytc/AAUvwnjXKdJzqeiY1ald_XuvFG5hSmBEyj_NAp42WH__jCg=s88-c-k-c0x00ffffff-no-rj-mo',
+      supportedSong: SongModel(
+          songID: '5fd87895a1e53c2f5cb1d118',
+          songName: 'Batash',
+          publishedDate: '2020-12-15T08:36:22.615+00:00',
+          songURL:
+              'https://firebasestorage.googleapis.com/v0/b/darpandentalhome-3567e.appspot.com/o/BATASH%20Shashwot%20Khadka%20(Prod.%20by%20Sanjv)%20(Official%20Lyric%20Video).mp3?alt=media&token=e01d3818-378f-48cf-b495-d47d71b3dcf5',
+          songImage: 'https://i.ytimg.com/vi/AtoZw7o2kRo/mqdefault.jpg',
+          genreName: 'Independent',
+          artistID: '5fd87603a1e53c2f5cb1d10d',
+          artistName: 'Shashwat Khadka',
+          albumID: null,
+          albumName: 'Single',
+          songDescription: 'hahaha',
+          songLyrics: 'dsds',
+          songListens: '324'),
+    ),
+    SupporterModel(
+      supportID: 'id',
+      supporterId: '5fd87603a1e53c2f5cb1d10d',
+      supporterName: 'Shaswat Khadka',
+      supportedAmount: 400,
+      message: 'This is your message',
+      paymentMethod: 'Khalti',
+      supportedDate: '2020-12-15T08:36:22.615+00:00',
+      supporterProfilePicture:
+          'https://yt3.ggpht.com/ytc/AAUvwnjXKdJzqeiY1ald_XuvFG5hSmBEyj_NAp42WH__jCg=s88-c-k-c0x00ffffff-no-rj-mo',
+      supportedSong: SongModel(
+          songID: '5fd87895a1e53c2f5cb1d118',
+          songName: 'Batash',
+          publishedDate: '2020-12-15T08:36:22.615+00:00',
+          songURL:
+              'https://firebasestorage.googleapis.com/v0/b/darpandentalhome-3567e.appspot.com/o/BATASH%20Shashwot%20Khadka%20(Prod.%20by%20Sanjv)%20(Official%20Lyric%20Video).mp3?alt=media&token=e01d3818-378f-48cf-b495-d47d71b3dcf5',
+          songImage: 'https://i.ytimg.com/vi/AtoZw7o2kRo/mqdefault.jpg',
+          genreName: 'Independent',
+          artistID: '5fd87603a1e53c2f5cb1d10d',
+          artistName: 'Shashwat Khadka',
+          albumID: null,
+          albumName: 'Single',
+          songDescription: 'hahaha',
+          songLyrics: 'dsds',
+          songListens: '324'),
+    ),
   ];
-
-  void _countTotalSupport() {
-    _supporters.map((e) {
-      setState(() {
-        total = e.supportedAmount;
-      });
-    });
-  }
 
   Widget _totalSupportAmount() {
     return Padding(
@@ -50,7 +92,7 @@ class _SupportersState extends State<Supporters> {
         CustomError(
           title: 'No Supporters',
           subTitle:
-              'There are no supports as of now. But you can have by uploading more on this platform.',
+              'There are no supports as of now. But you can have by uploading more songs on this platform.',
           buttonLabel: 'UPLOAD SONG',
           onPressed: () {},
         ),
@@ -68,7 +110,7 @@ class _SupportersState extends State<Supporters> {
     );
   }
 
-  Widget _showSupporterImage() {
+  Widget _showSupporterImage(SupporterModel supporter) {
     return CircleAvatar(
       radius: 28,
       backgroundColor: backgroundColor,
@@ -86,7 +128,7 @@ class _SupportersState extends State<Supporters> {
               ),
             ),
             Image.network(
-              'https://miro.medium.com/max/3840/1*LPESvqEeQ9V3DAx-6cD6SQ.jpeg',
+              supporter.supporterProfilePicture,
               height: 56,
               fit: BoxFit.cover,
             ),
@@ -97,35 +139,36 @@ class _SupportersState extends State<Supporters> {
     );
   }
 
-  Widget _showSupporterDetail() {
+  Widget _showSupporterDetail(SupporterModel supporter) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'SHuas',
+          supporter.supporterName,
           style: normalFontStyle.copyWith(
               fontWeight: FontWeight.w600, fontSize: 18),
-        ),
-        Text(
-          'SHuas dsfas',
-          style: normalFontStyle.copyWith(color: whitishColor.withOpacity(0.6)),
         ),
       ],
     );
   }
 
-  Widget _supportedAmount() {
+  Widget _supportedAmount(SupporterModel supporter) {
     return Text(
-      'Rs. 100',
-      style: normalFontStyle.copyWith(color: greenishColor, fontSize: 16),
+      'Rs. ${supporter.supportedAmount}',
+      style: normalFontStyle.copyWith(
+        color: greenishColor,
+        fontSize: 16,
+      ),
     );
   }
 
   Widget _supporterBox(SupporterModel supporter) {
     return InkWell(
       onTap: () {
-        Get.to(SupportDetail());
+        Get.to(SupportDetail(
+          support: supporter,
+        ));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
@@ -138,13 +181,13 @@ class _SupportersState extends State<Supporters> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
-                    _showSupporterImage(),
+                    _showSupporterImage(supporter),
                     SizedBox(
                       width: 10,
                     ),
-                    _showSupporterDetail(),
+                    _showSupporterDetail(supporter),
                     Spacer(),
-                    _supportedAmount()
+                    _supportedAmount(supporter)
                   ],
                 ),
               )),
@@ -153,10 +196,21 @@ class _SupportersState extends State<Supporters> {
     );
   }
 
+  void _countTotalSupport() {
+    double amount = 0;
+    for (SupporterModel supporter in _supporters) {
+      amount = amount + supporter.supportedAmount;
+    }
+    setState(() {
+      total = amount;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    total = 0;
     _countTotalSupport();
   }
 

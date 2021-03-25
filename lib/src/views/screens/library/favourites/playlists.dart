@@ -19,7 +19,12 @@ class Playlists extends StatefulWidget {
   _PlaylistsState createState() => _PlaylistsState();
 }
 
-class _PlaylistsState extends State<Playlists> {
+class _PlaylistsState extends State<Playlists>
+    with AutomaticKeepAliveClientMixin<Playlists> {
+
+  @override
+  bool get wantKeepAlive => true;
+
   PanelController _panelController = PanelController();
   TextEditingController _textEditingController = TextEditingController();
   PlaylistServices _playlistServices = PlaylistServices();
@@ -69,7 +74,8 @@ class _PlaylistsState extends State<Playlists> {
           isLoading = false;
         });
       } else {
-        _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+        _customSnackBar.buildSnackBar(
+            result.data['msg'], result.data['success']);
       }
     }
   }

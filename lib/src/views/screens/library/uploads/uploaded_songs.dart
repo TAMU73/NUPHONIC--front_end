@@ -15,7 +15,11 @@ class UploadedSongs extends StatefulWidget {
   _UploadedSongsState createState() => _UploadedSongsState();
 }
 
-class _UploadedSongsState extends State<UploadedSongs> {
+class _UploadedSongsState extends State<UploadedSongs>
+    with AutomaticKeepAliveClientMixin<UploadedSongs> {
+  @override
+  bool get wantKeepAlive => true;
+
   SongService _songService = SongService();
   SharedPrefService _sharedPrefService = SharedPrefService();
   CustomSnackBar _customSnackBar = CustomSnackBar();
@@ -47,35 +51,34 @@ class _UploadedSongsState extends State<UploadedSongs> {
   }
 
   Future<void> deleteSong(SongModel song) async {
-    if(song.albumName == 'Single') {
+    if (song.albumName == 'Single') {
       setState(() {
         isLoading = true;
       });
       var userID = await _sharedPrefService.read(id: 'user_id');
-      dynamic result =
-      await _songService.deleteSong(userID, song.songID);
+      dynamic result = await _songService.deleteSong(userID, song.songID);
       setState(() {
         isLoading = false;
       });
       if (result == null) {
         _customSnackBar.buildSnackBar('Network Error', false);
       } else {
-        _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+        _customSnackBar.buildSnackBar(
+            result.data['msg'], result.data['success']);
         if (result.data['success']) {
           getUserSongs();
         }
       }
     } else {
-      _customSnackBar.buildSnackBar('Remove this song from album first in order to delete', false);
+      _customSnackBar.buildSnackBar(
+          'Remove this song from album first in order to delete', false);
     }
-
   }
 
   Widget _showErrorMessage() {
     return CustomError(
       title: 'No Songs Found',
-      subTitle:
-          'You have not uploaded any song yet. Upload song to see here.',
+      subTitle: 'You have not uploaded any song yet. Upload song to see here.',
       buttonLabel: 'UPLOAD',
       onPressed: () {
         Get.to(UploadSongs());
@@ -122,16 +125,18 @@ class _UploadedSongsState extends State<UploadedSongs> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? loading : _uploadedSongs.length == 0
-        ? _showErrorMessage()
-        : SingleChildScrollView(
-            child: Column(children: [
-              SizedBox(
-                height: 20,
-              ),
-              _showSongs()
-            ]),
-          );
+    return isLoading
+        ? loading
+        : _uploadedSongs.length == 0
+            ? _showErrorMessage()
+            : SingleChildScrollView(
+                child: Column(children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _showSongs()
+                ]),
+              );
     ;
   }
 }

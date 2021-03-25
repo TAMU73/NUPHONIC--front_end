@@ -3,7 +3,17 @@ import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
 
-class FavouriteSongs extends StatelessWidget {
+class FavouriteSongs extends StatefulWidget {
+  @override
+  _FavouriteSongsState createState() => _FavouriteSongsState();
+}
+
+class _FavouriteSongsState extends State<FavouriteSongs>
+    with AutomaticKeepAliveClientMixin<FavouriteSongs> {
+
+  @override
+  bool get wantKeepAlive => true;
+
   List<SongModel> _favouriteSongs = [
     SongModel(
       songImage: '',

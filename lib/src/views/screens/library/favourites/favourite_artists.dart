@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
-class FavouriteArtists extends StatelessWidget {
+class FavouriteArtists extends StatefulWidget {
+  @override
+  _FavouriteArtistsState createState() => _FavouriteArtistsState();
+}
+
+class _FavouriteArtistsState extends State<FavouriteArtists>
+    with AutomaticKeepAliveClientMixin<FavouriteArtists> {
+
+  @override
+  bool get wantKeepAlive => true;
+
   List<String> _favouriteArtists = ['', ''];
 
   Widget _showErrorMessage() {
@@ -66,7 +76,9 @@ class FavouriteArtists extends StatelessWidget {
           child: Row(
             children: [
               _artistImage(),
-              SizedBox(width: 10,),
+              SizedBox(
+                width: 10,
+              ),
               _artistName(),
             ],
           ),
