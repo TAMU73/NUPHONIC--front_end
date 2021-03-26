@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/supporter_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/support_services.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads/support_detail.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
@@ -16,62 +18,37 @@ class _SupportersState extends State<Supporters>
   @override
   bool get wantKeepAlive => true;
 
+  SharedPrefService _sharedPrefService = SharedPrefService();
+  SupportServices _supportServices = SupportServices();
+
   double total;
 
-  List<SupporterModel> _supporters = [
-    SupporterModel(
-      supportID: 'id',
-      supporterId: '5fd87603a1e53c2f5cb1d10d',
-      supporterName: 'Shaswat Khadka',
-      supportedAmount: 100,
-      message: 'This is your message',
-      paymentMethod: 'Khalti',
-      supportedDate: '2020-12-15T08:36:22.615+00:00',
-      supporterProfilePicture:
-          'https://yt3.ggpht.com/ytc/AAUvwnjXKdJzqeiY1ald_XuvFG5hSmBEyj_NAp42WH__jCg=s88-c-k-c0x00ffffff-no-rj-mo',
-      supportedSong: SongModel(
-          songID: '5fd87895a1e53c2f5cb1d118',
-          songName: 'Batash',
-          publishedDate: '2020-12-15T08:36:22.615+00:00',
-          songURL:
-              'https://firebasestorage.googleapis.com/v0/b/darpandentalhome-3567e.appspot.com/o/BATASH%20Shashwot%20Khadka%20(Prod.%20by%20Sanjv)%20(Official%20Lyric%20Video).mp3?alt=media&token=e01d3818-378f-48cf-b495-d47d71b3dcf5',
-          songImage: 'https://i.ytimg.com/vi/AtoZw7o2kRo/mqdefault.jpg',
-          genreName: 'Independent',
-          artistID: '5fd87603a1e53c2f5cb1d10d',
-          artistName: 'Shashwat Khadka',
-          albumID: null,
-          albumName: 'Single',
-          songDescription: 'hahaha',
-          songLyrics: 'dsds',
-          songListens: '324'),
-    ),
-    SupporterModel(
-      supportID: 'id',
-      supporterId: '5fd87603a1e53c2f5cb1d10d',
-      supporterName: 'Shaswat Khadka',
-      supportedAmount: 400,
-      message: 'This is your message',
-      paymentMethod: 'Khalti',
-      supportedDate: '2020-12-15T08:36:22.615+00:00',
-      supporterProfilePicture:
-          'https://yt3.ggpht.com/ytc/AAUvwnjXKdJzqeiY1ald_XuvFG5hSmBEyj_NAp42WH__jCg=s88-c-k-c0x00ffffff-no-rj-mo',
-      supportedSong: SongModel(
-          songID: '5fd87895a1e53c2f5cb1d118',
-          songName: 'Batash',
-          publishedDate: '2020-12-15T08:36:22.615+00:00',
-          songURL:
-              'https://firebasestorage.googleapis.com/v0/b/darpandentalhome-3567e.appspot.com/o/BATASH%20Shashwot%20Khadka%20(Prod.%20by%20Sanjv)%20(Official%20Lyric%20Video).mp3?alt=media&token=e01d3818-378f-48cf-b495-d47d71b3dcf5',
-          songImage: 'https://i.ytimg.com/vi/AtoZw7o2kRo/mqdefault.jpg',
-          genreName: 'Independent',
-          artistID: '5fd87603a1e53c2f5cb1d10d',
-          artistName: 'Shashwat Khadka',
-          albumID: null,
-          albumName: 'Single',
-          songDescription: 'hahaha',
-          songLyrics: 'dsds',
-          songListens: '324'),
-    ),
-  ];
+  bool isLoading = false;
+
+  List<SupporterModel> _supporters = [];
+
+  Future<void> getSupporters() async {
+    _supporters.clear();
+    setState(() {
+      isLoading = true;
+    });
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _supportServices.getSuperSupporters(userID);
+    setState(() {
+      isLoading = false;
+    });
+    if (result == null) {
+    } else {
+      if (result.data['success']) {
+        dynamic supporterList = result.data['supporters'];
+        for (var supporter in supporterList) {
+          setState(() {
+            _supporters.add(SupporterModel.fromJson(supporter));
+          });
+        }
+      }
+    }
+  }
 
   Widget _totalSupportAmount() {
     return Padding(
@@ -127,11 +104,13 @@ class _SupportersState extends State<Supporters>
                 size: 30,
               ),
             ),
-            Image.network(
-              supporter.supporterProfilePicture,
-              height: 56,
-              fit: BoxFit.cover,
-            ),
+            supporter.supporterProfilePicture != null
+                ? Image.network(
+                    supporter.supporterProfilePicture,
+                    height: 56,
+                    fit: BoxFit.cover,
+                  )
+                : SizedBox(),
             // profilePicture == null ? SizedBox() : Image.network(profilePicture),
           ],
         ),
@@ -158,7 +137,8 @@ class _SupportersState extends State<Supporters>
       'Rs. ${supporter.supportedAmount}',
       style: normalFontStyle.copyWith(
         color: greenishColor,
-        fontSize: 16,
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -187,7 +167,17 @@ class _SupportersState extends State<Supporters>
                     ),
                     _showSupporterDetail(supporter),
                     Spacer(),
-                    _supportedAmount(supporter)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        _supportedAmount(supporter),
+                        Image.asset(
+                          'assets/images/khalti_logo.png',
+                          height: 25,
+                        )
+                      ],
+                    )
                   ],
                 ),
               )),
@@ -206,27 +196,36 @@ class _SupportersState extends State<Supporters>
     });
   }
 
+  void atStart() async {
+    await getSupporters();
+    _countTotalSupport();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     total = 0;
-    _countTotalSupport();
+    atStart();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _totalSupportAmount(),
-          SizedBox(
-            height: 20,
-          ),
-          _supporters.length == 0 ? _showErrorMessage() : _showSupporters(),
-        ],
-      ),
-    );
+    return isLoading
+        ? loading
+        : SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _totalSupportAmount(),
+                SizedBox(
+                  height: 20,
+                ),
+                _supporters.length == 0
+                    ? _showErrorMessage()
+                    : _showSupporters(),
+              ],
+            ),
+          );
   }
 }

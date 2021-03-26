@@ -126,10 +126,18 @@ class _UserProfileState extends State<UserProfile> {
                             Container(
                               width: width,
                               height: width,
-                              child: Image.network(
-                                user.profilePicture == null ? '' : user.profilePicture,
-                                fit: BoxFit.cover,
-                              ),
+                              child: user.profilePicture != null
+                                  ? Image.network(
+                                      user.profilePicture,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : SizedBox(
+                                      child: Icon(
+                                        Icons.person_outline,
+                                        color: mainColor,
+                                        size: 100,
+                                      ),
+                                    ),
                             ),
                             Container(
                               width: width,

@@ -47,10 +47,10 @@ class _FavouritesState extends State<Favourites>
               controller: _tabController1,
               indicatorSize: TabBarIndicatorSize.label,
               labelStyle: normalFontStyle.copyWith(
-                fontSize: 17,
+                fontSize: 18,
               ),
               unselectedLabelStyle: normalFontStyle.copyWith(
-                fontSize: 17,
+                fontSize: 18,
               ),
               labelColor: mainColor,
               unselectedLabelColor: whitishColor.withOpacity(0.6),

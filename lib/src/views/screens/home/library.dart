@@ -9,6 +9,7 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_ser
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/favourites.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/own_profile.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/upload_song.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
@@ -33,15 +34,6 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
     Favourites(),
     Uploads(),
   ];
-
-  Future<void> _signOut() async {
-    setState(() {
-      isLoading = true;
-    });
-    await _sharedPrefService.save(id: 'user_id', data: null);
-    await _sharedPrefService.save(id: 'first_name', data: null);
-    Get.offAll(Main());
-  }
 
   Future<void> _getFirstName() async {
     String name = await _sharedPrefService.read(id: 'first_name');
@@ -118,53 +110,58 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  height: 100,
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 26,
-                        backgroundColor: textFieldColor,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 26,
-                                backgroundColor: textFieldColor,
-                                child: Icon(
-                                  Icons.person_outline_outlined,
-                                  color: mainColor,
-                                  size: 30,
+              InkWell(
+                onTap: () async {
+                  Get.to(OwnProfile(userID: await _sharedPrefService.read(id: 'user_id'),));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    height: 100,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 26,
+                          backgroundColor: textFieldColor,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 26,
+                                  backgroundColor: textFieldColor,
+                                  child: Icon(
+                                    Icons.person_outline_outlined,
+                                    color: mainColor,
+                                    size: 30,
+                                  ),
                                 ),
-                              ),
-                              profilePicture == null ? SizedBox() : Image.network(profilePicture, height: 52, fit: BoxFit.cover,),
-                            ],
+                                profilePicture == null ? SizedBox() : Image.network(profilePicture, height: 52, fit: BoxFit.cover,),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            username ?? 'Username',
-                            style: titleTextStyle.copyWith(fontSize: 20),
-                          ),
-                          Text(
-                            fullName ?? '',
-                            style: normalFontStyle.copyWith(
-                                fontSize: 15,
-                                color: whitishColor.withOpacity(0.7)),
-                          ),
-                        ],
-                      ),
-                    ],
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              username ?? '',
+                              style: titleTextStyle.copyWith(fontSize: 20),
+                            ),
+                            Text(
+                              fullName ?? '',
+                              style: normalFontStyle.copyWith(
+                                  fontSize: 15,
+                                  color: whitishColor.withOpacity(0.7)),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

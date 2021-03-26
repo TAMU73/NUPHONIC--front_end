@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/supporter_model.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/music_player.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/user_profile.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
 class SupportDetail extends StatelessWidget {
@@ -27,11 +29,13 @@ class SupportDetail extends StatelessWidget {
                 size: 30,
               ),
             ),
-            Image.network(
-              'https://miro.medium.com/max/3840/1*LPESvqEeQ9V3DAx-6cD6SQ.jpeg',
-              height: 56,
-              fit: BoxFit.cover,
-            ),
+            support.supporterProfilePicture != null
+                ? Image.network(
+                    support.supporterProfilePicture,
+                    height: 56,
+                    fit: BoxFit.cover,
+                  )
+                : SizedBox(),
             // profilePicture == null ? SizedBox() : Image.network(profilePicture),
           ],
         ),
@@ -45,13 +49,9 @@ class SupportDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'SHuas',
+          support.supporterName,
           style: normalFontStyle.copyWith(
               fontWeight: FontWeight.w600, fontSize: 18),
-        ),
-        Text(
-          'SHuas dsfas',
-          style: normalFontStyle.copyWith(color: whitishColor.withOpacity(0.6)),
         ),
       ],
     );
@@ -59,31 +59,52 @@ class SupportDetail extends StatelessWidget {
 
   Widget _supportedAmount() {
     return Text(
-      'Rs. 100',
-      style: normalFontStyle.copyWith(color: greenishColor, fontSize: 16),
+      'Rs. ${support.supportedAmount}',
+      style: normalFontStyle.copyWith(
+        color: greenishColor,
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 
   Widget _showSupporterBox() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-          color: darkGreyColor,
-          height: 80,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                _showSupporterImage(),
-                SizedBox(
-                  width: 10,
-                ),
-                _showSupporterDetail(),
-                Spacer(),
-                _supportedAmount()
-              ],
-            ),
-          )),
+    return InkWell(
+      onTap: () {
+        Get.to(UserProfile(
+          userID: support.supporterId,
+        ));
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+            color: darkGreyColor,
+            height: 80,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  _showSupporterImage(),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  _showSupporterDetail(),
+                  Spacer(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _supportedAmount(),
+                      Image.asset(
+                        'assets/images/khalti_logo.png',
+                        height: 25,
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )),
+      ),
     );
   }
 
@@ -102,7 +123,7 @@ class SupportDetail extends StatelessWidget {
                   height: 20,
                 ),
                 CustomAppBar(
-                  label: 'Supported by',
+                  label: 'Support Details',
                   leadIconPath: 'assets/icons/back_icon.svg',
                   onIconTap: () {
                     Get.back();
@@ -113,49 +134,49 @@ class SupportDetail extends StatelessWidget {
                 ),
                 _showSupporterBox(),
                 SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   children: [
-                    SizedBox(width: 10,),
-                    Text(
-                      'For song ',
-                      style: normalFontStyle.copyWith(
-                          color: whitishColor.withOpacity(0.7)
+                    InkWell(
+                      onTap: () {
+                        Get.to(MusicPlayer(
+                          song: support.supportedSong,
+                        ));
+                      },
+                      child: Text(
+                        support.supportedSong.songName,
+                        style: normalFontStyle.copyWith(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Icon(
+                        Icons.circle,
+                        size: 5,
+                        color: whitishColor.withOpacity(0.7),
                       ),
                     ),
                     Text(
-                      'Batash',
-                      style: normalFontStyle,
+                      '${DateFormat('MMM dd, yyyy').format(DateTime.parse(support.supportedDate))}',
+                      style: normalFontStyle.copyWith(),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 5,
+                  height: 20,
                 ),
-                Row(
-                  children: [
-                    SizedBox(width: 10,),
-                    Text(
-                      'on ',
-                      style: normalFontStyle.copyWith(
-                          color: whitishColor.withOpacity(0.7)
-                      ),
-                    ),
-                    Text(
-                      'Dec 12, 2020',
-                      style: normalFontStyle,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20,),
                 Text(
-                  'Support message',
+                  support.message,
                   style: normalFontStyle,
                   textAlign: TextAlign.justify,
                 ),
-                SizedBox(height: 20,),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
               ],
             ),
           ),
