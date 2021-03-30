@@ -11,23 +11,26 @@ class CustomTextField extends StatelessWidget {
   final Function onEditingComplete;
   final TextInputType keyboardType;
   final TextEditingController controller;
+  final FocusNode focusNode;
   final EdgeInsets contentPadding;
   final int maxLines;
   final double height;
 
-  CustomTextField(
-      {this.labelName,
-      this.height,
-      this.hint,
-      this.icons,
-      this.obSecureText,
-      this.onChanged,
-      this.onEditingComplete,
-      this.textInputAction,
-      this.keyboardType,
-      this.contentPadding,
-      this.controller,
-      this.maxLines});
+  CustomTextField({
+    this.labelName,
+    this.height,
+    this.hint,
+    this.icons,
+    this.obSecureText,
+    this.onChanged,
+    this.onEditingComplete,
+    this.textInputAction,
+    this.keyboardType,
+    this.contentPadding,
+    this.controller,
+    this.focusNode,
+    this.maxLines,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,7 @@ class CustomTextField extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   maxLines: maxLines != null ? maxLines : 1,
+                  focusNode: focusNode,
                   controller: controller,
                   obscureText: obSecureText ?? false,
                   cursorHeight: 24,

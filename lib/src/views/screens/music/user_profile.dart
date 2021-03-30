@@ -4,10 +4,13 @@ import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/user_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/favourite_services.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/back_blank.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 
@@ -24,8 +27,12 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   AuthService _auth = AuthService();
   SongService _song = SongService();
+  CustomSnackBar _customSnackBar = CustomSnackBar();
+  FavouriteServices _favouriteServices = FavouriteServices();
+  SharedPrefService _sharedPrefService = SharedPrefService();
 
   bool isLoading = false;
+  bool isFavourite = false;
   bool networkError = false;
   bool isSongLoading = false;
   UserModel user;
@@ -81,9 +88,65 @@ class _UserProfileState extends State<UserProfile> {
     }
   }
 
+  Future<void> addToFavourite() async {
+    setState(() {
+      isFavourite = true;
+    });
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _favouriteServices.addFavouriteArtists(user.userID, userID);
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Cannot add to favourite artists, please try again!!', false);
+      setState(() {
+        isFavourite = false;
+      });
+    } else {
+      setState(() {
+        isFavourite = true;
+      });
+    }
+  }
+
+  Future<void> removeFromFavourite() async {
+    setState(() {
+      isFavourite = false;
+    });
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _favouriteServices.removeFavouriteSongs(user.userID, userID);
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Cannot remove from favourite artists, please try again!!', false);
+      setState(() {
+        isFavourite = true;
+      });
+    } else {
+      setState(() {
+        isFavourite = false;
+      });
+    }
+  }
+
+  Future<void> getFavouriteStatus() async {
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _favouriteServices.getFavouriteArtists(userID);
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Network Error, please try again!!', false);
+    } else {
+      List songList = result.data["artist_list"]["artist_list"];
+      if(songList.contains(user.userID)) {
+        setState(() {
+          isFavourite = true;
+        });
+      } else {
+        setState(() {
+          isFavourite = false;
+        });
+      }
+    }
+  }
+
   void atStart() async {
     await getArtistDetail();
     getArtistSongs();
+    getFavouriteStatus();
   }
 
   @override
@@ -162,9 +225,17 @@ class _UserProfileState extends State<UserProfile> {
                                   Get.back();
                                 },
                                 label: "",
-                                endChild: SvgPicture.asset(
-                                  'assets/icons/love_big.svg',
-                                  height: 24,
+                                endChild: InkWell(
+                                  onTap: () {
+                                    if(isFavourite) removeFromFavourite();
+                                    else addToFavourite();
+                                  },
+                                  child: SvgPicture.asset(isFavourite
+                                      ? 'assets/icons/loved_big.svg'
+                                      : 'assets/icons/love_big.svg'
+                                    ,
+                                    height: 24,
+                                  ),
                                 ),
                               ),
                             ),
