@@ -194,8 +194,8 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
     setState(() {
       isMainLoading = true;
     });
-    await searchSongs(name);
-    // await searchArtists(name);
+    searchSongs(name);
+    await searchArtists(name);
     setState(() {
       isMainLoading = false;
     });
@@ -283,6 +283,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                             hint: 'Search songs or artists',
                             contentPadding: EdgeInsets.only(
                               left: 50,
+                              right: 35,
                             ),
                             textInputAction: TextInputAction.done,
                             onChanged: (val) {
@@ -300,10 +301,29 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                           ),
                         ),
                         Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: SvgPicture.asset(
-                              'assets/icons/search.svg',
-                            ))
+                          padding: const EdgeInsets.only(left: 15),
+                          child: SvgPicture.asset(
+                            'assets/icons/search.svg',
+                          ),
+                        ),
+                        searchName != "" ? Positioned(
+                          right: 15,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                searchName = "";
+                              });
+                              searchNode.unfocus();
+                              searchController.clear();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: SvgPicture.asset(
+                                'assets/icons/cross.svg',
+                              ),
+                            ),
+                          ),
+                        ) : SizedBox(),
                       ],
                     ),
                   ),

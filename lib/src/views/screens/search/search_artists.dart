@@ -25,7 +25,7 @@ class SearchedArtists extends StatelessWidget {
           )
         : SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              padding: const EdgeInsets.only(top: 20, bottom: 10),
               child: Column(
                 children: artistList
                     .map(
