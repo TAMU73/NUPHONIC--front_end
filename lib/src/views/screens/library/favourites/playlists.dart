@@ -8,10 +8,12 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_ser
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_bottom_sheet.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/playlist_box.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/favourites/playlist_detail.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Playlists extends StatefulWidget {
@@ -21,10 +23,10 @@ class Playlists extends StatefulWidget {
 
 class _PlaylistsState extends State<Playlists>
     with AutomaticKeepAliveClientMixin<Playlists> {
-
   @override
   bool get wantKeepAlive => true;
 
+  RefreshController _refreshController = RefreshController();
   PanelController _panelController = PanelController();
   TextEditingController _textEditingController = TextEditingController();
   PlaylistServices _playlistServices = PlaylistServices();
@@ -147,17 +149,20 @@ class _PlaylistsState extends State<Playlists>
       onTap: () {
         _panelController.open();
       },
-      child: Row(
-        children: [
-          Spacer(),
-          SvgPicture.asset('assets/icons/plus_circle.svg'),
-          SizedBox(width: 10),
-          Text(
-            'Create New Playlist',
-            style: normalFontStyle,
-          ),
-          SizedBox(width: 20)
-        ],
+      child: Padding(
+        padding: EdgeInsets.only(top: 10),
+        child: Row(
+          children: [
+            Spacer(),
+            SvgPicture.asset('assets/icons/plus_circle.svg'),
+            SizedBox(width: 10),
+            Text(
+              'Create New Playlist',
+              style: normalFontStyle,
+            ),
+            SizedBox(width: 20)
+          ],
+        ),
       ),
     );
   }
@@ -234,15 +239,23 @@ class _PlaylistsState extends State<Playlists>
             ? loading
             : _allPlaylists.length == 0
                 ? _showErrorMessage()
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _createNewPlaylist(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        _showPlaylists(),
-                      ],
+                : SmartRefresher(
+                    controller: _refreshController,
+                    onRefresh: () {
+                      getUserPlaylist().then(
+                          (value) => _refreshController.refreshCompleted());
+                    },
+                    header: CustomRefreshHeader(),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _createNewPlaylist(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _showPlaylists(),
+                        ],
+                      ),
                     ),
                   ),
         _customButtonSheet()

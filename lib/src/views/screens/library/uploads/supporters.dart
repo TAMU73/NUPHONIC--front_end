@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/supporter_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/support_services.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads/support_detail.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Supporters extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class _SupportersState extends State<Supporters>
   @override
   bool get wantKeepAlive => true;
 
+  RefreshController _refreshController = RefreshController();
   SharedPrefService _sharedPrefService = SharedPrefService();
   SupportServices _supportServices = SupportServices();
 
@@ -213,18 +215,26 @@ class _SupportersState extends State<Supporters>
   Widget build(BuildContext context) {
     return isLoading
         ? loading
-        : SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _totalSupportAmount(),
-                SizedBox(
-                  height: 20,
-                ),
-                _supporters.length == 0
-                    ? _showErrorMessage()
-                    : _showSupporters(),
-              ],
+        : SmartRefresher(
+            controller: _refreshController,
+            onRefresh: () {
+              getSupporters()
+                  .then((value) => _refreshController.refreshCompleted());
+            },
+            header: CustomRefreshHeader(),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _totalSupportAmount(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _supporters.length == 0
+                      ? _showErrorMessage()
+                      : _showSupporters(),
+                ],
+              ),
             ),
           );
   }

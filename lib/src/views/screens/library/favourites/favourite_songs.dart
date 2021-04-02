@@ -4,9 +4,11 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/favourit
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class FavouriteSongs extends StatefulWidget {
   @override
@@ -17,6 +19,8 @@ class _FavouriteSongsState extends State<FavouriteSongs>
     with AutomaticKeepAliveClientMixin<FavouriteSongs> {
   @override
   bool get wantKeepAlive => true;
+
+  RefreshController _refreshController = RefreshController();
   CustomSnackBar _customSnackBar = CustomSnackBar();
   SharedPrefService _sharedPrefService = SharedPrefService();
   FavouriteServices _favouriteServices = FavouriteServices();
@@ -87,15 +91,25 @@ class _FavouriteSongsState extends State<FavouriteSongs>
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? loading : _favouriteSongs.length == 0
-        ? _showErrorMessage()
-        : SingleChildScrollView(
-            child: Column(children: [
-              SizedBox(
-                height: 20,
-              ),
-              _showSongs()
-            ]),
-          );
+    return isLoading
+        ? loading
+        : _favouriteSongs.length == 0
+            ? _showErrorMessage()
+            : SmartRefresher(
+                controller: _refreshController,
+                onRefresh: () {
+                  getFavouriteSongs()
+                      .then((value) => _refreshController.refreshCompleted());
+                },
+                header: CustomRefreshHeader(),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _showSongs()
+                  ]),
+                ),
+              );
   }
 }

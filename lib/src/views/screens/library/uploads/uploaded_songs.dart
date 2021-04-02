@@ -5,10 +5,12 @@ import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/upload_song.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UploadedSongs extends StatefulWidget {
   @override
@@ -20,6 +22,7 @@ class _UploadedSongsState extends State<UploadedSongs>
   @override
   bool get wantKeepAlive => true;
 
+  RefreshController _refreshController = RefreshController();
   SongService _songService = SongService();
   SharedPrefService _sharedPrefService = SharedPrefService();
   CustomSnackBar _customSnackBar = CustomSnackBar();
@@ -129,13 +132,21 @@ class _UploadedSongsState extends State<UploadedSongs>
         ? loading
         : _uploadedSongs.length == 0
             ? _showErrorMessage()
-            : SingleChildScrollView(
-                child: Column(children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _showSongs()
-                ]),
+            : SmartRefresher(
+                controller: _refreshController,
+                onRefresh: () {
+                  getUserSongs()
+                      .then((value) => _refreshController.refreshCompleted());
+                },
+                header: CustomRefreshHeader(),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _showSongs()
+                  ]),
+                ),
               );
     ;
   }

@@ -7,10 +7,12 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/album_se
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads/create_album.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/album_profile.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UploadedAlbums extends StatefulWidget {
   @override
@@ -22,6 +24,7 @@ class _UploadedAlbumsState extends State<UploadedAlbums>
   @override
   bool get wantKeepAlive => true;
 
+  RefreshController _refreshController = RefreshController();
   SharedPrefService _sharedPrefService = SharedPrefService();
   AlbumServices _albumServices = AlbumServices();
   CustomSnackBar _customSnackBar = CustomSnackBar();
@@ -261,15 +264,23 @@ class _UploadedAlbumsState extends State<UploadedAlbums>
         ? loading
         : _allAlbums.length == 0
             ? _showErrorMessage()
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _createNewAlbum(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _showAlbums(),
-                  ],
+            : SmartRefresher(
+                controller: _refreshController,
+                onRefresh: () {
+                  getUserAlbum()
+                      .then((value) => _refreshController.refreshCompleted());
+                },
+                header: CustomRefreshHeader(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _createNewAlbum(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _showAlbums(),
+                    ],
+                  ),
                 ),
               );
   }

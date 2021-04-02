@@ -10,7 +10,7 @@ class CustomSnackBar {
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(15),
       borderRadius: 10,
-      duration: Duration(seconds: 4),
+      duration: Duration(seconds: 3),
       animationDuration: Duration(milliseconds: 400),
       messageText: Text(
         message,
@@ -20,6 +20,6 @@ class CustomSnackBar {
         ),
       ),
     );
-    if (success) await Future.delayed(Duration(milliseconds: 2000));
+    if (success) await Future.delayed(Duration(seconds: 3));
   }
 }

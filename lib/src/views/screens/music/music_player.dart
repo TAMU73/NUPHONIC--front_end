@@ -204,9 +204,6 @@ class _MusicPlayerState extends State<MusicPlayer> {
 
   Future<void> addListen() async {
     dynamic result = await _song.addListen(widget.song.songID);
-    if (result == null) {
-      _customSnackBar.buildSnackBar('Cannot add your listen, please try again!!', false);
-    }
   }
 
   void atStart() async {

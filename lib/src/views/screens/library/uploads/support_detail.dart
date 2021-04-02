@@ -110,6 +110,8 @@ class SupportDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(support.supportedSong.songName);
+    print(support.supportedSong.songImage);
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SingleChildScrollView(

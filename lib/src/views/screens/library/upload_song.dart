@@ -102,18 +102,23 @@ class _UploadSongsState extends State<UploadSongs> {
       albumName: albumName,
       songLyrics: songLyrics,
     );
-    setState(() {
-      isLoading = false;
-    });
     if (result == null) {
       _customSnackBar.buildSnackBar('Network Error', false);
     } else {
-      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
-      String songId = result.data['song']['_id'];
-      if (albumId != null) {
-        await _albumServices.addAlbumSongs(songId, albumId);
+      if(result.data['success']) {
+        String songId = result.data['song']['_id'];
+        if (albumId != null) {
+          await _albumServices.addAlbumSongs(songId, albumId);
+        }
+        await _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+        Get.back();
+      } else {
+        _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
       }
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void checkTextFields() {
@@ -332,19 +337,17 @@ class _UploadSongsState extends State<UploadSongs> {
                   },
                 ),
                 SizedBox(height: 15),
-                Container(
-                  child: CustomTextField(
-                    labelName: 'Song Description',
-                    hint: 'Add description here...',
-                    maxLines: 100,
-                    height: 100,
-                    onChanged: (val) {
-                      setState(() {
-                        songDescription = val;
-                      });
-                      checkTextFields();
-                    },
-                  ),
+                CustomTextField(
+                  labelName: 'Song Description',
+                  hint: 'Add description here...',
+                  maxLines: 100,
+                  height: 100,
+                  onChanged: (val) {
+                    setState(() {
+                      songDescription = val;
+                    });
+                    checkTextFields();
+                  },
                 ),
                 SizedBox(height: 15),
                 Text(

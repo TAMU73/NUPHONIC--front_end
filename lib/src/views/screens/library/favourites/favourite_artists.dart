@@ -5,9 +5,11 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_ser
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/favourite_services.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/user_profile.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class FavouriteArtists extends StatefulWidget {
   @override
@@ -18,6 +20,8 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
     with AutomaticKeepAliveClientMixin<FavouriteArtists> {
   @override
   bool get wantKeepAlive => true;
+
+  RefreshController _refreshController = RefreshController();
   CustomSnackBar _customSnackBar = CustomSnackBar();
   SharedPrefService _sharedPrefService = SharedPrefService();
   FavouriteServices _favouriteServices = FavouriteServices();
@@ -77,7 +81,9 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
   Widget _favouriteArtistBox(UserModel artist) {
     return InkWell(
       onTap: () {
-        Get.to(UserProfile(user: artist,));
+        Get.to(UserProfile(
+          user: artist,
+        ));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
@@ -156,13 +162,21 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
         ? loading
         : _favouriteArtists.length == 0
             ? _showErrorMessage()
-            : SingleChildScrollView(
-                child: Column(children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _showArtists()
-                ]),
+            : SmartRefresher(
+                controller: _refreshController,
+                onRefresh: () {
+                  getFavouriteArtists()
+                      .then((value) => _refreshController.refreshCompleted());
+                },
+                header: CustomRefreshHeader(),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _showArtists()
+                  ]),
+                ),
               );
   }
 }
