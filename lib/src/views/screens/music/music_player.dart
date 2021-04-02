@@ -6,8 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/blocs/now_playing_bloc.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/favourite_services.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/add_to_playlist.dart';
+import 'package:nuphonic_front_end/src/views/screens/super_support/give_super_support.dart';
 import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/more_option.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -28,16 +32,19 @@ class _MusicPlayerState extends State<MusicPlayer> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AudioPlayer audioPlayer = AudioPlayer();
   SongService _song = SongService();
+  CustomSnackBar _customSnackBar = CustomSnackBar();
+  FavouriteServices _favouriteServices = FavouriteServices();
+  SharedPrefService _sharedPrefService = SharedPrefService();
+
   List<PaletteColor> colors = [];
 
   Duration duration = new Duration();
   Duration position = new Duration();
 
-  bool isPlaying = false;
+  var nowPlaying;
 
-  // bool isRepeating = false;
+  bool isPlaying = false;
   bool isFavourite = false;
-  bool isSupported = false;
 
   void generateColor() async {
     ImageProvider image = NetworkImage('${widget.song.songImage}');
@@ -130,7 +137,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
     });
     audioPlayer.onPlayerCompletion.listen((event) {
       audioPlayer.stop();
-      if (Provider.of<NowPlayingBloc>(context, listen: false).isRepeating) {
+      if (nowPlaying.isRepeating) {
         play();
       } else {
         setState(() {
@@ -140,32 +147,83 @@ class _MusicPlayerState extends State<MusicPlayer> {
     });
   }
 
-  void addListen() async {
-    dynamic result = await _song.addListen(widget.song.songID);
-    if (result != null) {
-      print(result);
+  Future<void> addToFavourite() async {
+    setState(() {
+      isFavourite = true;
+    });
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _favouriteServices.addFavouriteSongs(widget.song.songID, userID);
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Cannot add to favourite songs, please try again!!', false);
+      setState(() {
+        isFavourite = false;
+      });
     } else {
-      print('Error');
+      setState(() {
+        isFavourite = true;
+      });
     }
+  }
+
+  Future<void> removeFromFavourite() async {
+    setState(() {
+      isFavourite = false;
+    });
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _favouriteServices.removeFavouriteSongs(widget.song.songID, userID);
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Cannot remove from favourite songs, please try again!!', false);
+      setState(() {
+        isFavourite = true;
+      });
+    } else {
+      setState(() {
+        isFavourite = false;
+      });
+    }
+  }
+
+  Future<void> getFavouriteStatus() async {
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _favouriteServices.getFavouriteSongs(userID);
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Network Error, please try again!!', false);
+    } else {
+      List songList = result.data["song_list"]["song_list"];
+      if(songList.contains(widget.song.songID)) {
+        setState(() {
+          isFavourite = true;
+        });
+      } else {
+        setState(() {
+          isFavourite = false;
+        });
+      }
+    }
+  }
+
+  Future<void> addListen() async {
+    dynamic result = await _song.addListen(widget.song.songID);
   }
 
   void atStart() async {
     generateColor();
     getAudio();
     addListen();
+    getFavouriteStatus();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    nowPlaying = Provider.of<NowPlayingBloc>(context, listen: false);
     atStart();
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    final nowPlaying = Provider.of<NowPlayingBloc>(context, listen: false);
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -310,23 +368,27 @@ class _MusicPlayerState extends State<MusicPlayer> {
                             onTap: () {
                               nowPlaying.isRepeating = !nowPlaying.isRepeating;
                             },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset('assets/icons/repeat.svg',
-                                    color: nowPlaying.isRepeating
-                                        ? mainColor
-                                        : lightGreyColor),
-                                SizedBox(
-                                  height: 2,
-                                ),
-                                nowPlaying.isRepeating
-                                    ? Icon(
-                                        Icons.circle,
-                                        size: 4,
-                                        color: mainColor,
-                                      )
-                                    : SizedBox()
-                              ],
+                            child: Consumer<NowPlayingBloc>(
+                              builder: (context, now, child) {
+                                return Column(
+                                  children: [
+                                    SvgPicture.asset('assets/icons/repeat.svg',
+                                        color: now.isRepeating
+                                            ? mainColor
+                                            : lightGreyColor),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
+                                    now.isRepeating
+                                        ? Icon(
+                                            Icons.circle,
+                                            size: 4,
+                                            color: mainColor,
+                                          )
+                                        : SizedBox()
+                                  ],
+                                );
+                              },
                             ),
                           ),
                           Expanded(
@@ -389,9 +451,8 @@ class _MusicPlayerState extends State<MusicPlayer> {
                           ),
                           InkWell(
                               onTap: () {
-                                setState(() {
-                                  isFavourite = !isFavourite;
-                                });
+                                if(isFavourite) removeFromFavourite();
+                                else addToFavourite();
                               },
                               child: SvgPicture.asset(isFavourite
                                   ? 'assets/icons/loved.svg'
@@ -430,19 +491,18 @@ class _MusicPlayerState extends State<MusicPlayer> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
-                            onTap: () {
-                              setState(() {
-                                isSupported = !isSupported;
-                              });
+                            onTap: () async {
+                              Get.to(GiveSuperSupport(
+                                song: widget.song,
+                              ));
                             },
-                            child: SvgPicture.asset(isSupported
-                                ? 'assets/icons/supported.svg'
-                                : 'assets/icons/support.svg'),
+                            child: SvgPicture.asset('assets/icons/support.svg'),
                           ),
                           InkWell(
                             onTap: () {
-                              print('asdsad');
-                              Get.to(AddToPlaylist(song: widget.song,));
+                              Get.to(AddToPlaylist(
+                                song: widget.song,
+                              ));
                             },
                             child: SvgPicture.asset('assets/icons/add.svg'),
                           ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:uuid/uuid.dart';
 
@@ -28,19 +29,22 @@ class FileServices {
     }
   }
 
-  Future<List> uploadFile(UploadFileType type) async {
+  Future<List> uploadFile(UploadFileType uploadType) async {
+    String type = uploadType == UploadFileType.images ? 'images' : 'songs';
+    SharedPrefService _sharedPrefService = SharedPrefService();
     Uuid uuid = Uuid();
     CustomSnackBar _customSnackBar = CustomSnackBar();
+    var userID = await _sharedPrefService.read(id: 'user_id');
     try {
-      PlatformFile platformFile = await chooseFile(type);
+      PlatformFile platformFile = await chooseFile(uploadType);
       if(platformFile != null) {
         File file = File(platformFile.path);
         String fileName = uuid.v1() + '.${platformFile.extension}';
         firebase_storage.FirebaseStorage storage =
             firebase_storage.FirebaseStorage.instance;
-        await storage.ref('$type/$fileName').putFile(file);
-        String url = await storage.ref('$type/$fileName').getDownloadURL();
-        _customSnackBar.buildSnackBar('Successfully Uploaded', true);
+        await storage.ref('$type/$userID/$fileName').putFile(file);
+        String url = await storage.ref('$type/$userID/$fileName').getDownloadURL();
+        // _customSnackBar.buildSnackBar('Successfully Uploaded the file.', true);
         return [
           url,
           platformFile.name

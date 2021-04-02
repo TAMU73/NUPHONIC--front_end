@@ -111,7 +111,7 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
                                   playlist: widget.playlist,
                                   showLabel: false,
                                 ),
-                                SvgPicture.asset('assets/icons/play_song.svg', height: 40, width: 40,),
+                                SvgPicture.asset('assets/icons/play_song.svg', height: 50, width: 50,),
                               ],
                             ),
                             SizedBox(
@@ -144,8 +144,11 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
                                             onTap: () {
                                               removeSongFromPlaylist(_playlist,song);
                                             },
-                                            child: SvgPicture.asset(
-                                                'assets/icons/remove.svg'),
+                                            child: Opacity(
+                                              opacity: 0.6,
+                                              child: SvgPicture.asset(
+                                                  'assets/icons/remove.svg'),
+                                            ),
                                           ),
                                         )
                                       ],

@@ -8,6 +8,7 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_ser
 import 'package:nuphonic_front_end/src/views/reusable_widgets/back_blank.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/song_box.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/album_description.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
@@ -28,12 +29,35 @@ class AlbumProfile extends StatefulWidget {
 class _AlbumProfileState extends State<AlbumProfile> {
   AlbumServices _albumServices = AlbumServices();
   SongService _song = SongService();
+  CustomSnackBar _customSnackBar = CustomSnackBar();
 
   bool isLoading = false;
   bool networkError = false;
   bool isSongLoading = false;
   AlbumModel album;
   List<SongModel> albumSongs = [];
+
+  Future<void> removeSongFromAlbum(AlbumModel album, SongModel song) async {
+    setState(() {
+      isSongLoading = true;
+    });
+    dynamic result =
+        await _albumServices.deleteAlbumSongs(song.songID, album.albumID);
+    setState(() {
+      isSongLoading = false;
+    });
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Network Error', false);
+    } else {
+      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+      if (result.data['success']) {
+        setState(() {
+          album.albumSongModel.remove(song);
+        });
+        getAlbumSongs();
+      }
+    }
+  }
 
   Future<void> getAlbumDetails() async {
     if (widget.album != null) {
@@ -60,20 +84,22 @@ class _AlbumProfileState extends State<AlbumProfile> {
   }
 
   Future<void> getAlbumSongs() async {
-    albumSongs.clear();
-    setState(() {
-      isSongLoading = true;
-    });
-    dynamic albumSongsList = album.albumSongs;
-    for (var song in albumSongsList) {
-      dynamic result = await _song.getSongDetails(song);
+    if (album.albumSongs.isNotEmpty) {
+      albumSongs.clear();
       setState(() {
-        isSongLoading = false;
+        isSongLoading = true;
       });
-      Map<String, dynamic> songDetail = result.data['song'];
-      setState(() {
-        albumSongs.add(SongModel.fromJson(songDetail));
-      });
+      dynamic albumSongsList = album.albumSongs;
+      for (var song in albumSongsList) {
+        dynamic result = await _song.getSongDetails(song);
+        setState(() {
+          isSongLoading = false;
+        });
+        Map<String, dynamic> songDetail = result.data['song'];
+        setState(() {
+          albumSongs.add(SongModel.fromJson(songDetail));
+        });
+      }
     }
   }
 
@@ -114,7 +140,7 @@ class _AlbumProfileState extends State<AlbumProfile> {
                     ),
                   )
                 : SingleChildScrollView(
-                  child: Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Stack(
@@ -153,7 +179,9 @@ class _AlbumProfileState extends State<AlbumProfile> {
                                 label: "",
                                 endChild: InkWell(
                                   onTap: () {
-                                    Get.to(AlbumDescription(album: album,));
+                                    Get.to(AlbumDescription(
+                                      album: album,
+                                    ));
                                   },
                                   child: SvgPicture.asset(
                                     'assets/icons/info_big.svg',
@@ -167,16 +195,17 @@ class _AlbumProfileState extends State<AlbumProfile> {
                               child: Container(
                                 width: width,
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         album.albumName,
                                         textAlign: TextAlign.center,
-                                        style:
-                                            titleTextStyle.copyWith(fontSize: 30),
+                                        style: titleTextStyle.copyWith(
+                                            fontSize: 30),
                                       ),
                                       SizedBox(
                                         height: 5,
@@ -196,8 +225,8 @@ class _AlbumProfileState extends State<AlbumProfile> {
                                             album.artistName,
                                             textAlign: TextAlign.center,
                                             style: normalFontStyle.copyWith(
-                                                color:
-                                                    whitishColor.withOpacity(0.7),
+                                                color: whitishColor
+                                                    .withOpacity(0.7),
                                                 fontWeight: FontWeight.w600),
                                           ),
                                         ],
@@ -228,8 +257,25 @@ class _AlbumProfileState extends State<AlbumProfile> {
                                 ? Column(
                                     children: albumSongs
                                         .map(
-                                          (song) => SongBox(
-                                            song: song,
+                                          (song) => Stack(
+                                            alignment: Alignment.centerRight,
+                                            children: [
+                                              SongBox(song: song),
+                                              Positioned(
+                                                right: 40,
+                                                bottom: 61,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    removeSongFromAlbum(album, song);
+                                                  },
+                                                  child: Opacity(
+                                                    opacity: 0.6,
+                                                    child: SvgPicture.asset(
+                                                        'assets/icons/remove.svg'),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         )
                                         .toList())
@@ -247,7 +293,7 @@ class _AlbumProfileState extends State<AlbumProfile> {
                                   ),
                       ],
                     ),
-                ),
+                  ),
       ),
     );
   }

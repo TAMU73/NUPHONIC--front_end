@@ -1,3 +1,5 @@
+import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
+
 class AlbumModel {
   final String albumID;
   final String artistID;
@@ -6,6 +8,7 @@ class AlbumModel {
   final String albumPicture;
   final List albumSongs;
   final String description;
+  List<SongModel> albumSongModel;
   AlbumModel({
     this.albumID,
     this.artistID,
@@ -14,6 +17,7 @@ class AlbumModel {
     this.albumPicture,
     this.albumSongs,
     this.description,
+    this.albumSongModel,
   });
 
   factory AlbumModel.fromJson(Map<String, dynamic> data) {

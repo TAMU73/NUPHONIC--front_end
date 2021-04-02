@@ -1,40 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/album_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/album_services.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/uploads/create_album.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/album_profile.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class UploadedAlbums extends StatelessWidget {
-  PanelController _panelController = PanelController();
+class UploadedAlbums extends StatefulWidget {
+  @override
+  _UploadedAlbumsState createState() => _UploadedAlbumsState();
+}
 
-  List<AlbumModel> _allAlbums = [
-    AlbumModel(albumName: 'adasda', albumSongs: ['', '']),
-    AlbumModel(albumName: 'adasda', albumSongs: ['', '']),
-    AlbumModel(albumName: 'adasda', albumSongs: ['', '']),
-  ];
+class _UploadedAlbumsState extends State<UploadedAlbums>
+    with AutomaticKeepAliveClientMixin<UploadedAlbums> {
+  @override
+  bool get wantKeepAlive => true;
+
+  RefreshController _refreshController = RefreshController();
+  SharedPrefService _sharedPrefService = SharedPrefService();
+  AlbumServices _albumServices = AlbumServices();
+  CustomSnackBar _customSnackBar = CustomSnackBar();
+  SongService _song = SongService();
+
+  List<AlbumModel> _allAlbums = [];
+  bool isLoading = true;
+
+  Future<List<SongModel>> getSongModel(List albumSongs) async {
+    List<SongModel> songList = List<SongModel>();
+    for (var song in albumSongs) {
+      dynamic result = await _song.getSongDetails(song);
+      songList.add(SongModel.fromJson(result.data['song']));
+    }
+    return songList;
+  }
+
+  Future<void> getUserAlbum() async {
+    setState(() {
+      isLoading = true;
+    });
+    dynamic userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _albumServices.getUserAlbums(userID);
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Network Error', false);
+    } else {
+      if (result.data['success']) {
+        dynamic albumList = result.data['albums'];
+        _allAlbums.clear();
+        for (var album in albumList) {
+          setState(() {
+            _allAlbums.add(AlbumModel.fromJson(album));
+          });
+          for (var album in _allAlbums) {
+            var playlistSongModel = await getSongModel(album.albumSongs);
+            setState(() {
+              album.albumSongModel = playlistSongModel;
+            });
+          }
+        }
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        _customSnackBar.buildSnackBar(
+            result.data['msg'], result.data['success']);
+      }
+    }
+  }
+
+  Future<void> deleteAlbum(AlbumModel albumModel) async {
+    setState(() {
+      isLoading = true;
+    });
+    dynamic result = await _albumServices.deleteAlbum(albumModel.albumID);
+    setState(() {
+      isLoading = false;
+    });
+    if (result == null) {
+      _customSnackBar.buildSnackBar('Network Error', false);
+    } else {
+      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+      if (result.data['success']) {
+        getUserAlbum();
+      }
+    }
+  }
 
   Widget _showErrorMessage() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 40,
-        ),
-        CustomError(
-          title: 'No Albums',
-          subTitle:
-              'There are no albums of your own. Please create one to view here.',
-          buttonLabel: 'CREATE ALBUM',
-          onPressed: () {},
-        ),
-      ],
+    return CustomError(
+      title: 'No Albums',
+      subTitle:
+          'There are no albums of your own. Please create one to view here.',
+      buttonLabel: 'CREATE ALBUM',
+      onPressed: () {
+        Get.to(CreateAlbum());
+      },
     );
   }
 
-  Widget _createNewPlaylist() {
+  Widget _createNewAlbum() {
     return InkWell(
       onTap: () {
-        _panelController.open();
+        Get.to(CreateAlbum());
       },
       child: Row(
         children: [
@@ -66,7 +140,7 @@ class UploadedAlbums extends StatelessWidget {
 
   Widget _albumImage(AlbumModel album) {
     return Image.network(
-      'https://miro.medium.com/max/3840/1*LPESvqEeQ9V3DAx-6cD6SQ.jpeg',
+      album.albumPicture,
       height: 97,
       width: Size.infinite.width,
       fit: BoxFit.cover,
@@ -110,31 +184,57 @@ class UploadedAlbums extends StatelessWidget {
   }
 
   Widget _albumBox(AlbumModel album) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          height: 97,
-          child: Stack(
-            alignment: Alignment.centerRight,
-            children: [
-              _imageDummy(),
-              _albumImage(album),
-              _gradientEffect(),
-              Positioned(
-                left: 10,
-                bottom: 5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return InkWell(
+      onTap: () {
+        Get.to(AlbumProfile(
+          album: album,
+        ));
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
+        child: Stack(
+          alignment: Alignment.centerRight,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                height: 97,
+                child: Stack(
+                  alignment: Alignment.centerRight,
                   children: [
-                    _albumName(album),
-                    _albumSongsLength(album),
+                    _imageDummy(),
+                    _albumImage(album),
+                    _gradientEffect(),
+                    Positioned(
+                      left: 10,
+                      bottom: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _albumName(album),
+                          _albumSongsLength(album),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+            Positioned(
+              right: 20,
+              child: InkWell(
+                onTap: () {
+                  deleteAlbum(album);
+                },
+                child: Opacity(
+                  opacity: 0.6,
+                  child: SvgPicture.asset(
+                    'assets/icons/delete.svg',
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -151,17 +251,37 @@ class UploadedAlbums extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserAlbum();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _createNewPlaylist(),
-          SizedBox(
-            height: 20,
-          ),
-          _allAlbums.length == 0 ? _showErrorMessage() : _showAlbums(),
-        ],
-      ),
-    );
+    double height = MediaQuery.of(context).size.height;
+    return isLoading
+        ? loading
+        : _allAlbums.length == 0
+            ? _showErrorMessage()
+            : SmartRefresher(
+                controller: _refreshController,
+                onRefresh: () {
+                  getUserAlbum()
+                      .then((value) => _refreshController.refreshCompleted());
+                },
+                header: CustomRefreshHeader(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _createNewAlbum(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _showAlbums(),
+                    ],
+                  ),
+                ),
+              );
   }
 }

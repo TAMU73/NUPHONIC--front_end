@@ -54,7 +54,7 @@ class SongModel {
       'song_name': songName,
       'published_date': publishedDate,
       'song_url': songURL,
-      'song_cover_url': songImage,
+      'song_picture_url': songImage,
       'genre_name': genreName,
       'artist_id': artistID,
       'artist_name': artistName,

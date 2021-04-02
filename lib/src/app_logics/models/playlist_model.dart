@@ -4,8 +4,8 @@ class PlaylistModel {
   final String playlistId;
   final String playlistName;
   final List playlistSongs;
-  List<SongModel> playlistSongModel;
   final String userID;
+  List<SongModel> playlistSongModel;
 
   PlaylistModel({
     this.playlistId,

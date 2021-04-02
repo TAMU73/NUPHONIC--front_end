@@ -1,34 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/supporter_model.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/api_services/support_services.dart';
+import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads/support_detail.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Supporters extends StatefulWidget {
   @override
   _SupportersState createState() => _SupportersState();
 }
 
-class _SupportersState extends State<Supporters> {
-  double total = 0;
+class _SupportersState extends State<Supporters>
+    with AutomaticKeepAliveClientMixin<Supporters> {
+  @override
+  bool get wantKeepAlive => true;
 
-  List<SupporterModel> _supporters = [
-    SupporterModel(supportedAmount: 100),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-    SupporterModel(supportedAmount: 400),
-  ];
+  RefreshController _refreshController = RefreshController();
+  SharedPrefService _sharedPrefService = SharedPrefService();
+  SupportServices _supportServices = SupportServices();
 
-  void _countTotalSupport() {
-    _supporters.map((e) {
-      setState(() {
-        total = e.supportedAmount;
-      });
+  double total;
+
+  bool isLoading = false;
+
+  List<SupporterModel> _supporters = [];
+
+  Future<void> getSupporters() async {
+    _supporters.clear();
+    setState(() {
+      isLoading = true;
     });
+    var userID = await _sharedPrefService.read(id: 'user_id');
+    dynamic result = await _supportServices.getSuperSupporters(userID);
+    setState(() {
+      isLoading = false;
+    });
+    if (result == null) {
+    } else {
+      if (result.data['success']) {
+        dynamic supporterList = result.data['supporters'];
+        for (var supporter in supporterList) {
+          setState(() {
+            _supporters.add(SupporterModel.fromJson(supporter));
+          });
+        }
+      }
+    }
   }
 
   Widget _totalSupportAmount() {
@@ -50,7 +71,7 @@ class _SupportersState extends State<Supporters> {
         CustomError(
           title: 'No Supporters',
           subTitle:
-              'There are no supports as of now. But you can have by uploading more on this platform.',
+              'There are no supports as of now. But you can have by uploading more songs on this platform.',
           buttonLabel: 'UPLOAD SONG',
           onPressed: () {},
         ),
@@ -68,7 +89,7 @@ class _SupportersState extends State<Supporters> {
     );
   }
 
-  Widget _showSupporterImage() {
+  Widget _showSupporterImage(SupporterModel supporter) {
     return CircleAvatar(
       radius: 28,
       backgroundColor: backgroundColor,
@@ -85,11 +106,13 @@ class _SupportersState extends State<Supporters> {
                 size: 30,
               ),
             ),
-            Image.network(
-              'https://miro.medium.com/max/3840/1*LPESvqEeQ9V3DAx-6cD6SQ.jpeg',
-              height: 56,
-              fit: BoxFit.cover,
-            ),
+            supporter.supporterProfilePicture != null
+                ? Image.network(
+                    supporter.supporterProfilePicture,
+                    height: 56,
+                    fit: BoxFit.cover,
+                  )
+                : SizedBox(),
             // profilePicture == null ? SizedBox() : Image.network(profilePicture),
           ],
         ),
@@ -97,35 +120,37 @@ class _SupportersState extends State<Supporters> {
     );
   }
 
-  Widget _showSupporterDetail() {
+  Widget _showSupporterDetail(SupporterModel supporter) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'SHuas',
+          supporter.supporterName,
           style: normalFontStyle.copyWith(
               fontWeight: FontWeight.w600, fontSize: 18),
-        ),
-        Text(
-          'SHuas dsfas',
-          style: normalFontStyle.copyWith(color: whitishColor.withOpacity(0.6)),
         ),
       ],
     );
   }
 
-  Widget _supportedAmount() {
+  Widget _supportedAmount(SupporterModel supporter) {
     return Text(
-      'Rs. 100',
-      style: normalFontStyle.copyWith(color: greenishColor, fontSize: 16),
+      'Rs. ${supporter.supportedAmount}',
+      style: normalFontStyle.copyWith(
+        color: greenishColor,
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 
   Widget _supporterBox(SupporterModel supporter) {
     return InkWell(
       onTap: () {
-        Get.to(SupportDetail());
+        Get.to(SupportDetail(
+          support: supporter,
+        ));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
@@ -138,13 +163,23 @@ class _SupportersState extends State<Supporters> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
-                    _showSupporterImage(),
+                    _showSupporterImage(supporter),
                     SizedBox(
                       width: 10,
                     ),
-                    _showSupporterDetail(),
+                    _showSupporterDetail(supporter),
                     Spacer(),
-                    _supportedAmount()
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        _supportedAmount(supporter),
+                        Image.asset(
+                          'assets/images/khalti_logo.png',
+                          height: 25,
+                        )
+                      ],
+                    )
                   ],
                 ),
               )),
@@ -153,26 +188,54 @@ class _SupportersState extends State<Supporters> {
     );
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  void _countTotalSupport() {
+    double amount = 0;
+    for (SupporterModel supporter in _supporters) {
+      amount = amount + supporter.supportedAmount;
+    }
+    setState(() {
+      total = amount;
+    });
+  }
+
+  void atStart() async {
+    await getSupporters();
     _countTotalSupport();
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    total = 0;
+    atStart();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _totalSupportAmount(),
-          SizedBox(
-            height: 20,
-          ),
-          _supporters.length == 0 ? _showErrorMessage() : _showSupporters(),
-        ],
-      ),
-    );
+    return isLoading
+        ? loading
+        : SmartRefresher(
+            controller: _refreshController,
+            onRefresh: () {
+              getSupporters()
+                  .then((value) => _refreshController.refreshCompleted());
+            },
+            header: CustomRefreshHeader(),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _totalSupportAmount(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _supporters.length == 0
+                      ? _showErrorMessage()
+                      : _showSupporters(),
+                ],
+              ),
+            ),
+          );
   }
 }
