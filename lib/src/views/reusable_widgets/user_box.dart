@@ -30,6 +30,7 @@ class UserBox extends StatelessWidget {
                 ? Image.network(
                     artist.profilePicture,
                     height: 56,
+                    width: 56,
                     fit: BoxFit.cover,
                   )
                 : SizedBox(),
