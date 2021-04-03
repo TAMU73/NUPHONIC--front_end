@@ -61,6 +61,7 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
                 ? Image.network(
                     artist.profilePicture,
                     height: 56,
+                    width: 56,
                     fit: BoxFit.cover,
                   )
                 : SizedBox(),
