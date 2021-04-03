@@ -18,7 +18,7 @@ import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_artist_bo
 import 'package:nuphonic_front_end/src/views/reusable_widgets/featured_song_box.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/page_indicator.dart';
-import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/music_player.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/music_player.dart';
 import 'package:nuphonic_front_end/src/views/shimmers/home_shimmer.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:provider/provider.dart';
@@ -37,8 +37,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   SongService _song = SongService();
   SharedPrefService _sharedPrefService = SharedPrefService();
 
-  String name;
-  String greeting;
+  String name = "";
+  String greeting = "";
 
   bool homeLoading = true;
   bool networkError = false;

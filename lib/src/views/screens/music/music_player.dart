@@ -11,8 +11,8 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_ser
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/screens/music/add_to_playlist.dart';
+import 'package:nuphonic_front_end/src/views/screens/music/more_option.dart';
 import 'package:nuphonic_front_end/src/views/screens/super_support/give_super_support.dart';
-import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/more_option.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
@@ -152,9 +152,11 @@ class _MusicPlayerState extends State<MusicPlayer> {
       isFavourite = true;
     });
     var userID = await _sharedPrefService.read(id: 'user_id');
-    dynamic result = await _favouriteServices.addFavouriteSongs(widget.song.songID, userID);
+    dynamic result =
+        await _favouriteServices.addFavouriteSongs(widget.song.songID, userID);
     if (result == null) {
-      _customSnackBar.buildSnackBar('Cannot add to favourite songs, please try again!!', false);
+      _customSnackBar.buildSnackBar(
+          'Cannot add to favourite songs, please try again!!', false);
       setState(() {
         isFavourite = false;
       });
@@ -170,9 +172,11 @@ class _MusicPlayerState extends State<MusicPlayer> {
       isFavourite = false;
     });
     var userID = await _sharedPrefService.read(id: 'user_id');
-    dynamic result = await _favouriteServices.removeFavouriteSongs(widget.song.songID, userID);
+    dynamic result = await _favouriteServices.removeFavouriteSongs(
+        widget.song.songID, userID);
     if (result == null) {
-      _customSnackBar.buildSnackBar('Cannot remove from favourite songs, please try again!!', false);
+      _customSnackBar.buildSnackBar(
+          'Cannot remove from favourite songs, please try again!!', false);
       setState(() {
         isFavourite = true;
       });
@@ -190,7 +194,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
       _customSnackBar.buildSnackBar('Network Error, please try again!!', false);
     } else {
       List songList = result.data["song_list"]["song_list"];
-      if(songList.contains(widget.song.songID)) {
+      if (songList.contains(widget.song.songID)) {
         setState(() {
           isFavourite = true;
         });
@@ -396,7 +400,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 InkWell(
-                                  onDoubleTap: () {
+                                  onTap: () {
                                     double val =
                                         position.inSeconds.toDouble() - 10;
                                     if (val > 0) {
@@ -410,8 +414,8 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                       });
                                     }
                                   },
-                                  child:
-                                      SvgPicture.asset('assets/icons/back.svg'),
+                                  child: SvgPicture.asset(
+                                      'assets/icons/fast_backward.svg'),
                                 ),
                                 SizedBox(
                                   width: 30,
@@ -428,7 +432,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                   width: 30,
                                 ),
                                 InkWell(
-                                  onDoubleTap: () {
+                                  onTap: () {
                                     double val =
                                         position.inSeconds.toDouble() + 10;
                                     if (val < duration.inSeconds.toDouble()) {
@@ -443,16 +447,18 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                       });
                                     }
                                   },
-                                  child:
-                                      SvgPicture.asset('assets/icons/next.svg'),
+                                  child: SvgPicture.asset(
+                                      'assets/icons/fast_forward.svg'),
                                 ),
                               ],
                             ),
                           ),
                           InkWell(
                               onTap: () {
-                                if(isFavourite) removeFromFavourite();
-                                else addToFavourite();
+                                if (isFavourite)
+                                  removeFromFavourite();
+                                else
+                                  addToFavourite();
                               },
                               child: SvgPicture.asset(isFavourite
                                   ? 'assets/icons/loved.svg'
@@ -496,7 +502,32 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                 song: widget.song,
                               ));
                             },
-                            child: SvgPicture.asset('assets/icons/support.svg'),
+                            child: Container(
+                              width: 127,
+                              decoration: BoxDecoration(
+                                  color: whitishColor.withOpacity(0.05),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                          'assets/icons/support.svg'),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        'Super Support',
+                                        style: normalFontStyle.copyWith(
+                                            fontSize: 10,
+                                            color: Color(0xff817E7D)),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                           InkWell(
                             onTap: () {
@@ -504,7 +535,31 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                 song: widget.song,
                               ));
                             },
-                            child: SvgPicture.asset('assets/icons/add.svg'),
+                            child: Container(
+                              width: 127,
+                              decoration: BoxDecoration(
+                                  color: whitishColor.withOpacity(0.05),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Add to Playlist',
+                                        style: normalFontStyle.copyWith(
+                                            fontSize: 10,
+                                            color: Color(0xff817E7D)),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      SvgPicture.asset('assets/icons/add.svg'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
