@@ -424,7 +424,9 @@ class _OwnProfileState extends State<OwnProfile> {
               width: width,
               child: CustomButton(
                 labelName: 'SIGN OUT',
-                onPressed: () {},
+                onPressed: () {
+                  _signOut();
+                },
                 isLoading: false,
               ),
             ),

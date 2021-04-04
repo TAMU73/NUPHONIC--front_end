@@ -8,6 +8,7 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/auth_ser
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
+import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/favourites.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/own_profile.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/upload_song.dart';
@@ -24,6 +25,7 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
   RefreshController _refreshController = RefreshController();
   SharedPrefService _sharedPrefService = SharedPrefService();
   AuthService _auth = AuthService();
+  CustomSnackBar _customSnackBar = CustomSnackBar();
 
   String username;
   String fullName;
@@ -45,14 +47,13 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
     dynamic result =
         await _auth.getUserInfo(await _sharedPrefService.read(id: 'user_id'));
     if (result == null) {
-      // setState(() {
-      //   networkError = true;
-      // });
+      _customSnackBar.buildSnackBar('Network Error.', false);
     } else {
       setState(() {
         username = result.data['user']['username'];
         profilePicture = result.data['user']['profile_picture'];
       });
+      await _sharedPrefService.save(id: 'first_name', data: result.data['user']['full_name']);
     }
   }
 
@@ -72,7 +73,7 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    // double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
