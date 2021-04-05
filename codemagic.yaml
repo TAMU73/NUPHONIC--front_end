@@ -8,7 +8,7 @@ workflows:
     environment:
       flutter: stable
       xcode: latest
-      cocoapods: latest
+      cocoapods: default
     scripts:
       - cd . && flutter packages pub get
       - find . -name "Podfile" -execdir pod install \;
