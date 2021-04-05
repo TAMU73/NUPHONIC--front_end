@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/playlist_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/playlist_services.dart';
-import 'package:nuphonic_front_end/src/app_logics/services/api_services/song_service.dart';
-import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_app_bar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/playlist_box.dart';

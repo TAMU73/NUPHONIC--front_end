@@ -102,7 +102,7 @@ class _GiveSuperSupportState extends State<GiveSuperSupport> {
       isLoading = true;
     });
     FlutterKhalti _flutterKhalti = FlutterKhalti.configure(
-      publicKey: "test_public_key_959391e7bb334739a8015e7931afb6da",
+      publicKey: "live_public_key_e57856a73ba74018a4fbdbc5e5456ea2",
       urlSchemeIOS: "KhaltiPayFlutterExampleScheme",
     );
 

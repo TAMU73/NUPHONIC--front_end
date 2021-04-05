@@ -8,9 +8,15 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(ChangeNotifierProvider<NowPlayingBloc>(
     create: (_) => NowPlayingBloc(),
-    child: GetMaterialApp(
-      home: Main(),
-      debugShowCheckedModeBanner: false,
+    child: NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (overScroll) {
+        overScroll.disallowGlow();
+        return false;
+      },
+      child: GetMaterialApp(
+        home: Main(),
+        debugShowCheckedModeBanner: false,
+      ),
     ),
   ));
 }
@@ -23,13 +29,7 @@ class Main extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      child: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (overScroll) {
-          overScroll.disallowGlow();
-          return false;
-        },
-        child: Wrapper(),
-      ),
+      child: Wrapper(),
     );
   }
 }

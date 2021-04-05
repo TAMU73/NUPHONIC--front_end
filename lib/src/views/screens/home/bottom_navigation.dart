@@ -1,16 +1,11 @@
 import 'dart:ui';
 
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:nuphonic_front_end/src/app_logics/blocs/now_playing_bloc.dart';
 import 'package:nuphonic_front_end/src/views/screens/home/home.dart';
 import 'package:nuphonic_front_end/src/views/screens/home/library.dart';
 import 'package:nuphonic_front_end/src/views/screens/home/search.dart';
-import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/music/music_player.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
-import 'package:provider/provider.dart';
 
 class BottomNavigation extends StatefulWidget {
   @override

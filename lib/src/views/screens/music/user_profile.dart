@@ -135,7 +135,7 @@ class _UserProfileState extends State<UserProfile> {
     });
     var userID = await _sharedPrefService.read(id: 'user_id');
     dynamic result =
-        await _favouriteServices.removeFavouriteSongs(user.userID, userID);
+        await _favouriteServices.removeFavouriteArtists(user.userID, userID);
     if (result == null) {
       _customSnackBar.buildSnackBar(
           'Cannot remove from favourite artists, please try again!!', false);

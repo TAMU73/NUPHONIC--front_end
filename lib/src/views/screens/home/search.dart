@@ -15,9 +15,9 @@ import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_snackbar.da
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_text_button.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_textfield.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/genre_box.dart';
+import 'package:nuphonic_front_end/src/views/screens/genre/genre_songs.dart';
 import 'package:nuphonic_front_end/src/views/screens/search/search_artists.dart';
 import 'package:nuphonic_front_end/src/views/screens/search/search_songs.dart';
-import 'file:///C:/Users/DELL/Desktop/FYP/NUPHONIC%20-%20front_end/lib/src/views/screens/genre/genre_songs.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:nuphonic_front_end/src/views/utils/genres.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
