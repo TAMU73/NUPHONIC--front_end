@@ -52,6 +52,7 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
       setState(() {
         username = result.data['user']['username'];
         profilePicture = result.data['user']['profile_picture'];
+        fullName = result.data['user']['full_name'];
       });
       await _sharedPrefService.save(id: 'first_name', data: result.data['user']['full_name']);
     }
