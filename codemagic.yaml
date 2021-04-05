@@ -1,0 +1,24 @@
+# Automatically generated on 2021-04-05 UTC from https://codemagic.io/app/606aadbe0be8c67fc1b3e567/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
+workflows:
+  default-workflow:
+    name: Default Workflow
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: latest
+    scripts:
+      - cd . && flutter packages pub get
+      - find . -name "Podfile" -execdir pod install \;
+      - cd . && flutter build ios --release --no-codesign
+      - pod install
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - nuphonic.contact@gmail.com
