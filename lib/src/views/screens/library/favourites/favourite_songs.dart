@@ -61,19 +61,26 @@ class _FavouriteSongsState extends State<FavouriteSongs>
       });
       _customSnackBar.buildSnackBar('Network Error, please try again!!', false);
     } else {
-      List songListData = result.data["song_list"]["song_list"];
-      if (songListData != null && songListData.isNotEmpty) {
-        List<SongModel> list = List<SongModel>();
-        for (var songID in songListData) {
-          dynamic result1 = await _song.getSongDetails(songID);
-          Map<String, dynamic> songDetail = result1.data['song'];
-          list.add(SongModel.fromJson(songDetail));
+      if(result.data["song_list"] != null) {
+        List songListData = result.data["song_list"]["song_list"];
+        if (songListData != null && songListData.isNotEmpty) {
+          List<SongModel> list = List<SongModel>();
+          for (var songID in songListData) {
+            dynamic result1 = await _song.getSongDetails(songID);
+            Map<String, dynamic> songDetail = result1.data['song'];
+            list.add(SongModel.fromJson(songDetail));
+          }
+          _favouriteSongs.clear();
+          setState(() {
+            _favouriteSongs = list;
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            _favouriteSongs = [];
+            isLoading = false;
+          });
         }
-        _favouriteSongs.clear();
-        setState(() {
-          _favouriteSongs = list;
-          isLoading = false;
-        });
       } else {
         setState(() {
           _favouriteSongs = [];

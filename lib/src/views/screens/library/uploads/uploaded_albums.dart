@@ -98,7 +98,7 @@ class _UploadedAlbumsState extends State<UploadedAlbums>
       title: 'No Albums',
       subTitle:
           'There are no albums of your own. Please create one to view here.',
-      buttonLabel: 'CREATE ALBUM',
+      buttonLabel: 'CREATE',
       onPressed: () {
         Get.to(CreateAlbum());
       },

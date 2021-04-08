@@ -313,55 +313,54 @@ class _MusicPlayerState extends State<MusicPlayer> {
                         ),
                       ),
                     ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.song.songName,
-                                style: normalFontStyle.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: whitishColor,
-                                    fontSize: 24,
-                                    letterSpacing: 0.5),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.song.songName,
+                              style: normalFontStyle.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: whitishColor,
+
+                                  fontSize: 24,
+                                  letterSpacing: 0.5),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.song.artistName,
+                              style: normalFontStyle.copyWith(
+                                fontSize: 15,
+                                color: whitishColor.withOpacity(0.7),
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.song.artistName,
-                                style: normalFontStyle.copyWith(
-                                  fontSize: 15,
-                                  color: whitishColor.withOpacity(0.7),
-                                ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Icon(
+                                Icons.circle,
+                                size: 5,
+                                color: whitishColor.withOpacity(0.7),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: Icon(
-                                  Icons.circle,
-                                  size: 5,
-                                  color: whitishColor.withOpacity(0.7),
-                                ),
+                            ),
+                            Text(
+                              widget.song.albumName,
+                              style: normalFontStyle.copyWith(
+                                fontSize: 15,
+                                color: whitishColor.withOpacity(0.7),
                               ),
-                              Text(
-                                widget.song.albumName,
-                                style: normalFontStyle.copyWith(
-                                  fontSize: 15,
-                                  color: whitishColor.withOpacity(0.7),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(

@@ -385,48 +385,49 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             SizedBox(
                               width: 10,
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  nowPlaying.song.songName,
-                                  style: normalFontStyle.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: whitishColor,
-                                      fontSize: 18,
-                                      letterSpacing: 0.5),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      nowPlaying.song.artistName,
-                                      style: normalFontStyle.copyWith(
-                                        fontSize: 12,
-                                        color: whitishColor.withOpacity(0.7),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    nowPlaying.song.songName,
+                                    style: normalFontStyle.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: whitishColor,
+                                        fontSize: 18,
+                                        letterSpacing: 0.5),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        nowPlaying.song.artistName,
+                                        style: normalFontStyle.copyWith(
+                                          fontSize: 12,
+                                          color: whitishColor.withOpacity(0.7),
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5),
-                                      child: Icon(
-                                        Icons.circle,
-                                        size: 5,
-                                        color: whitishColor.withOpacity(0.7),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: Icon(
+                                          Icons.circle,
+                                          size: 5,
+                                          color: whitishColor.withOpacity(0.7),
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      nowPlaying.song.albumName,
-                                      style: normalFontStyle.copyWith(
-                                        fontSize: 12,
-                                        color: whitishColor.withOpacity(0.7),
+                                      Text(
+                                        nowPlaying.song.albumName,
+                                        style: normalFontStyle.copyWith(
+                                          fontSize: 12,
+                                          color: whitishColor.withOpacity(0.7),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            Spacer(),
                             InkWell(
                               onTap: () {
                                 nowPlayingBloc.audioPlayer.dispose();

@@ -172,7 +172,7 @@ class _PlaylistsState extends State<Playlists>
       title: 'No Playlists',
       subTitle:
           'There are no playlist of your own. Please create one to view here.',
-      buttonLabel: 'CREATE PLAYLIST',
+      buttonLabel: 'CREATE',
       onPressed: () {
         _panelController.open();
       },
