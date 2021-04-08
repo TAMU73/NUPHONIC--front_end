@@ -260,18 +260,17 @@ class _UploadedAlbumsState extends State<UploadedAlbums>
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return isLoading
-        ? loading
-        : _allAlbums.length == 0
-            ? _showErrorMessage()
-            : SmartRefresher(
-                controller: _refreshController,
-                onRefresh: () {
-                  getUserAlbum()
-                      .then((value) => _refreshController.refreshCompleted());
-                },
-                header: CustomRefreshHeader(),
-                child: SingleChildScrollView(
+    return SmartRefresher(
+      controller: _refreshController,
+      onRefresh: () {
+        getUserAlbum().then((value) => _refreshController.refreshCompleted());
+      },
+      header: CustomRefreshHeader(),
+      child: isLoading
+          ? loading
+          : _allAlbums.length == 0
+              ? _showErrorMessage()
+              : SingleChildScrollView(
                   child: Column(
                     children: [
                       _createNewAlbum(),
@@ -282,6 +281,6 @@ class _UploadedAlbumsState extends State<UploadedAlbums>
                     ],
                   ),
                 ),
-              );
+    );
   }
 }

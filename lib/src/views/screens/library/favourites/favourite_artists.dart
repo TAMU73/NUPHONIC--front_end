@@ -159,18 +159,18 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? loading
-        : _favouriteArtists.length == 0
-            ? _showErrorMessage()
-            : SmartRefresher(
-                controller: _refreshController,
-                onRefresh: () {
-                  getFavouriteArtists()
-                      .then((value) => _refreshController.refreshCompleted());
-                },
-                header: CustomRefreshHeader(),
-                child: SingleChildScrollView(
+    return SmartRefresher(
+      controller: _refreshController,
+      onRefresh: () {
+        getFavouriteArtists()
+            .then((value) => _refreshController.refreshCompleted());
+      },
+      header: CustomRefreshHeader(),
+      child: isLoading
+          ? loading
+          : _favouriteArtists.length == 0
+              ? _showErrorMessage()
+              : SingleChildScrollView(
                   child: Column(children: [
                     SizedBox(
                       height: 20,
@@ -178,6 +178,6 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
                     _showArtists()
                   ]),
                 ),
-              );
+    );
   }
 }

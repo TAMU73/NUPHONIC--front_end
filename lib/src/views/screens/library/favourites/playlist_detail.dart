@@ -24,6 +24,7 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
   PlaylistServices _playlistServices = PlaylistServices();
 
   PlaylistModel _playlist;
+  int playlistLength;
   bool isLoading = false;
 
   Future<void> removeSongFromPlaylist(PlaylistModel playlist, SongModel song) async {
@@ -42,17 +43,18 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
       if (result.data['success']) {
         setState(() {
           _playlist.playlistSongModel.remove(song);
+          playlistLength = playlistLength - 1;
         });
       }
     }
   }
 
-  Widget _playlistSongsLength(PlaylistModel playlist) {
-    String songOrSongs = playlist.playlistSongs.length > 1 ? 'songs' : 'song';
+  Widget _playlistSongsLength() {
+    String songOrSongs = playlistLength > 1 ? 'songs' : 'song';
     return Row(
       children: [
         Text(
-          '${playlist.playlistSongs.length.toString()} $songOrSongs',
+          '${playlistLength.toString()} $songOrSongs',
           style: normalFontStyle.copyWith(
             fontSize: 13,
             color: whitishColor.withOpacity(0.7),
@@ -67,6 +69,7 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
     // TODO: implement initState
     super.initState();
     _playlist = widget.playlist;
+    playlistLength = _playlist.playlistSongModel.length;
   }
 
   @override
@@ -123,7 +126,7 @@ class _PlaylistDetailState extends State<PlaylistDetail> {
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(20, 5, 0, 0),
-                              child: _playlistSongsLength(widget.playlist),
+                              child: _playlistSongsLength(),
                             ),
                             SizedBox(
                               height: 20,

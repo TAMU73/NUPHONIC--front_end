@@ -128,18 +128,17 @@ class _UploadedSongsState extends State<UploadedSongs>
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? loading
-        : _uploadedSongs.length == 0
-            ? _showErrorMessage()
-            : SmartRefresher(
-                controller: _refreshController,
-                onRefresh: () {
-                  getUserSongs()
-                      .then((value) => _refreshController.refreshCompleted());
-                },
-                header: CustomRefreshHeader(),
-                child: SingleChildScrollView(
+    return SmartRefresher(
+      controller: _refreshController,
+      onRefresh: () {
+        getUserSongs().then((value) => _refreshController.refreshCompleted());
+      },
+      header: CustomRefreshHeader(),
+      child: isLoading
+          ? loading
+          : _uploadedSongs.length == 0
+              ? _showErrorMessage()
+              : SingleChildScrollView(
                   child: Column(children: [
                     SizedBox(
                       height: 20,
@@ -147,7 +146,7 @@ class _UploadedSongsState extends State<UploadedSongs>
                     _showSongs()
                   ]),
                 ),
-              );
+    );
     ;
   }
 }

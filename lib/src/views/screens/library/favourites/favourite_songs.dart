@@ -91,18 +91,18 @@ class _FavouriteSongsState extends State<FavouriteSongs>
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? loading
-        : _favouriteSongs.length == 0
-            ? _showErrorMessage()
-            : SmartRefresher(
-                controller: _refreshController,
-                onRefresh: () {
-                  getFavouriteSongs()
-                      .then((value) => _refreshController.refreshCompleted());
-                },
-                header: CustomRefreshHeader(),
-                child: SingleChildScrollView(
+    return SmartRefresher(
+      controller: _refreshController,
+      onRefresh: () {
+        getFavouriteSongs()
+            .then((value) => _refreshController.refreshCompleted());
+      },
+      header: CustomRefreshHeader(),
+      child: isLoading
+          ? loading
+          : _favouriteSongs.length == 0
+              ? _showErrorMessage()
+              : SingleChildScrollView(
                   child: Column(children: [
                     SizedBox(
                       height: 20,
@@ -110,6 +110,6 @@ class _FavouriteSongsState extends State<FavouriteSongs>
                     _showSongs()
                   ]),
                 ),
-              );
+    );
   }
 }

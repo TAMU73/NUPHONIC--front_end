@@ -5,6 +5,7 @@ import 'package:nuphonic_front_end/src/app_logics/services/api_services/support_
 import 'package:nuphonic_front_end/src/app_logics/services/shared_pref_services/shared_pref_service.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_error.dart';
 import 'package:nuphonic_front_end/src/views/reusable_widgets/custom_refresh_header.dart';
+import 'package:nuphonic_front_end/src/views/screens/library/upload_song.dart';
 import 'package:nuphonic_front_end/src/views/screens/library/uploads/support_detail.dart';
 import 'package:nuphonic_front_end/src/views/utils/consts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -63,19 +64,14 @@ class _SupportersState extends State<Supporters>
   }
 
   Widget _showErrorMessage() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 40,
-        ),
-        CustomError(
-          title: 'No Supporters',
-          subTitle:
-              'There are no supports as of now. But you can have by uploading more songs on this platform.',
-          buttonLabel: 'UPLOAD SONG',
-          onPressed: () {},
-        ),
-      ],
+    return CustomError(
+      title: 'No Supporters',
+      subTitle:
+          'There are no supports as of now. But you can have by uploading more songs on this platform.',
+      buttonLabel: 'UPLOAD',
+      onPressed: () {
+        Get.to(UploadSongs());
+      },
     );
   }
 
@@ -213,29 +209,28 @@ class _SupportersState extends State<Supporters>
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? loading
-        : SmartRefresher(
-            controller: _refreshController,
-            onRefresh: () {
-              getSupporters()
-                  .then((value) => _refreshController.refreshCompleted());
-            },
-            header: CustomRefreshHeader(),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  _totalSupportAmount(),
-                  SizedBox(
-                    height: 20,
+    return SmartRefresher(
+      controller: _refreshController,
+      onRefresh: () {
+        getSupporters().then((value) => _refreshController.refreshCompleted());
+      },
+      header: CustomRefreshHeader(),
+      child: isLoading
+          ? loading
+          : _supporters.length == 0
+              ? _showErrorMessage()
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _totalSupportAmount(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _showSupporters(),
+                    ],
                   ),
-                  _supporters.length == 0
-                      ? _showErrorMessage()
-                      : _showSupporters(),
-                ],
-              ),
-            ),
-          );
+                ),
+    );
   }
 }

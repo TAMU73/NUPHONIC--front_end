@@ -62,7 +62,7 @@ class SongModel {
       'album_name': albumName,
       'song_description': songDescription,
       'song_lyrics': songLyrics,
-      'listens': songListens,
+      'listens': int.parse(songListens),
     };
   }
 }

@@ -235,18 +235,18 @@ class _PlaylistsState extends State<Playlists>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        isLoading
-            ? loading
-            : _allPlaylists.length == 0
-                ? _showErrorMessage()
-                : SmartRefresher(
-                    controller: _refreshController,
-                    onRefresh: () {
-                      getUserPlaylist().then(
-                          (value) => _refreshController.refreshCompleted());
-                    },
-                    header: CustomRefreshHeader(),
-                    child: SingleChildScrollView(
+        SmartRefresher(
+          controller: _refreshController,
+          onRefresh: () {
+            getUserPlaylist()
+                .then((value) => _refreshController.refreshCompleted());
+          },
+          header: CustomRefreshHeader(),
+          child: isLoading
+              ? loading
+              : _allPlaylists.length == 0
+                  ? _showErrorMessage()
+                  : SingleChildScrollView(
                       child: Column(
                         children: [
                           _createNewPlaylist(),
@@ -257,7 +257,7 @@ class _PlaylistsState extends State<Playlists>
                         ],
                       ),
                     ),
-                  ),
+        ),
         _customButtonSheet()
       ],
     );
