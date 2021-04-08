@@ -76,6 +76,7 @@ class _FavouriteSongsState extends State<FavouriteSongs>
         });
       } else {
         setState(() {
+          _favouriteSongs = [];
           isLoading = false;
         });
       }

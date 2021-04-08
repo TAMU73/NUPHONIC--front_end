@@ -123,6 +123,7 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
     });
     var userID = await _sharedPrefService.read(id: 'user_id');
     dynamic result = await _favouriteServices.getFavouriteArtists(userID);
+    print(result);
     if (result == null) {
       setState(() {
         isLoading = false;
@@ -136,6 +137,7 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
           dynamic result1 = await _authService.getUserInfo(artistID);
           Map<String, dynamic> artistDetail = result1.data['user'];
           list.add(UserModel.fromJson(artistDetail));
+          print(list.length);
         }
         _favouriteArtists.clear();
         setState(() {
@@ -144,6 +146,7 @@ class _FavouriteArtistsState extends State<FavouriteArtists>
         });
       } else {
         setState(() {
+          _favouriteArtists = [];
           isLoading = false;
         });
       }

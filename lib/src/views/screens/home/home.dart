@@ -146,10 +146,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       for (var songs in songList) {
         setState(() {
           browseSongs.add(SongModel.fromJson(songs));
-          if (browseSongs.length > 4) {
-            homeLoading = false;
-          }
         });
+        if (browseSongs.length >= 1) {
+          setState(() {
+            homeLoading = false;
+          });
+        }
       }
     }
   }

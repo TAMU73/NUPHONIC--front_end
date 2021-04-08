@@ -504,28 +504,25 @@ class _MusicPlayerState extends State<MusicPlayer> {
                             },
                             child: Container(
                               width: 127,
+                              height: 40,
                               decoration: BoxDecoration(
                                   color: whitishColor.withOpacity(0.05),
                                   borderRadius: BorderRadius.circular(10)),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                          'assets/icons/support.svg'),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        'Super Support',
-                                        style: normalFontStyle.copyWith(
-                                            fontSize: 10,
-                                            color: Color(0xff817E7D)),
-                                      )
-                                    ],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                      'assets/icons/support.svg'),
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                ),
+                                  Text(
+                                    'Super Support',
+                                    style: normalFontStyle.copyWith(
+                                        fontSize: 10,
+                                        color: Color(0xff817E7D)),
+                                  )
+                                ],
                               ),
                             ),
                           ),
@@ -537,27 +534,24 @@ class _MusicPlayerState extends State<MusicPlayer> {
                             },
                             child: Container(
                               width: 127,
+                              height: 40,
                               decoration: BoxDecoration(
                                   color: whitishColor.withOpacity(0.05),
                                   borderRadius: BorderRadius.circular(10)),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Add to Playlist',
-                                        style: normalFontStyle.copyWith(
-                                            fontSize: 10,
-                                            color: Color(0xff817E7D)),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      SvgPicture.asset('assets/icons/add.svg'),
-                                    ],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Add to Playlist',
+                                    style: normalFontStyle.copyWith(
+                                        fontSize: 10,
+                                        color: Color(0xff817E7D)),
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  SvgPicture.asset('assets/icons/add.svg'),
+                                ],
                               ),
                             ),
                           ),

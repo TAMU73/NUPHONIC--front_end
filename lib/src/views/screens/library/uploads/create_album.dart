@@ -78,7 +78,12 @@ class _CreateAlbumState extends State<CreateAlbum> {
     if (result == null) {
       _customSnackBar.buildSnackBar('Network Error', false);
     } else {
-      _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+      if(result.data['success']) {
+        await _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+        Get.back();
+      } else {
+        _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
+      }
     }
   }
 
