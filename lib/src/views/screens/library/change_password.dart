@@ -50,7 +50,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     } else {
       CustomSnackBar()
           .buildSnackBar(result.data['msg'], result.data['success']);
-      if(result.data['success']) {
+      if (result.data['success']) {
         _oldPassController.clear();
         _newPassController.clear();
         setState(() {
@@ -141,7 +141,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   height: 30,
                 ),
                 CustomButton(
-                  labelName: 'RESET',
+                  labelName: 'CHANGE',
                   isLoading: isLoading,
                   onPressed: isErrorP == 1 && oldPassword != ""
                       ? () => changePassword(newPassword, oldPassword)

@@ -102,32 +102,16 @@ class _OwnProfileState extends State<OwnProfile> {
   }
 
   Widget _showSupporterImage(SupporterModel supporter) {
-    return CircleAvatar(
-      radius: 28,
-      backgroundColor: backgroundColor,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: Stack(
-          children: [
-            CircleAvatar(
-              radius: 28,
-              backgroundColor: backgroundColor,
-              child: Icon(
-                Icons.person_outline_outlined,
-                color: mainColor,
-                size: 30,
-              ),
-            ),
-            supporter.supportedSong.songImage != null
-                ? Image.network(
-                    supporter.supportedSong.songImage,
-                    height: 56,
-                    fit: BoxFit.cover,
-                  )
-                : SizedBox(),
-          ],
-        ),
-      ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: supporter.supportedSong.songImage != null
+          ? Image.network(
+              supporter.supportedSong.songImage,
+              height: 63,
+              width: 63,
+              fit: BoxFit.cover,
+            )
+          : SizedBox(),
     );
   }
 

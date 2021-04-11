@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:marquee/marquee.dart';
 import 'package:nuphonic_front_end/src/app_logics/blocs/now_playing_bloc.dart';
 import 'package:nuphonic_front_end/src/app_logics/models/song_model.dart';
 import 'package:nuphonic_front_end/src/app_logics/services/api_services/favourite_services.dart';
@@ -193,11 +194,17 @@ class _MusicPlayerState extends State<MusicPlayer> {
     if (result == null) {
       _customSnackBar.buildSnackBar('Network Error, please try again!!', false);
     } else {
-      List songList = result.data["song_list"]["song_list"];
-      if (songList.contains(widget.song.songID)) {
-        setState(() {
-          isFavourite = true;
-        });
+      if (result.data["song_list"] != null) {
+        List songList = result.data["song_list"]["song_list"];
+        if (songList.contains(widget.song.songID)) {
+          setState(() {
+            isFavourite = true;
+          });
+        } else {
+          setState(() {
+            isFavourite = false;
+          });
+        }
       } else {
         setState(() {
           isFavourite = false;
@@ -207,7 +214,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
   }
 
   Future<void> addListen() async {
-    dynamic result = await _song.addListen(widget.song.songID);
+    await _song.addListen(widget.song.songID);
   }
 
   void atStart() async {
@@ -323,7 +330,6 @@ class _MusicPlayerState extends State<MusicPlayer> {
                               style: normalFontStyle.copyWith(
                                   fontWeight: FontWeight.w700,
                                   color: whitishColor,
-
                                   fontSize: 24,
                                   letterSpacing: 0.5),
                             ),
@@ -510,16 +516,14 @@ class _MusicPlayerState extends State<MusicPlayer> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset(
-                                      'assets/icons/support.svg'),
+                                  SvgPicture.asset('assets/icons/support.svg'),
                                   SizedBox(
                                     width: 10,
                                   ),
                                   Text(
                                     'Super Support',
                                     style: normalFontStyle.copyWith(
-                                        fontSize: 10,
-                                        color: Color(0xff817E7D)),
+                                        fontSize: 10, color: Color(0xff817E7D)),
                                   )
                                 ],
                               ),
@@ -543,8 +547,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                   Text(
                                     'Add to Playlist',
                                     style: normalFontStyle.copyWith(
-                                        fontSize: 10,
-                                        color: Color(0xff817E7D)),
+                                        fontSize: 10, color: Color(0xff817E7D)),
                                   ),
                                   SizedBox(
                                     width: 10,

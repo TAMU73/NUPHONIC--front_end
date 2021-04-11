@@ -34,7 +34,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _fullNameController = TextEditingController();
 
-  String changeProfileTitle = "Change Profile";
+  String changeProfileTitle = "Change Picture";
 
   bool isLoading = false;
   bool networkError = false;

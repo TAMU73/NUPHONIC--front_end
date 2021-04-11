@@ -110,6 +110,9 @@ class _UploadSongsState extends State<UploadSongs> {
         if (albumId != null) {
           await _albumServices.addAlbumSongs(songId, albumId);
         }
+        setState(() {
+          isLoading = false;
+        });
         await _customSnackBar.buildSnackBar(result.data['msg'], result.data['success']);
         Get.back();
       } else {
